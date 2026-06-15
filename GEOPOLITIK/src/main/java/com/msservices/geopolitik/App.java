@@ -1,6 +1,7 @@
 package com.msservices.geopolitik;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.StackPane;
@@ -13,12 +14,18 @@ import java.sql.Statement;
 
 public class App extends Application {
 
-    @Override
-    public void start(Stage stage) {
+        @Override
+        public void start(Stage stage) throws Exception {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("mainView.fxml"));
+            Scene scene = new Scene(loader.load());
+            stage.setTitle("Geopolitik");
+            stage.setScene(scene);
+            stage.show();
+        }
 
-    }
-
-    public static void main(String[] args) {
-        launch();
-    }
+        public static void main(String[] args) {
+            launch(args);
+        }
 }
+
+

@@ -1,0 +1,43 @@
+/* Colores y estilo general */
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #f9f9f9;
+}
+
+/* Barra de menú */
+.menu-bar {
+    -fx-background-color: #2e4e2e;
+    -fx-text-fill: white;
+}
+
+/* Panel principal */
+.panel-principal {
+    -fx-background-color: #e8d8a0;
+    -fx-border-color: #2e4e2e;
+    -fx-border-width: 2;
+}
+
+/* Etiquetas */
+.etiqueta-roja {
+    -fx-fill: #8b0000;
+}
+.etiqueta-azul {
+    -fx-fill: #4682b4;
+}
+
+/* Listas */
+.lista {
+    -fx-background-color: #d9c97a;
+    -fx-padding: 5;
+    -fx-border-color: #2e4e2e;
+    -fx-border-width: 1;
+}
+
+/* Botón negro */
+.boton-negro {
+    -fx-background-color: #000000;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-padding: 8 20;
+    -fx-border-radius: 5;
+}

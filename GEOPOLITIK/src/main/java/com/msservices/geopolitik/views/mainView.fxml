@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="main.controllers.MenuController"
+            stylesheets="@style.css">
+
+    <!-- Barra superior -->
+    <top>
+        <MenuBar styleClass="menu-bar">
+            <Menu text="Partida"/>
+        </MenuBar>
+    </top>
+
+    <!-- Zona principal -->
+    <center>
+        <HBox spacing="10" alignment="CENTER">
+            <!-- Panel izquierdo (zona de imagen principal) -->
+            <Pane prefWidth="600" prefHeight="400" styleClass="panel-principal">
+                <ImageView fx:id="imagenPrincipal" fitWidth="600" fitHeight="400" preserveRatio="true"/>
+            </Pane>
+
+            <!-- Panel derecho -->
+            <VBox spacing="15" alignment="TOP_CENTER">
+                <!-- Etiquetas circulares y rectangulares -->
+                <HBox spacing="10" alignment="CENTER">
+                    <Circle fx:id="etiquetaRoja" radius="25" styleClass="etiqueta-roja"/>
+                    <Rectangle fx:id="etiquetaAzul" width="60" height="40" styleClass="etiqueta-azul"/>
+                </HBox>
+
+                <!-- Lista superior -->
+                <ScrollPane prefHeight="120" prefWidth="200" fitToWidth="true">
+                    <VBox fx:id="listaSuperior" spacing="5" styleClass="lista">
+                        <!-- Ejemplo de item -->
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 1"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- Lista inferior -->
+                <ScrollPane prefHeight="150" prefWidth="200" fitToWidth="true">
+                    <VBox fx:id="listaInferior" spacing="5" styleClass="lista">
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Mercado de armas"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Investigación"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Diplomacia"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Acciones"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- Botón inferior -->
+                <Button fx:id="botonNegro" text="Ejecutar" styleClass="boton-negro"/>
+            </VBox>
+        </HBox>
+    </center>
+</BorderPane>
