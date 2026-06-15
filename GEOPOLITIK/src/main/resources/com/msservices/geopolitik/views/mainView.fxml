@@ -7,9 +7,10 @@
 <?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="main.controllers.MenuController"
-            stylesheets="@style.css">
-
+            fx:controller="com.msservices.geopolitik.controllers.MenuController">
+    <stylesheets>
+        <URL value="@../styles/mainViewStyles.css" />
+    </stylesheets>
     <!-- Barra superior -->
     <top>
         <MenuBar styleClass="menu-bar">

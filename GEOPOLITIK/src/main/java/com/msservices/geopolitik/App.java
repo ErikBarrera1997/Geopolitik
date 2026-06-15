@@ -16,7 +16,7 @@ public class App extends Application {
 
         @Override
         public void start(Stage stage) throws Exception {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("mainView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("views/mainView.fxml"));
             Scene scene = new Scene(loader.load());
             stage.setTitle("Geopolitik");
             stage.setScene(scene);
