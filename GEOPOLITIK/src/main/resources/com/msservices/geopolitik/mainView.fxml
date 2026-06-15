@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.MenuController"
+            stylesheets="@mainViewStyles.css">
+    
+    <top>
+        <MenuBar>
+            <Menu text="Archivo">
+                <MenuItem text="Nuevo"/>
+                <MenuItem text="Abrir"/>
+                <MenuItem text="Guardar"/>
+                <MenuItem text="Salir"/>
+            </Menu>
+            <Menu text="Edición">
+                <MenuItem text="Cortar"/>
+                <MenuItem text="Copiar"/>
+                <MenuItem text="Pegar"/>
+            </Menu>
+            <Menu text="Ayuda">
+                <MenuItem text="Acerca de"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    
+    <center>
+        <VBox spacing="10" styleClass="content-area">
+            <!-- Contenido principal de la aplicación -->
+        </VBox>
+    </center>
+    
+</BorderPane>

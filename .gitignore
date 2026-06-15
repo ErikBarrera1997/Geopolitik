@@ -1,0 +1,31 @@
+```
+# Java/Maven specific
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# IDE specific
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Build system
+.mvn/
+mvnw
+mvnw.cmd
+
+# Log files
+*.log
+
+# Environment
+.env
+.env.local
+*.env.*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+```
