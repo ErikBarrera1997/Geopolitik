@@ -24,4 +24,5 @@ jobs:
       run: sudo apt-get update && sudo apt-get install -y xvfb
 
     - name: Build and test
-      run: xvfb-run mvn -B verify --file pom.xml
+      working-directory: GEOPOLITIK
+      run: xvfb-run mvn -B verify

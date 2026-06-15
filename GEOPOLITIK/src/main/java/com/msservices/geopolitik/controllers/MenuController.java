@@ -26,7 +26,7 @@ public class MenuController {
     private VBox listaInferior;
 
     @FXML
-    private Button botonNegro;
+    private Button botonEjecutar;
 
     @FXML
     public void initialize() {

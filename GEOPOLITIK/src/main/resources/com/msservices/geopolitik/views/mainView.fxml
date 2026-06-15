@@ -7,46 +7,71 @@
 <?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.msservices.geopolitik.controllers.MenuController">
+            fx:controller="com.msservices.geopolitik.controllers.MenuController"
+            minWidth="800" minHeight="500">
     <stylesheets>
-        <URL value="@../styles/mainViewStyles.css" />
+        /com/msservices/geopolitik/styles/mainViewStyles.css
     </stylesheets>
-    <!-- Barra superior -->
+
     <top>
         <MenuBar styleClass="menu-bar">
             <Menu text="Partida"/>
         </MenuBar>
     </top>
 
-    <!-- Zona principal -->
     <center>
         <HBox spacing="10" alignment="CENTER">
-            <!-- Panel izquierdo (zona de imagen principal) -->
-            <Pane prefWidth="600" prefHeight="400" styleClass="panel-principal">
-                <ImageView fx:id="imagenPrincipal" fitWidth="600" fitHeight="400" preserveRatio="true"/>
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Pane HBox.hgrow="ALWAYS" minWidth="400" styleClass="panel-principal">
+                <ImageView fx:id="imagenPrincipal" preserveRatio="true"/>
             </Pane>
 
-            <!-- Panel derecho -->
-            <VBox spacing="15" alignment="TOP_CENTER">
-                <!-- Etiquetas circulares y rectangulares -->
+            <VBox spacing="10" alignment="TOP_CENTER" minWidth="220" maxWidth="300">
                 <HBox spacing="10" alignment="CENTER">
                     <Circle fx:id="etiquetaRoja" radius="25" styleClass="etiqueta-roja"/>
                     <Rectangle fx:id="etiquetaAzul" width="60" height="40" styleClass="etiqueta-azul"/>
                 </HBox>
 
-                <!-- Lista superior -->
-                <ScrollPane prefHeight="120" prefWidth="200" fitToWidth="true">
+                <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaSuperior" spacing="5" styleClass="lista">
-                        <!-- Ejemplo de item -->
                         <HBox spacing="5" alignment="CENTER_LEFT">
                             <ImageView fitWidth="20" fitHeight="20"/>
                             <Label text="Elemento 1"/>
                         </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 2"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 3"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 4"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 5"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 6"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 7"/>
+                        </HBox>
+                        <HBox spacing="5" alignment="CENTER_LEFT">
+                            <ImageView fitWidth="20" fitHeight="20"/>
+                            <Label text="Elemento 8"/>
+                        </HBox>
                     </VBox>
                 </ScrollPane>
 
-                <!-- Lista inferior -->
-                <ScrollPane prefHeight="150" prefWidth="200" fitToWidth="true">
+                <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaInferior" spacing="5" styleClass="lista">
                         <HBox spacing="5" alignment="CENTER_LEFT">
                             <ImageView fitWidth="20" fitHeight="20"/>
@@ -67,8 +92,7 @@
                     </VBox>
                 </ScrollPane>
 
-                <!-- Botón inferior -->
-                <Button fx:id="botonNegro" text="Ejecutar" styleClass="boton-negro"/>
+                <Button fx:id="botonEjecutar" text="Ejecutar" maxWidth="Infinity" styleClass="boton-ejecutar"/>
             </VBox>
         </HBox>
     </center>

@@ -1,45 +1,84 @@
 /* Colores y estilo general */
 .root {
     -fx-font-family: "Georgia";
-    -fx-background-color: #f9f9f9;
+    -fx-background-color: #2e4e2e;
 }
 
 /* Barra de menú */
 .menu-bar {
-    -fx-background-color: #2e4e2e;
+    -fx-background-color: #3a5a3a;
+    -fx-padding: 2 5;
 }
 .menu-bar .menu .label {
-    -fx-text-fill: white;
+    -fx-text-fill: #f0ead0;
+}
+.menu-bar .menu:hover {
+    -fx-background-color: #4a6a4a;
 }
 
-/* Panel principal */
+/* Panel principal (mapa) */
 .panel-principal {
     -fx-background-color: #e8d8a0;
-    -fx-border-color: #2e4e2e;
+    -fx-border-color: #1a3a1a;
     -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
 }
 
-/* Etiquetas */
+/* Etiquetas (integradas con la paleta de la ventana) */
 .etiqueta-roja {
-    -fx-fill: #8b0000;
+    -fx-fill: #c49a3a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
 }
 .etiqueta-azul {
-    -fx-fill: #4682b4;
+    -fx-fill: #3a5a3a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 2;
+    -fx-arc-width: 6;
+    -fx-arc-height: 6;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+/* Paneles de scroll */
+.panel-scroll {
+    -fx-background: transparent;
+    -fx-background-color: transparent;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-padding: 0;
 }
 
 /* Listas */
 .lista {
     -fx-background-color: #d9c97a;
     -fx-padding: 5;
-    -fx-border-color: #2e4e2e;
-    -fx-border-width: 1;
+    -fx-spacing: 3;
+}
+.lista .label {
+    -fx-text-fill: #1a3a1a;
+    -fx-font-size: 13px;
+}
+.lista .image-view {
+    -fx-opacity: 0.7;
 }
 
-/* Botón negro */
-.boton-negro {
-    -fx-background-color: #000000;
-    -fx-text-fill: white;
+/* Botón ejecutar */
+.boton-ejecutar {
+    -fx-background-color: #3a5a3a;
+    -fx-text-fill: #f0ead0;
     -fx-font-weight: bold;
-    -fx-padding: 8 20;
-    -fx-border-radius: 5;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.boton-ejecutar:hover {
+    -fx-background-color: #4a6a4a;
+}
+.boton-ejecutar:pressed {
+    -fx-background-color: #2a4a2a;
 }
