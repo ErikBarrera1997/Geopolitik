@@ -24,9 +24,11 @@
             <padding>
                 <Insets top="10" right="10" bottom="10" left="10"/>
             </padding>
-            <Pane HBox.hgrow="ALWAYS" minWidth="400" styleClass="panel-principal">
-                <ImageView fx:id="imagenPrincipal" preserveRatio="true"/>
-            </Pane>
+            <ScrollPane fx:id="scrollMapa" HBox.hgrow="ALWAYS" styleClass="panel-principal">
+                <Pane minWidth="400">
+                    <ImageView fx:id="imagenPrincipal" preserveRatio="true"/>
+                </Pane>
+            </ScrollPane>
 
             <VBox spacing="10" alignment="TOP_CENTER" minWidth="220" maxWidth="300">
                 <HBox spacing="10" alignment="CENTER">

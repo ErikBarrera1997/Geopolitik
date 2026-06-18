@@ -1,0 +1,12 @@
+{
+  "map": "img/maps/middle_east.png",
+  "rules": [
+      "accelerated",
+      "no_hidden",
+      "no_nukes",
+      "no_war"
+  ],
+  "flag": "Israel.png",
+  "leader": "Netanyahu.png",
+  "database": "middle_east.db"
+}
