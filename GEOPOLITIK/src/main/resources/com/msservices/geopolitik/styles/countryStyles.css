@@ -1,0 +1,82 @@
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #2e4e2e;
+}
+
+/* Panel del mapa */
+.panel-mapa {
+    -fx-background-color: #e8d8a0;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
+}
+
+/* Bandera */
+.bandera {
+    -fx-fill: #c49a3a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+/* Iconos */
+.icono {
+    -fx-fill: #d9c97a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 1;
+}
+
+/* Lista de provincias */
+.lista-provincias {
+    -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+}
+.lista-provincias .label {
+    -fx-text-fill: #1a3a1a;
+    -fx-font-size: 13px;
+}
+
+/* Botón atrás */
+.boton-atras {
+    -fx-background-color: #3a5a3a;
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.boton-atras:hover {
+    -fx-background-color: #4a6a4a;
+}
+.boton-atras:pressed {
+    -fx-background-color: #2a4a2a;
+}
+
+/* Valores de datos */
+.valor {
+    -fx-text-fill: #c49a3a;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 4 28;
+}
+
+/* Títulos */
+.titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+.label {
+    -fx-text-fill: #f0ead0;
+}

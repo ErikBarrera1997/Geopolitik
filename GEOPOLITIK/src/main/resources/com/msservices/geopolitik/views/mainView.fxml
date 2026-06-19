@@ -26,7 +26,7 @@
             </padding>
             <ScrollPane fx:id="scrollMapa" HBox.hgrow="ALWAYS" styleClass="panel-principal">
                 <Pane minWidth="400">
-                    <ImageView fx:id="imagenPrincipal" preserveRatio="true"/>
+                    <ImageView fx:id="imagenPrincipal" preserveRatio="true" onMouseClicked="#onImagenPrincipalClick"/>
                 </Pane>
             </ScrollPane>
 

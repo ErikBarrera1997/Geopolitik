@@ -1,0 +1,26 @@
+{
+  "list": [
+    { "name": "Armenia", "value": 1.28 },
+    { "name": "Azerbaijan", "value": 1.49 },
+    { "name": "Bahrain", "value": 1.86 },
+    { "name": "Cyprus", "value": 1.11 },
+    { "name": "Egypt", "value": 1.73 },
+    { "name": "Georgia", "value": 1.07 },
+    { "name": "Iran", "value": 1.74 },
+    { "name": "Iraq", "value": 1.1 },
+    { "name": "Israel", "value": 1.53 },
+    { "name": "Jordan", "value": 1.44 },
+    { "name": "Kuwait", "value": 1.72 },
+    { "name": "Lebanon", "value": 1.09 },
+    { "name": "Oman", "value": 1.75 },
+    { "name": "Palestine", "value": 0.0 },
+    { "name": "Qatar", "value": 1.08 },
+    { "name": "Saudi Arabia", "value": 1.47 },
+    { "name": "Syria", "value": 1.51 },
+    { "name": "Turkey", "value": 1.7 },
+    { "name": "Turkmenistan", "value": 1.92 },
+    { "name": "United Arab Emirates", "value": 1.44 },
+    { "name": "Uzbekistan", "value": 1.81 },
+    { "name": "Yemen", "value": 1.94 }
+  ]
+}
