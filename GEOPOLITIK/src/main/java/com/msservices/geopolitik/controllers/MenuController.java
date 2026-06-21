@@ -5,12 +5,14 @@ import com.msservices.geopolitik.connection.DatabaseConnection;
 import com.msservices.geopolitik.connection.Views.CountryResources;
 import com.msservices.geopolitik.connection.Queries;
 import com.msservices.geopolitik.functions.mapFunctions;
+import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadMap;
 import com.msservices.geopolitik.init.loadMatch;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Bounds;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -18,6 +20,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
@@ -43,6 +46,29 @@ public class MenuController {
 
     @FXML
     private VBox listaInferior;
+
+    @FXML
+    private ImageView iconArmamento;
+
+    @FXML
+    private ImageView iconAccionesMilitares;
+
+    @FXML
+    private ImageView iconNoticias;
+
+    @FXML
+    private ImageView iconProvincias;
+
+    @FXML
+    private ImageView iconInvestigacion;
+
+    @FXML
+    private ImageView iconDiplomacia;
+
+    @FXML
+    private ImageView iconMundo;
+
+    private int selectedInferiorIndex = -1;
 
     @FXML
     private Button botonEjecutar;
@@ -92,6 +118,7 @@ public class MenuController {
         loadMap.loadMapFromMatch(imagenPrincipal);
 
         cargarDatosPais();
+        cargarIconos();
 
         Platform.runLater(() -> ajustarMapaAlContenedor());
 
@@ -120,6 +147,40 @@ public class MenuController {
         lblAcero.setText("Acero: " + recursos.getAcero());
         lblIndustria.setText("Industria: " + recursos.getIndustria());
         lblElectricidad.setText("Electricidad: " + recursos.getElectricidad());
+    }
+
+    private void cargarIconos() {
+        iconArmamento.setImage(loadImages.getIcon("weapons"));
+        iconAccionesMilitares.setImage(loadImages.getIcon("military_actions"));
+        iconNoticias.setImage(loadImages.getIcon("news"));
+        iconProvincias.setImage(loadImages.getIcon("provinces"));
+        iconInvestigacion.setImage(loadImages.getIcon("research"));
+        iconDiplomacia.setImage(loadImages.getIcon("diplomacy"));
+        iconMundo.setImage(loadImages.getIcon("world"));
+    }
+
+    @FXML
+    private void onInferiorItemClick(MouseEvent event) {
+        Node source = (Node) event.getSource();
+        while (source != null && !(source instanceof HBox)) {
+            source = source.getParent();
+        }
+        if (source == null) return;
+
+        HBox row = (HBox) source;
+        int index = listaInferior.getChildren().indexOf(row);
+        if (index < 0) return;
+
+        for (Node child : listaInferior.getChildren()) {
+            child.getStyleClass().remove("list-item-selected");
+        }
+
+        row.getStyleClass().add("list-item-selected");
+        selectedInferiorIndex = index;
+    }
+
+    public int getSelectedInferiorIndex() {
+        return selectedInferiorIndex;
     }
 
     private void ajustarMapaAlContenedor() {

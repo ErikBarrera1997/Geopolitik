@@ -57,10 +57,23 @@
 }
 .lista .label {
     -fx-text-fill: #1a3a1a;
-    -fx-font-size: 13px;
+    -fx-font-size: 14px;
 }
 .lista .image-view {
     -fx-opacity: 0.7;
+}
+
+/* Elementos seleccionables de lista inferior */
+.list-item {
+    -fx-padding: 6 8;
+    -fx-background-radius: 3;
+}
+.list-item:hover {
+    -fx-background-color: #c4b06a;
+    -fx-cursor: hand;
+}
+.list-item-selected {
+    -fx-background-color: #a09050;
 }
 
 /* Botón ejecutar */

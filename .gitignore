@@ -30,6 +30,8 @@ Desktop.ini
 *.tmp
 *.bak
 
-# Allow database and SQL files
+# Allow database, SQL and image files
 !*.db
 !*.sql
+!*.png
+!*.jpg
