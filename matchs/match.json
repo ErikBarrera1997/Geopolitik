@@ -6,7 +6,8 @@
       "no_nukes",
       "no_war"
   ],
+  "country": "Israel",
   "flag": "Israel.png",
   "leader": "Netanyahu.png",
-  "database": "middle_east.db"
+  "database": "middleeast.db"
 }

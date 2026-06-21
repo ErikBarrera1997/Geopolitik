@@ -1,0 +1,57 @@
+name: SQLite CI
+
+on:
+  push:
+    branches: [ "**" ]
+    paths:
+      - '**.db'
+      - '**.sql'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - '**.db'
+      - '**.sql'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install SQLite
+      run: sudo apt-get update && sudo apt-get install -y sqlite3
+
+    - name: Check database integrity
+      working-directory: GEOPOLITIK
+      run: |
+        echo "=== Database files ==="
+        find . -name "*.db" -type f
+        echo "=== Integrity check ==="
+        for db in $(find . -name "*.db" -type f); do
+          echo "Checking: $db"
+          sqlite3 "$db" "PRAGMA integrity_check;"
+        done
+
+    - name: Validate SQL files syntax
+      working-directory: GEOPOLITIK
+      run: |
+        echo "=== SQL files ==="
+        find . -name "*.sql" -type f
+        echo "=== Syntax check ==="
+        for sql in $(find . -name "*.sql" -type f); do
+          echo "Validating: $sql"
+          sqlite3 :memory: < "$sql" || echo "Warning: $sql may need a database context"
+        done
+
+    - name: Show database schema
+      working-directory: GEOPOLITIK
+      run: |
+        for db in $(find . -name "*.db" -type f); do
+          echo "=== Schema: $db ==="
+          sqlite3 "$db" ".tables"
+          for table in $(sqlite3 "$db" ".tables"); do
+            echo "--- $table ---"
+            sqlite3 "$db" "PRAGMA table_info($table);"
+          done
+        done

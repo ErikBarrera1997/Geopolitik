@@ -22,7 +22,7 @@
             <VBox spacing="10" alignment="TOP_CENTER">
                 <!-- Bandera -->
                 <Rectangle fx:id="bandera" width="120" height="60" styleClass="bandera"/>
-                <Label text="Nombre" styleClass="titulo"/>
+                <Label fx:id="lblNombrePais" text="Nombre" styleClass="titulo"/>
 
                 <!-- Etiquetas amarillas -->
                 <VBox spacing="8" alignment="CENTER_LEFT">
@@ -30,36 +30,31 @@
                         <Rectangle fx:id="icon1" width="20" height="20" styleClass="icono"/>
                         <Label text="Capital:"/>
                     </HBox>
-                    <Label text="Valor" styleClass="valor"/>
+                    <Label fx:id="lblCapital" text="Valor" styleClass="valor"/>
 
                     <HBox spacing="8" alignment="CENTER_LEFT">
                         <Rectangle fx:id="icon2" width="20" height="20" styleClass="icono"/>
                         <Label text="Tipo de gobierno:"/>
                     </HBox>
-                    <Label text="Valor" styleClass="valor"/>
+                    <Label fx:id="lblGobierno" text="Valor" styleClass="valor"/>
 
                     <HBox spacing="8" alignment="CENTER_LEFT">
                         <Rectangle fx:id="icon3" width="20" height="20" styleClass="icono"/>
-                        <Label text="PIB:"/>
+                        <Label text="Población:"/>
                     </HBox>
-                    <Label text="Valor" styleClass="valor"/>
+                    <Label fx:id="lblPoblacion" text="Valor" styleClass="valor"/>
 
                     <HBox spacing="8" alignment="CENTER_LEFT">
                         <Rectangle fx:id="icon4" width="20" height="20" styleClass="icono"/>
-                        <Label text="Población:"/>
+                        <Label text="Ingresos:"/>
                     </HBox>
-                    <Label text="Valor" styleClass="valor"/>
+                    <Label fx:id="lblIngresos" text="Valor" styleClass="valor"/>
                 </VBox>
 
                 <!-- Lista de provincias -->
                 <Label text="Provincias" styleClass="subtitulo"/>
                 <ScrollPane prefHeight="150" prefWidth="220" fitToWidth="true">
-                    <VBox fx:id="provincias" spacing="5" styleClass="lista-provincias">
-                        <HBox spacing="5" alignment="CENTER_LEFT">
-                            <ImageView fitWidth="20" fitHeight="20"/>
-                            <Label text="Alguna provincia"/>
-                        </HBox>
-                    </VBox>
+                    <VBox fx:id="provincias" spacing="5" styleClass="lista-provincias"/>
                 </ScrollPane>
 
                 <!-- Diplomacia -->

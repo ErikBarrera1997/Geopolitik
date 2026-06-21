@@ -29,3 +29,7 @@ Desktop.ini
 *.class
 *.tmp
 *.bak
+
+# Allow database and SQL files
+!*.db
+!*.sql
