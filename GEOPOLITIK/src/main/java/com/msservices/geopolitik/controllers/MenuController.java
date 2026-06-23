@@ -177,6 +177,25 @@ public class MenuController {
 
         row.getStyleClass().add("list-item-selected");
         selectedInferiorIndex = index;
+
+        if (index == 0) {
+            openWeaponsMarket();
+        }
+    }
+
+    private void openWeaponsMarket() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsMarketView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Mercado de armas");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public int getSelectedInferiorIndex() {

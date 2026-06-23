@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<StackPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="com.msservices.geopolitik.controllers.MarketConfirmControllers"
+           stylesheets="/com/msservices/geopolitik/styles/marketConfirmStyles.css">
+
+    <VBox spacing="15" styleClass="panel-confirmar" maxWidth="360">
+        <padding>
+            <Insets top="20" right="20" bottom="20" left="20"/>
+        </padding>
+
+        <Label text="Confirmar la compra" styleClass="titulo"/>
+
+        <ScrollPane prefHeight="100" fitToWidth="true" styleClass="panel-scroll">
+            <VBox fx:id="listaElementos" spacing="5" styleClass="lista-scroll"/>
+        </ScrollPane>
+
+        <HBox spacing="40" alignment="CENTER">
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="Costo" styleClass="subtitulo"/>
+                <Label fx:id="lblCosto" text="0" styleClass="valor"/>
+            </VBox>
+            <VBox alignment="CENTER" spacing="5">
+                <Label text="Ingresos" styleClass="subtitulo"/>
+                <Label fx:id="lblIngresos" text="0" styleClass="valor"/>
+            </VBox>
+        </HBox>
+
+        <Label fx:id="lblTotal" text="Total: 0" styleClass="valor-total" alignment="CENTER" maxWidth="Infinity"/>
+
+        <HBox spacing="15" alignment="CENTER">
+            <Button fx:id="botonComprar" text="Comprar" styleClass="boton-comprar" onAction="#onComprarClick"/>
+            <Button fx:id="botonCancelar" text="Mejor no" styleClass="boton-cancelar" onAction="#onCancelarClick"/>
+        </HBox>
+    </VBox>
+</StackPane>

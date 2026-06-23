@@ -6,9 +6,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class loadMap {
 
