@@ -62,7 +62,4 @@ public class loadMatch {
         return match;
     }
 
-    public static Map<String, String> getColorMap(){
-        return colorList;
-    }
 }

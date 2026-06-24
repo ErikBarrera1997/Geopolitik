@@ -1,0 +1,94 @@
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #2e4e2e;
+}
+
+.panel-provincia {
+    -fx-background-color: #e8d8a0;
+    -fx-padding: 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
+}
+
+.panel-provincia .label {
+    -fx-text-fill: #1a3a1a;
+}
+
+.titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3a1a;
+}
+
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3a1a;
+}
+
+.texto-dato {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #c49a3a;
+}
+
+.icono {
+    -fx-fill: #d9c97a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 1;
+}
+
+.lista-scroll {
+    -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+}
+
+.lista-scroll .label {
+    -fx-text-fill: #1a3a1a;
+    -fx-font-size: 13px;
+}
+
+.boton-accion {
+    -fx-background-color: #c49a3a;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-accion:hover {
+    -fx-background-color: #d4aa4a;
+}
+
+.boton-accion:pressed {
+    -fx-background-color: #b48a2a;
+}
+
+.boton-atras {
+    -fx-background-color: #3a5a3a;
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-atras:hover {
+    -fx-background-color: #4a6a4a;
+}
+
+.boton-atras:pressed {
+    -fx-background-color: #2a4a2a;
+}

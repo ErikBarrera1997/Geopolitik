@@ -3,7 +3,7 @@ package com.msservices.geopolitik.controllers;
 import com.msservices.geopolitik.connection.Data.Country;
 import com.msservices.geopolitik.connection.DatabaseConnection;
 import com.msservices.geopolitik.connection.Views.CountryResources;
-import com.msservices.geopolitik.connection.Queries;
+import com.msservices.geopolitik.connection.queries;
 import com.msservices.geopolitik.functions.mapFunctions;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadMap;
@@ -114,7 +114,6 @@ public class MenuController {
 
     @FXML
     public void initialize() {
-        loadMatch.loadMatch(loadMatch.getJsonData());
         loadMap.loadMapFromMatch(imagenPrincipal);
 
         cargarDatosPais();
@@ -130,7 +129,7 @@ public class MenuController {
     }
 
     private void cargarDatosPais() {
-        Queries queries = new Queries(DatabaseConnection.getInstance().getConnection());
+        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
         CountryResources recursos = queries.getCountryResources(11);
         if (recursos == null) return;
 
@@ -221,7 +220,7 @@ public class MenuController {
         if (countryName.equals("Desconocido"))
             return;
 
-        Queries queries = new Queries(DatabaseConnection.getInstance().getConnection());
+        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
         Country country = queries.getCountryByName(countryName);
         if (country == null) return;
 

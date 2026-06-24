@@ -11,11 +11,11 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Queries {
+public class queries {
 
     private final Connection connection;
 
-    public Queries(Connection connection) {
+    public queries(Connection connection) {
         this.connection = connection;
     }
 

@@ -1,6 +1,6 @@
 package com.msservices.geopolitik;
 
-import com.msservices.geopolitik.init.loadDataBases;
+import com.msservices.geopolitik.init.loadGlobalVariables;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -11,7 +11,7 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        loadDataBases.load();
+        loadGlobalVariables.load();
 
         Screen screen = Screen.getPrimary();
         double screenWidth = screen.getVisualBounds().getWidth();

@@ -35,7 +35,7 @@
 
         <HBox spacing="15" alignment="CENTER">
             <Button fx:id="botonComprar" text="Comprar" styleClass="boton-comprar" onAction="#onComprarClick"/>
-            <Button fx:id="botonCancelar" text="Mejor no" styleClass="boton-cancelar" onAction="#onCancelarClick"/>
+                <Button fx:id="botonCancelar" text="Mejor no" styleClass="boton-cancelar" onAction="#goBack"/>
         </HBox>
     </VBox>
 </StackPane>

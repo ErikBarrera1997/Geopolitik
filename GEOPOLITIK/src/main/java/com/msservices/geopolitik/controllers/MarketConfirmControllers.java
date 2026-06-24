@@ -1,12 +1,13 @@
 package com.msservices.geopolitik.controllers;
 
+import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class MarketConfirmControllers {
+public class MarketConfirmControllers implements interaction {
 
     @FXML
     private VBox listaElementos;
@@ -55,10 +56,14 @@ public class MarketConfirmControllers {
         }
     }
 
-    @FXML
-    private void onCancelarClick() {
+    @Override
+    public void goBack() {
         if (stage != null) {
             stage.close();
         }
+    }
+
+    @Override
+    public void goAhead() {
     }
 }

@@ -1,5 +1,6 @@
 package com.msservices.geopolitik.controllers;
 
+import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,7 +15,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class WeaponsMarketControllers {
+public class WeaponsMarketControllers implements interaction {
 
     @FXML
     private Rectangle imagenIcono;
@@ -73,9 +74,13 @@ public class WeaponsMarketControllers {
         }
     }
 
-    @FXML
-    private void onRegresarClick() {
+    @Override
+    public void goBack() {
         Stage stage = (Stage) botonRegresar.getScene().getWindow();
         stage.close();
+    }
+
+    @Override
+    public void goAhead() {
     }
 }

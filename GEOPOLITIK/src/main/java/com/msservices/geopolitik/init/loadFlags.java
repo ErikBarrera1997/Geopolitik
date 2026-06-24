@@ -11,30 +11,30 @@ public class loadFlags {
 
     private static Map<Integer, flag> flagCache;
 
-    private static final Map<String, Integer> FILE_TO_ID = new HashMap<>();
+    private static final Map<String, Integer> FLAGS = new HashMap<>();
     static {
-        FILE_TO_ID.put("tukiye", 1);
-        FILE_TO_ID.put("georgia", 2);
-        FILE_TO_ID.put("azerbaijan", 3);
-        FILE_TO_ID.put("armenia", 4);
-        FILE_TO_ID.put("iraq", 5);
-        FILE_TO_ID.put("iran", 6);
-        FILE_TO_ID.put("turkmenistan", 7);
-        FILE_TO_ID.put("uzbekistan", 8);
-        FILE_TO_ID.put("afganistan", 9);
-        FILE_TO_ID.put("lebanon", 10);
-        FILE_TO_ID.put("israel", 11);
-        FILE_TO_ID.put("jordania", 12);
-        FILE_TO_ID.put("kwait", 13);
-        FILE_TO_ID.put("egypt", 14);
-        FILE_TO_ID.put("saudi arabia", 15);
-        FILE_TO_ID.put("bahrain", 16);
-        FILE_TO_ID.put("qatar", 17);
-        FILE_TO_ID.put("uae", 18);
-        FILE_TO_ID.put("oman", 19);
-        FILE_TO_ID.put("yemen", 20);
-        FILE_TO_ID.put("cyprus", 21);
-        FILE_TO_ID.put("syria", 22);
+        FLAGS.put("tukiye", 1);
+        FLAGS.put("georgia", 2);
+        FLAGS.put("azerbaijan", 3);
+        FLAGS.put("armenia", 4);
+        FLAGS.put("iraq", 5);
+        FLAGS.put("iran", 6);
+        FLAGS.put("turkmenistan", 7);
+        FLAGS.put("uzbekistan", 8);
+        FLAGS.put("afganistan", 9);
+        FLAGS.put("lebanon", 10);
+        FLAGS.put("israel", 11);
+        FLAGS.put("jordania", 12);
+        FLAGS.put("kwait", 13);
+        FLAGS.put("egypt", 14);
+        FLAGS.put("saudi arabia", 15);
+        FLAGS.put("bahrain", 16);
+        FLAGS.put("qatar", 17);
+        FLAGS.put("uae", 18);
+        FLAGS.put("oman", 19);
+        FLAGS.put("yemen", 20);
+        FLAGS.put("cyprus", 21);
+        FLAGS.put("syria", 22);
     }
 
     public static Map<Integer, flag> getFlags() {
@@ -52,7 +52,7 @@ public class loadFlags {
 
         for (File file : files) {
             String fileName = file.getName().replaceFirst("\\.\\w+$", "").toLowerCase(Locale.US);
-            Integer id = FILE_TO_ID.get(fileName);
+            Integer id = FLAGS.get(fileName);
             if (id != null) {
                 flagCache.put(id, new flag(id, file.toURI().toString()));
             }

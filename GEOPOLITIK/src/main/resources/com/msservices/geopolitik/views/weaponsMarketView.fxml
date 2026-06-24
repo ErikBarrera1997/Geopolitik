@@ -35,7 +35,7 @@
 
             <HBox spacing="10" alignment="CENTER_RIGHT">
                 <Button fx:id="botonNegro" text="Mercado negro" styleClass="boton-mercado-negro"/>
-                <Button fx:id="botonRegresar" text="Regresar" styleClass="boton-regresar" onAction="#onRegresarClick"/>
+                <Button fx:id="botonRegresar" text="Regresar" styleClass="boton-regresar" onAction="#goBack"/>
             </HBox>
         </VBox>
     </center>
