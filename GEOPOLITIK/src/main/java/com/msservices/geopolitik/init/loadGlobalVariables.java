@@ -12,5 +12,7 @@ public class loadGlobalVariables {
         loadImages.getIcons();
         loadFlags.getFlags();
         loadWeapons.getWeapons();
+        loadCombatActions.getCombatList();
+        loadCombatActions.getOperationsList();
     }
 }

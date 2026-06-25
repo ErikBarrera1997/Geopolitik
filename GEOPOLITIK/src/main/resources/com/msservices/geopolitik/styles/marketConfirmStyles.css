@@ -43,6 +43,22 @@
     -fx-font-size: 13px;
 }
 
+.fila-accion {
+    -fx-background-color: #c4b06a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 4 6;
+    -fx-cursor: hand;
+}
+.fila-accion:hover {
+    -fx-background-color: #b8a45e;
+}
+.fila-accion:pressed {
+    -fx-background-color: #a8944e;
+}
+
 .valor {
     -fx-text-fill: #c49a3a;
     -fx-font-size: 13px;

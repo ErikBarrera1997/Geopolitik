@@ -4,6 +4,7 @@ import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -40,9 +41,12 @@ public class MarketConfirmControllers implements interaction {
     public void setPurchaseData(String[] items, String costo, String ingresos, String total) {
         listaElementos.getChildren().clear();
         for (String item : items) {
+            HBox row = new HBox(5);
+            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+            row.getStyleClass().add("fila-accion");
             Label label = new Label(item);
-            label.setStyle("-fx-text-fill: #1a3a1a; -fx-font-size: 13px;");
-            listaElementos.getChildren().add(label);
+            row.getChildren().add(label);
+            listaElementos.getChildren().add(row);
         }
         lblCosto.setText(costo);
         lblIngresos.setText(ingresos);

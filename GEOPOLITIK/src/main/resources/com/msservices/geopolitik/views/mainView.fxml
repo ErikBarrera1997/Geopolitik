@@ -38,55 +38,55 @@
 
                 <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaSuperior" spacing="8" styleClass="lista" fillWidth="true">
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblPoblacion" text="Población: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblFinanzas" text="Finanzas: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblArea" text="Área: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblGasNatural" text="Gas natural: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblPetroleo" text="Petróleo: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblMadera" text="Madera: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblPesca" text="Pesca: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblUranio" text="Uranio: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblOro" text="Oro: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblAgricultura" text="Agricultura: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblAcero" text="Acero: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblIndustria" text="Industria: 0"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblElectricidad" text="Electricidad: 0"/>
                         </HBox>
@@ -95,31 +95,31 @@
 
                 <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaInferior" spacing="8" styleClass="lista" fillWidth="true">
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconArmamento" fitWidth="28" fitHeight="28"/>
                             <Label text="Armamento"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconAccionesMilitares" fitWidth="28" fitHeight="28"/>
                             <Label text="Acciones militares"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconNoticias" fitWidth="28" fitHeight="28"/>
                             <Label text="Noticias"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconProvincias" fitWidth="28" fitHeight="28"/>
                             <Label text="Provincias"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconInvestigacion" fitWidth="28" fitHeight="28"/>
                             <Label text="Investigación"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconDiplomacia" fitWidth="28" fitHeight="28"/>
                             <Label text="Diplomacia"/>
                         </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="list-item" onMouseClicked="#onInferiorItemClick">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconMundo" fitWidth="28" fitHeight="28"/>
                             <Label text="Mundo"/>
                         </HBox>

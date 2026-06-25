@@ -1,0 +1,32 @@
+{
+  "combat_list": [
+    { "name": "Ataque de artílleria", "value": 1 },
+    { "name": "Ataque de artílleria propulsada", "value": 2 },
+    { "name": "Ataque aéreo", "value": 3 },
+    { "name": "Bombardeo estratégico", "value": 4 },
+    { "name": "Ataque con misiles (Mar) ", "value": 5 },
+    { "name": "Ataque con misiles (Submarino)", "value": 6 },
+    { "name": "Lanzar misiles balísticos", "value": 7 },
+    { "name": "Lanzar misiles de crucero", "value": 8 },
+    { "name": "Asalto aéreo", "value": 9 },
+    { "name": "Ataque con drones", "value": 10 },
+    { "name": "Asalto combinado", "value": 11 },
+    { "name": "Incursión terrestre", "value": 12 },
+    { "name": "Sabotaje", "value": 13 },
+    { "name": "Operaciones especiales", "value": 14 },
+    { "name": "Ataque nuclear", "value": 15 },
+    { "name": "Ataque con armas químicas", "value": 16 },
+    { "name": "Ataque con armas biológicas", "value": 17 }
+  ],
+  "operations_list": [
+    { "name": "Colocar minas marítimas", "value": 1 },
+    { "name": "Colocar búnkeres", "value": 2 },
+    { "name": "Colocar trincheras", "value": 3 },
+    { "name": "Colocar dientes de dragón", "value": 4 },
+    { "name": "Colocar alambradas y sacos", "value": 5 },
+    { "name": "Lanzar ultimátum", "value": 6 },
+    { "name": "Reconocimiento aéreo", "value": 7 },
+    { "name": "Reconocimiento satélital", "value": 8 },
+    { "name": "Patrullaje aéreo", "value": 9 }
+  ]
+}

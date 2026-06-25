@@ -70,7 +70,7 @@ public class CountryViewControllers implements interaction {
         for (Province p : listaProvincias) {
             HBox row = new HBox(5);
             row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
-            row.setStyle("-fx-cursor: hand;");
+            row.getStyleClass().add("fila-accion");
             ImageView icon = new ImageView();
             icon.setFitWidth(20);
             icon.setFitHeight(20);

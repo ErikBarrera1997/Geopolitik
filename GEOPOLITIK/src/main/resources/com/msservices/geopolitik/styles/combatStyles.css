@@ -1,0 +1,75 @@
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #2e4e2e;
+}
+
+.panel-accion {
+    -fx-background-color: #3a5a3a;
+    -fx-padding: 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
+}
+
+.titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+
+.icono {
+    -fx-fill: #d9c97a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 1;
+}
+
+.texto-dato {
+    -fx-text-fill: #f0ead0;
+    -fx-font-size: 13px;
+}
+
+.lista-scroll {
+    -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-padding: 5;
+}
+.lista-scroll .label {
+    -fx-text-fill: #1a3a1a;
+    -fx-font-size: 13px;
+}
+
+.fila-accion {
+    -fx-background-color: #c4b06a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 4 6;
+    -fx-cursor: hand;
+}
+.fila-accion:hover {
+    -fx-background-color: #b8a45e;
+}
+.fila-accion:pressed {
+    -fx-background-color: #a8944e;
+}
+
+.boton-atras {
+    -fx-background-color: #3a5a3a;
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+.boton-atras:hover {
+    -fx-background-color: #4a6a4a;
+}
+.boton-atras:pressed {
+    -fx-background-color: #2a4a2a;
+}

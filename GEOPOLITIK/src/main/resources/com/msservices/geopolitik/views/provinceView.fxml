@@ -41,8 +41,17 @@
 
             <!-- Lista de recursos -->
             <Label text="Recursos" styleClass="subtitulo"/>
-            <ScrollPane prefHeight="100" prefWidth="250" fitToWidth="true">
+            <ScrollPane prefHeight="100" prefWidth="280" fitToWidth="true">
                 <VBox fx:id="listaRecursos" spacing="5" styleClass="lista-scroll"/>
+            </ScrollPane>
+
+            <!-- Defensas -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Defensas" styleClass="subtitulo"/>
+                <Circle fx:id="lockDefensas" radius="10" fill="#7b2d8e" styleClass="lock-icon"/>
+            </HBox>
+            <ScrollPane fx:id="defenseScroll" prefHeight="500" prefWidth="280" fitToWidth="true" visible="false" managed="false">
+                <VBox fx:id="defenseList" spacing="5" styleClass="lista-scroll"/>
             </ScrollPane>
 
             <!-- Botones -->

@@ -7,7 +7,6 @@ import com.msservices.geopolitik.connection.queries;
 import com.msservices.geopolitik.functions.mapFunctions;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadMap;
-import com.msservices.geopolitik.init.loadMatch;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
