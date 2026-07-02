@@ -10,17 +10,8 @@ import static com.msservices.geopolitik.init.loadMap.getMapWidth;
 public class mapFunctions {
 
     public static double getColor(int x, int y){
-        int color = (int) getMapColors()[y * getMapWidth() + x];
-        return getRGBValue(color);
-    }
-
-    public static double getRGBValue(int color) {
-        int r = (color >>> 16) & 0xFF;
-        int g = (color >>> 8) & 0xFF;
-        int b = color & 0xFF;
-        double value = r + g + b;
-        double sqrt = Math.cbrt(value);
-        return Math.round((sqrt - (Math.floor(sqrt) - 1)) * 100.0) / 100.0;
+        System.out.println((int) getMapColors()[y * getMapWidth() + x]);
+        return (int) getMapColors()[y * getMapWidth() + x];
     }
 
     //Identifies the country by color code from the list

@@ -67,6 +67,42 @@ public class MenuController {
     @FXML
     private ImageView iconMundo;
 
+    @FXML
+    private ImageView iconPoblacion;
+
+    @FXML
+    private ImageView iconFinanzas;
+
+    @FXML
+    private ImageView iconGasNatural;
+
+    @FXML
+    private ImageView iconPetroleo;
+
+    @FXML
+    private ImageView iconMadera;
+
+    @FXML
+    private ImageView iconPesca;
+
+    @FXML
+    private ImageView iconUranio;
+
+    @FXML
+    private ImageView iconOro;
+
+    @FXML
+    private ImageView iconAgricultura;
+
+    @FXML
+    private ImageView iconAcero;
+
+    @FXML
+    private ImageView iconIndustria;
+
+    @FXML
+    private ImageView iconElectricidad;
+
     private int selectedInferiorIndex = -1;
 
     @FXML
@@ -155,6 +191,19 @@ public class MenuController {
         iconInvestigacion.setImage(loadImages.getIcon("research"));
         iconDiplomacia.setImage(loadImages.getIcon("diplomacy"));
         iconMundo.setImage(loadImages.getIcon("world"));
+
+        iconPoblacion.setImage(loadImages.getIcon("population"));
+        iconFinanzas.setImage(loadImages.getIcon("money"));
+        iconGasNatural.setImage(loadImages.getIcon("gas"));
+        iconPetroleo.setImage(loadImages.getIcon("oil"));
+        iconMadera.setImage(loadImages.getIcon("wood"));
+        iconPesca.setImage(loadImages.getIcon("fishing"));
+        iconUranio.setImage(loadImages.getIcon("uranium"));
+        iconOro.setImage(loadImages.getIcon("gold"));
+        iconAgricultura.setImage(loadImages.getIcon("farming"));
+        iconAcero.setImage(loadImages.getIcon("steel"));
+        iconIndustria.setImage(loadImages.getIcon("industry"));
+        iconElectricidad.setImage(loadImages.getIcon("electricity"));
     }
 
     @FXML

@@ -6,6 +6,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.image.PixelReader;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class loadMap {
 
@@ -30,6 +33,8 @@ public class loadMap {
         loadMapColors(image);
     }
 
+    private static final int COLOR_PRECISION = 32;
+
     //Creates a map colors representation of the map.
     private static void loadMapColors(Image image){
         int width = (int) image.getWidth();
@@ -39,9 +44,18 @@ public class loadMap {
         mapHeight = height;
         PixelReader reader = image.getPixelReader();
 
+        Map<Integer, Integer> colorToId = new HashMap<>();
+        AtomicInteger nextId = new AtomicInteger(1);
+
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                mapColors[y * width + x] = reader.getArgb(x, y);
+                int argb = reader.getArgb(x, y);
+                int r = ((argb >> 16) & 0xFF) / COLOR_PRECISION * COLOR_PRECISION;
+                int g = ((argb >> 8) & 0xFF) / COLOR_PRECISION * COLOR_PRECISION;
+                int b = (argb & 0xFF) / COLOR_PRECISION * COLOR_PRECISION;
+                int quantizedRgb = (r << 16) | (g << 8) | b;
+                int id = colorToId.computeIfAbsent(quantizedRgb, k -> nextId.getAndIncrement());
+                mapColors[y * width + x] = id;
             }
         }
     }

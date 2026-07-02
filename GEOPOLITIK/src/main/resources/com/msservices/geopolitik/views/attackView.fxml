@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.AttackController"
+            stylesheets="/com/msservices/geopolitik/styles/attackStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-ataque">
+
+            <!-- Encabezado con cuadros grises y flecha -->
+            <HBox spacing="20" alignment="CENTER">
+                <Rectangle fx:id="cuadroIzquierdo" width="80" height="40" styleClass="cuadro-gris"/>
+                <Label text="➜" styleClass="flecha"/>
+                <Rectangle fx:id="cuadroDerecho" width="80" height="40" styleClass="cuadro-gris"/>
+            </HBox>
+
+            <!-- Descripción -->
+            <TextArea fx:id="descripcion" prefHeight="60" prefWidth="300" wrapText="true" editable="false" styleClass="descripcion"/>
+
+            <!-- Sección de opciones y efecto -->
+            <HBox spacing="20" alignment="CENTER">
+                <!-- Lista de opciones -->
+                <ScrollPane prefHeight="150" prefWidth="250" fitToWidth="true">
+                    <VBox fx:id="listaOpciones" spacing="5" styleClass="lista-scroll">
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="checkCivil" styleClass="check"/>
+                            <Rectangle fx:id="iconCivil" width="20" height="20" styleClass="icono"/>
+                            <Label text="Atacar infraestructura civil" styleClass="texto-dato"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="checkMilitar" styleClass="check"/>
+                            <Rectangle fx:id="iconMilitar" width="20" height="20" styleClass="icono"/>
+                            <Label text="Atacar infraestructura militar" styleClass="texto-dato"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="checkPoblacion" styleClass="check"/>
+                            <Rectangle fx:id="iconPoblacion" width="20" height="20" styleClass="icono"/>
+                            <Label text="Atacar a la población" styleClass="texto-dato"/>
+                        </HBox>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <CheckBox fx:id="checkObjetivos" styleClass="check"/>
+                            <Rectangle fx:id="iconObjetivos" width="20" height="20" styleClass="icono"/>
+                            <Label text="Atacar objetivos militares" styleClass="texto-dato"/>
+                        </HBox>
+                    </VBox>
+                </ScrollPane>
+
+                <!-- Cuadro de efecto -->
+                <TextArea fx:id="efecto" prefHeight="150" prefWidth="200" wrapText="true" editable="false" styleClass="efecto"/>
+            </HBox>
+
+            <!-- Botones -->
+            <HBox spacing="40" alignment="CENTER">
+                <Button fx:id="botonAtaque" text="Al ataque" styleClass="boton-accion"/>
+                <Button fx:id="botonCancelar" text="Mejor lo pienso" styleClass="boton-cancelar"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>
