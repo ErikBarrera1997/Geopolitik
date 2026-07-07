@@ -21,7 +21,7 @@
             <!-- Panel derecho -->
             <VBox spacing="10" alignment="TOP_CENTER">
                 <!-- Bandera -->
-                <Rectangle fx:id="bandera" width="120" height="60" styleClass="bandera"/>
+                <ImageView fx:id="bandera" fitWidth="120" fitHeight="60" preserveRatio="true" styleClass="bandera"/>
                 <Label fx:id="lblNombrePais" text="Nombre" styleClass="titulo"/>
 
                 <!-- Etiquetas amarillas -->

@@ -143,6 +143,20 @@ public class queries {
         return null;
     }
 
+    public double getCountryMoney(int countryId) {
+        String sql = "SELECT money FROM TotalResources WHERE id_country = ?";
+        try (var stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, countryId);
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("money");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public List<Province> getProvincesByCountry(int countryId) {
         List<Province> provinces = new ArrayList<>();
         String sql = "SELECT id_province, name, environment, population, area, is_capital, is_coastal, id_country, morale FROM Provinces WHERE id_country = ?";

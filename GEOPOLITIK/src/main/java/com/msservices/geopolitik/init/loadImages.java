@@ -93,4 +93,47 @@ public class loadImages {
     public static Image getAttackIcon(String key) {
         return getAttackIcons().get(key);
     }
+
+    private static Map<String, Image> weaponImageCache;
+    private static final int WEAPON_ICON_SIZE = 40;
+
+    private static final List<menuIcons> WEAPON_ICONS = List.of(
+        new menuIcons("Portaaviones", "img/weapons/aircraft carrier.jpg"),
+        new menuIcons("Sistema antiaéreo", "img/weapons/antiaircraft system.jpg"),
+        new menuIcons("Sistema antimisil", "img/weapons/antimissile system.jpg"),
+        new menuIcons("Artillería", "img/weapons/artillery.jpg"),
+        new menuIcons("Vehículo de asalto", "img/weapons/assault vehicle.jpg"),
+        new menuIcons("Dron de ataque", "img/weapons/attac drone.jpg"),
+        new menuIcons("Avión de ataque", "img/weapons/attacker.jpg"),
+        new menuIcons("Misil balístico", "img/weapons/ballistic missile.jpg"),
+        new menuIcons("bombardero", "img/weapons/bomber.jpg"),
+        new menuIcons("Misil de crucero", "img/weapons/cruice missile.jpg"),
+        new menuIcons("Destructor", "img/weapons/destroyer.jpg"),
+        new menuIcons("Caza", "img/weapons/fighter.jpg"),
+        new menuIcons("Helicóptero", "img/weapons/helicopter.jpg"),
+        new menuIcons("Artillería propulsada", "img/weapons/propeled artillery.jpg"),
+        new menuIcons("Dron de reconocimiento", "img/weapons/reccon drone.jpg"),
+        new menuIcons("Submarino", "img/weapons/submarine.jpg"),
+        new menuIcons("Tanque", "img/weapons/tank.jpg")
+    );
+
+    public static Map<String, Image> getWeaponImages() {
+        if (weaponImageCache != null) return weaponImageCache;
+
+        weaponImageCache = new HashMap<>();
+
+        for (menuIcons icon : WEAPON_ICONS) {
+            File file = new File(icon.path());
+            if (file.isFile()) {
+                Image image = new Image(file.toURI().toString(), WEAPON_ICON_SIZE, WEAPON_ICON_SIZE, true, true);
+                weaponImageCache.put(icon.name(), image);
+            }
+        }
+
+        return weaponImageCache;
+    }
+
+    public static Image getWeaponImage(String name) {
+        return getWeaponImages().get(name.toLowerCase());
+    }
 }

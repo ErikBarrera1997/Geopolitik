@@ -4,7 +4,7 @@
 }
 
 .panel-mercado {
-    -fx-background-color: #e8d8a0;
+    -fx-background-color: #2e4e2e;
     -fx-padding: 20;
     -fx-border-color: #1a3a1a;
     -fx-border-width: 2;
@@ -12,19 +12,19 @@
 }
 
 .panel-mercado .label {
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .titulo {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .subtitulo {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .imagen-icono {
@@ -51,6 +51,7 @@
 .lista-desplegable .list-cell {
     -fx-background-color: #d9c97a;
     -fx-text-fill: #1a3a1a;
+    -fx-font-family: "Georgia";
 }
 
 .lista-desplegable .list-cell:hover {
@@ -66,6 +67,27 @@
     -fx-border-color: #1a3a1a;
     -fx-border-width: 1;
     -fx-text-fill: #1a3a1a;
+}
+
+.boton-cantidad {
+    -fx-background-color: #c49a3a;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-cantidad:hover {
+    -fx-background-color: #d4aa4a;
+}
+
+.boton-cantidad:pressed {
+    -fx-background-color: #b48a2a;
 }
 
 .boton-comprar {

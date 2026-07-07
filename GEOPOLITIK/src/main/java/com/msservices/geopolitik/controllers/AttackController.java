@@ -3,7 +3,9 @@ package com.msservices.geopolitik.controllers;
 import com.msservices.geopolitik.init.loadCombatActions;
 import com.msservices.geopolitik.init.entity.combatOption;
 import com.msservices.geopolitik.init.loadImages;
+import com.msservices.geopolitik.interfaces.attack;
 import com.msservices.geopolitik.interfaces.interaction;
+import com.msservices.geopolitik.functions.combatFuctions.artilleryAttack;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -22,11 +24,10 @@ import javafx.stage.Stage;
 
 import java.util.List;
 
-public class AttackController implements interaction {
+public class AttackController implements interaction, attack {
 
     @FXML private VBox listaAcciones;
     @FXML private Button botonAtras;
-
     @FXML private Rectangle cuadroIzquierdo;
     @FXML private Rectangle cuadroDerecho;
     @FXML private TextArea descripcion;
@@ -45,21 +46,6 @@ public class AttackController implements interaction {
 
     private combatOption option;
 
-    @Override
-    public void goBack() {
-        Stage stage;
-        if (botonCancelar != null && botonCancelar.getScene() != null) {
-            stage = (Stage) botonCancelar.getScene().getWindow();
-        } else {
-            stage = (Stage) botonAtras.getScene().getWindow();
-        }
-        stage.close();
-    }
-
-    @Override
-    public void goAhead() {
-    }
-
     @FXML
     public void initialize() {
         if (botonAtras != null) {
@@ -68,6 +54,9 @@ public class AttackController implements interaction {
         }
         if (botonCancelar != null) {
             botonCancelar.setOnAction(e -> goBack());
+        }
+        if(botonAtaque != null) {
+            botonAtaque.setOnAction(e -> launchAttack());
         }
     }
 
@@ -119,5 +108,25 @@ public class AttackController implements interaction {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void launchAttack() {
+        artilleryAttack.launchAttackToMilitaryUnits(2,100, 10);
+    }
+
+    @Override
+    public void goBack() {
+        Stage stage;
+        if (botonCancelar != null && botonCancelar.getScene() != null) {
+            stage = (Stage) botonCancelar.getScene().getWindow();
+        } else {
+            stage = (Stage) botonAtras.getScene().getWindow();
+        }
+        stage.close();
+    }
+
+    @Override
+    public void goAhead() {
     }
 }

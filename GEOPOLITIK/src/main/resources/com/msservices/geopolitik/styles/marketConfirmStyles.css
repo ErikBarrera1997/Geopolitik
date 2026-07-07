@@ -1,29 +1,29 @@
 .root {
     -fx-font-family: "Georgia";
-    -fx-background-color: rgba(26, 58, 26, 0.65);
+    -fx-background-color: #2e4e2e;
 }
 
 .panel-confirmar {
-    -fx-background-color: #e8d8a0;
+    -fx-background-color: #2e4e2e;
     -fx-border-color: #1a3a1a;
     -fx-border-width: 2;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.5), 10, 0, 3, 3);
 }
 
 .panel-confirmar .label {
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .titulo {
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .subtitulo {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
-    -fx-text-fill: #1a3a1a;
+    -fx-text-fill: #f0ead0;
 }
 
 .panel-scroll {
@@ -50,13 +50,6 @@
     -fx-border-radius: 3;
     -fx-background-radius: 3;
     -fx-padding: 4 6;
-    -fx-cursor: hand;
-}
-.fila-accion:hover {
-    -fx-background-color: #b8a45e;
-}
-.fila-accion:pressed {
-    -fx-background-color: #a8944e;
 }
 
 .valor {
@@ -111,4 +104,26 @@
 
 .boton-cancelar:pressed {
     -fx-background-color: #b48a2a;
+}
+
+.boton-reset {
+    -fx-background-color: #0066cc;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-min-width: 24;
+    -fx-min-height: 24;
+    -fx-max-width: 24;
+    -fx-max-height: 24;
+    -fx-cursor: hand;
+    -fx-padding: 0;
+    -fx-border-color: #004499;
+    -fx-border-width: 1;
+}
+
+.boton-reset:hover {
+    -fx-background-color: #0077ee;
+}
+
+.boton-reset:pressed {
+    -fx-background-color: #0055bb;
 }

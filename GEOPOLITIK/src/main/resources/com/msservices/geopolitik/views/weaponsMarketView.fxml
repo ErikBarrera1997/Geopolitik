@@ -11,25 +11,29 @@
             stylesheets="/com/msservices/geopolitik/styles/weaponsMarketStyles.css">
 
     <center>
-        <VBox spacing="15" styleClass="panel-mercado" maxWidth="400">
+        <VBox spacing="15" styleClass="panel-mercado" prefWidth="360" maxWidth="400" minWidth="360">
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Rectangle fx:id="imagenIcono" width="40" height="40" styleClass="imagen-icono"/>
+            <VBox spacing="8" alignment="CENTER">
+                <Rectangle fx:id="imagenIcono" width="60" height="60" styleClass="imagen-icono"/>
                 <Label text="Mercado de armas" styleClass="titulo"/>
-            </HBox>
+            </VBox>
 
             <HBox spacing="10" alignment="CENTER_LEFT">
                 <Rectangle fx:id="imagenArma" width="40" height="40" styleClass="imagen-icono"/>
                 <Label fx:id="etiquetaTexto" text="Nombre del arma" styleClass="etiqueta-texto"/>
             </HBox>
 
-            <ComboBox fx:id="listaDesplegable" maxWidth="Infinity" styleClass="lista-desplegable"/>
+            <ComboBox fx:id="listaDesplegable" maxWidth="Infinity" prefHeight="30" styleClass="lista-desplegable"/>
 
-            <HBox spacing="10" alignment="CENTER_LEFT">
+            <VBox fx:id="cantidadPanel" managed="false" visible="false" spacing="10" alignment="CENTER_LEFT">
                 <Label text="Cantidad" styleClass="subtitulo"/>
-                <Slider fx:id="sliderCantidad" min="0" max="100" value="10" HBox.hgrow="ALWAYS"/>
-                <TextField fx:id="campoCantidad" prefWidth="60" styleClass="campo-cantidad"/>
-            </HBox>
+                <HBox spacing="10" alignment="CENTER_LEFT">
+                    <Slider fx:id="sliderCantidad" min="0" max="100" value="10" HBox.hgrow="ALWAYS"/>
+                    <TextField fx:id="campoCantidad" prefWidth="60" styleClass="campo-cantidad"/>
+                </HBox>
+            </VBox>
+
+            <Button fx:id="botonCantidad" text="Seleccionar cantidad" maxWidth="Infinity" styleClass="boton-cantidad" onAction="#onSeleccionarCantidad"/>
 
             <Button fx:id="botonComprar" text="Comprar" maxWidth="Infinity" styleClass="boton-comprar" onAction="#onComprarClick"/>
 

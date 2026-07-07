@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 public class CountryViewControllers implements interaction {
 
     @FXML private Pane mapaProvincias;
-    @FXML private Rectangle bandera;
+    @FXML private ImageView bandera;
     @FXML private Rectangle icon1;
     @FXML private Rectangle icon2;
     @FXML private Rectangle icon3;
@@ -65,6 +65,9 @@ public class CountryViewControllers implements interaction {
         }
 
         Image flagImage = loadFlag(countryId);
+        if (flagImage != null) {
+            bandera.setImage(flagImage);
+        }
 
         provincias.getChildren().clear();
         for (Province p : listaProvincias) {
@@ -90,7 +93,7 @@ public class CountryViewControllers implements interaction {
     private Image loadFlag(int countryId) {
         flag f = loadFlags.getFlag(countryId);
         if (f != null) {
-            return new Image(f.path(), 20, 20, true, true);
+            return new Image(f.path(), 120, 60, true, true);
         }
         return null;
     }
@@ -128,6 +131,7 @@ public class CountryViewControllers implements interaction {
 
     @FXML
     public void initialize() {
+        
         botonAtras.setOnAction(e -> goBack());
     }
 }
