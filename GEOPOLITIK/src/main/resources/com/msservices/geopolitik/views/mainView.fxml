@@ -43,16 +43,18 @@
                     <Rectangle fx:id="etiquetaAzul" width="60" height="40" styleClass="etiqueta-azul"/>
                 </HBox>
 
+                <!-- Poblacion y Finanzas fuera de la lista -->
+                <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onPoblacionClick">
+                    <ImageView fx:id="iconPoblacion" fitWidth="28" fitHeight="28"/>
+                    <Label fx:id="lblPoblacion" text="Población: 0"/>
+                </HBox>
+                <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onFinanzasClick">
+                    <ImageView fx:id="iconFinanzas" fitWidth="28" fitHeight="28"/>
+                    <Label fx:id="lblFinanzas" text="Finanzas: 0"/>
+                </HBox>
+
                 <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaSuperior" spacing="8" styleClass="lista" fillWidth="true">
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onPoblacionClick">
-                            <ImageView fx:id="iconPoblacion" fitWidth="28" fitHeight="28"/>
-                            <Label fx:id="lblPoblacion" text="Población: 0"/>
-                        </HBox>
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
-                            <ImageView fx:id="iconFinanzas" fitWidth="28" fitHeight="28"/>
-                            <Label fx:id="lblFinanzas" text="Finanzas: 0"/>
-                        </HBox>
                         <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
                             <ImageView fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblArea" text="Área: 0"/>

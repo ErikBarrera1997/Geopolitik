@@ -45,10 +45,10 @@ public class AttackController implements interaction, attack {
     private static final int ORIGIN_COUNTRY_ID = 11;
 
     private static final String[][] ATTACK_TYPES = {
-        {"Atacar infraestructura civil", "1"},
-        {"Atacar infraestructura militar", "2"},
-        {"Atacar civiles", "12"},
-        {"Atacar objetivos militares", "11"}
+        {"Atacar infraestructura civil", "civillian_inf_objectives"},
+        {"Atacar infraestructura militar", "military_inf_objectives"},
+        {"Atacar civiles", "civillian_objectives"},
+        {"Atacar objetivos militares", "military_objectives"}
     };
 
     @FXML
@@ -112,7 +112,7 @@ public class AttackController implements interaction, attack {
             ImageView icon = new ImageView();
             icon.setFitWidth(28);
             icon.setFitHeight(28);
-            Image img = loadImages.getAttackIcon(attack[1]);
+            Image img = loadImages.getIcon(attack[1]);
             if (img != null) {
                 icon.setImage(img);
             }

@@ -1,14 +1,14 @@
-/* Colores y estilo general */
 .root {
     -fx-font-family: "Georgia";
     -fx-background-color: #2e4e2e;
 }
 
-/* Barra de menú */
+/* Barra de menu */
 .menu-bar {
     -fx-background-color: linear-gradient(to bottom, #3e5e3e, #2e4e2e);
     -fx-padding: 2 5;
-    -fx-border-color: transparent;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 0 0 1 0;
 }
 .menu-bar .menu .label {
     -fx-text-fill: #f0ead0;
@@ -41,7 +41,7 @@
 /* Menus desplegables */
 .menu-bar .context-menu {
     -fx-background-color: linear-gradient(to bottom, #3e5e3e, #2e4e2e);
-    -fx-border-color: #5a7a4a;
+    -fx-border-color: #1a3a1a;
     -fx-border-width: 1;
     -fx-border-radius: 0 0 4 4;
     -fx-background-radius: 0 0 4 4;
@@ -71,25 +71,27 @@
     -fx-border-width: 0 0 1 0;
 }
 
-/* Panel principal (mapa) */
+/* Panel del mapa con sombreado y borde */
 .panel-principal {
-    -fx-background-color: #e8d8a0;
+    -fx-background-color: #3a5a3a;
     -fx-border-color: #1a3a1a;
-    -fx-border-width: 2;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0, 1, 1);
 }
 
-/* Etiquetas (integradas con la paleta de la ventana) */
+/* Etiquetas */
 .etiqueta-roja {
     -fx-fill: #c49a3a;
     -fx-stroke: #1a3a1a;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
 }
 .etiqueta-azul {
-    -fx-fill: #3a5a3a;
+    -fx-fill: #4a6a4a;
     -fx-stroke: #1a3a1a;
-    -fx-stroke-width: 2;
+    -fx-stroke-width: 1;
     -fx-arc-width: 6;
     -fx-arc-height: 6;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
@@ -101,37 +103,27 @@
     -fx-background-color: transparent;
     -fx-border-color: #1a3a1a;
     -fx-border-width: 1;
+    -fx-border-radius: 3;
     -fx-padding: 0;
 }
 
 /* Listas */
 .lista {
     -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
     -fx-padding: 5;
     -fx-spacing: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 1, 1);
 }
 .lista .label {
     -fx-text-fill: #1a3a1a;
-    -fx-font-size: 14px;
-}
-.lista .image-view {
-    -fx-opacity: 0.7;
+    -fx-font-size: 13px;
 }
 
-/* Elementos seleccionables de lista inferior */
-.list-item {
-    -fx-padding: 6 8;
-    -fx-background-radius: 3;
-}
-.list-item:hover {
-    -fx-background-color: #c4b06a;
-    -fx-cursor: hand;
-}
-.list-item-selected,
-.fila-accion.list-item-selected {
-    -fx-background-color: #a09050;
-}
-
+/* Filas de accion */
 .fila-accion {
     -fx-background-color: #c4b06a;
     -fx-border-color: #1a3a1a;
@@ -148,22 +140,38 @@
     -fx-background-color: #a8944e;
 }
 
-/* Botón ejecutar */
+/* Elementos seleccionables */
+.list-item {
+    -fx-padding: 6 8;
+    -fx-background-radius: 3;
+}
+.list-item:hover {
+    -fx-background-color: #c4b06a;
+    -fx-cursor: hand;
+}
+.list-item-selected,
+.fila-accion.list-item-selected {
+    -fx-background-color: #a09050;
+}
+
+/* Boton ejecutar */
 .boton-ejecutar {
-    -fx-background-color: #3a5a3a;
-    -fx-text-fill: #f0ead0;
+    -fx-background-color: linear-gradient(to bottom, #c49a3a, #a8842a);
+    -fx-text-fill: #1a3a1a;
     -fx-font-weight: bold;
-    -fx-font-size: 14px;
-    -fx-padding: 10 20;
+    -fx-font-size: 13px;
+    -fx-padding: 8 24;
     -fx-border-color: #1a3a1a;
     -fx-border-width: 1;
     -fx-border-radius: 4;
     -fx-background-radius: 4;
     -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
 }
 .boton-ejecutar:hover {
-    -fx-background-color: #4a6a4a;
+    -fx-background-color: linear-gradient(to bottom, #d4aa4a, #b8943a);
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 4, 0, 1, 1);
 }
 .boton-ejecutar:pressed {
-    -fx-background-color: #2a4a2a;
+    -fx-background-color: linear-gradient(to bottom, #a8842a, #987420);
 }

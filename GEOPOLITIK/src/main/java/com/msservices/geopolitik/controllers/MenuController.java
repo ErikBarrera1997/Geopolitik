@@ -257,6 +257,24 @@ public class MenuController {
         }
     }
 
+    @FXML
+    private void onFinanzasClick() {
+        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
+        CountryResources recursos = queries.getCountryResources(11);
+        if (recursos == null) return;
+
+        javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
+        alert.setTitle("Finanzas");
+        alert.setHeaderText("Resumen financiero");
+        alert.setContentText("Ingresos: " + recursos.getIngresos() + "\n" +
+                "Petróleo: " + recursos.getPetroleo() + "\n" +
+                "Gas natural: " + recursos.getGasNatural() + "\n" +
+                "Oro: " + recursos.getOro() + "\n" +
+                "Acero: " + recursos.getAcero());
+        alert.initOwner(imagenPrincipal.getScene().getWindow());
+        alert.showAndWait();
+    }
+
     private void openWeaponsMarket() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsMarketView.fxml"));
