@@ -16,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -148,6 +149,9 @@ public class MenuController {
     private Label lblElectricidad;
 
     @FXML
+    private Menu menuMinistroGuerra;
+
+    @FXML
     public void initialize() {
         loadMap.loadMapFromMatch(imagenPrincipal);
 
@@ -230,6 +234,29 @@ public class MenuController {
         }
     }
 
+    @FXML
+    private void onPoblacionClick() {
+        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
+        var countryPop = queries.getTotalCountryPopulation(11);
+        if (countryPop == null) return;
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/populationView.fxml"));
+            Parent root = loader.load();
+            PopulationController controller = loader.getController();
+            controller.setPopulationData(countryPop.getCountryName(), countryPop.getTotalPopulation(), 11);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Población - " + countryPop.getCountryName());
+            stage.setResizable(false);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void openWeaponsMarket() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsMarketView.fxml"));
@@ -238,6 +265,24 @@ public class MenuController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(imagenPrincipal.getScene().getWindow());
             stage.setTitle("Mercado de armas");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void openWarMinister() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/warMinisterView.fxml"));
+            Parent root = loader.load();
+            WarMinisterController controller = loader.getController();
+            controller.setCountryId(11);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Ministro de guerra");
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (Exception e) {

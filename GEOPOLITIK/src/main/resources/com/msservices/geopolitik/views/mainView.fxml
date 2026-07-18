@@ -16,6 +16,13 @@
     <top>
         <MenuBar styleClass="menu-bar">
             <Menu text="Partida"/>
+            <Menu fx:id="menuMinistroGuerra" text="Ministro de guerra">
+                <MenuItem text="Fuerzas armadas" onAction="#openWarMinister"/>
+            </Menu>
+            <Menu text="Ministro de economía"/>
+            <Menu text="Mundo"/>
+            <Menu text="Trucos"/>
+            <Menu text="Ayuda"/>
         </MenuBar>
     </top>
 
@@ -38,7 +45,7 @@
 
                 <ScrollPane VBox.vgrow="ALWAYS" fitToWidth="true" styleClass="panel-scroll">
                     <VBox fx:id="listaSuperior" spacing="8" styleClass="lista" fillWidth="true">
-                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion">
+                        <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onPoblacionClick">
                             <ImageView fx:id="iconPoblacion" fitWidth="28" fitHeight="28"/>
                             <Label fx:id="lblPoblacion" text="Población: 0"/>
                         </HBox>

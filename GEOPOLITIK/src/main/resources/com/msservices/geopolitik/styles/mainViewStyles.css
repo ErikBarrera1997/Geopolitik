@@ -6,14 +6,69 @@
 
 /* Barra de menú */
 .menu-bar {
-    -fx-background-color: #3a5a3a;
+    -fx-background-color: linear-gradient(to bottom, #3e5e3e, #2e4e2e);
     -fx-padding: 2 5;
+    -fx-border-color: transparent;
 }
 .menu-bar .menu .label {
     -fx-text-fill: #f0ead0;
+    -fx-font-size: 13px;
+    -fx-font-weight: normal;
+}
+.menu-bar .menu {
+    -fx-background-color: transparent;
+    -fx-background-radius: 3;
+    -fx-background-insets: 0;
+    -fx-padding: 4 10;
 }
 .menu-bar .menu:hover {
-    -fx-background-color: #4a6a4a;
+    -fx-background-color: linear-gradient(to bottom, #5a7a4a, #4a6a3a);
+    -fx-background-radius: 3;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.25), 4, 0, 0, 1);
+}
+.menu-bar .menu:hover .label {
+    -fx-text-fill: #fffde0;
+}
+.menu-bar .menu:showing {
+    -fx-background-color: linear-gradient(to bottom, #5a7a4a, #4a6a3a);
+    -fx-background-radius: 3 3 0 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 5, 0, 0, 2);
+}
+.menu-bar .menu:showing .label {
+    -fx-text-fill: #fffde0;
+}
+
+/* Menus desplegables */
+.menu-bar .context-menu {
+    -fx-background-color: linear-gradient(to bottom, #3e5e3e, #2e4e2e);
+    -fx-border-color: #5a7a4a;
+    -fx-border-width: 1;
+    -fx-border-radius: 0 0 4 4;
+    -fx-background-radius: 0 0 4 4;
+    -fx-padding: 4 0;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.35), 6, 0, 0, 2);
+}
+.menu-bar .context-menu .menu-item {
+    -fx-background-color: transparent;
+    -fx-padding: 3 20;
+}
+.menu-bar .context-menu .menu-item .label {
+    -fx-text-fill: #f0ead0;
+    -fx-font-size: 13px;
+}
+.menu-bar .context-menu .menu-item:hover {
+    -fx-background-color: linear-gradient(to bottom, #5a7a4a, #4a6a3a);
+    -fx-background-radius: 2;
+}
+.menu-bar .context-menu .menu-item:hover .label {
+    -fx-text-fill: #fffde0;
+}
+.menu-bar .context-menu .separator {
+    -fx-padding: 2 0;
+}
+.menu-bar .context-menu .separator .line {
+    -fx-border-color: #5a7a4a;
+    -fx-border-width: 0 0 1 0;
 }
 
 /* Panel principal (mapa) */

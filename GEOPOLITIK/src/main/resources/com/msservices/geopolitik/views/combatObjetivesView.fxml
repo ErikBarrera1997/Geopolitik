@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.AttackController"
+            stylesheets="/com/msservices/geopolitik/styles/combatObjetivesStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-objetivo">
+
+            <!-- Titulo -->
+            <Label text="Seleccionar objetivo" styleClass="titulo"/>
+
+            <!-- Lista con scroll -->
+            <ScrollPane prefHeight="200" prefWidth="300" fitToWidth="true">
+                <VBox fx:id="listaObjetivos" spacing="5" styleClass="lista-scroll">
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <ImageView fitWidth="30" fitHeight="30"/>
+                        <Label text="Objetivo 1" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="10" alignment="CENTER_LEFT">
+                        <ImageView fitWidth="30" fitHeight="30"/>
+                        <Label text="Objetivo 2" styleClass="texto-dato"/>
+                    </HBox>
+                </VBox>
+            </ScrollPane>
+
+            <!-- Boton inferior -->
+            <Button fx:id="botonCancelar" text="Mejor lo pienso" styleClass="boton-cancelar"/>
+        </VBox>
+    </center>
+</BorderPane>

@@ -11,10 +11,10 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
 }
 
-.cuadro-gris {
-    -fx-fill: #c4b06a;
-    -fx-stroke: #1a3a1a;
-    -fx-stroke-width: 2;
+/* Bandera */
+.bandera {
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 2;
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
 }
 
@@ -27,20 +27,22 @@
 .descripcion {
     -fx-background-color: #d9c97a;
     -fx-border-color: #1a3a1a;
-    -fx-border-width: 1;
+    -fx-border-width: 2;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
     -fx-text-fill: #1a3a1a;
     -fx-font-weight: bold;
     -fx-font-size: 13px;
+    -fx-padding: 10 14;
+    -fx-wrap-text: true;
+    -fx-text-alignment: center;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 1, 1);
 }
 
-.icono {
-    -fx-fill: #c49a3a;
-    -fx-stroke: #1a3a1a;
-    -fx-stroke-width: 1;
-}
-
-.check {
-    -fx-padding: 2;
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #1a3a1a;
 }
 
 .texto-dato {
@@ -48,24 +50,26 @@
     -fx-text-fill: #1a3a1a;
 }
 
-.lista-scroll {
-    -fx-background-color: #c4b06a;
+/* ListView de objetivos */
+.lista-seleccion {
+    -fx-background-color: #d9c97a;
     -fx-border-color: #1a3a1a;
     -fx-border-width: 1;
     -fx-padding: 5;
 }
-
-.lista-scroll .label {
+.lista-seleccion .list-cell {
+    -fx-background-color: #c4b06a;
     -fx-text-fill: #1a3a1a;
+    -fx-font-family: "Georgia";
     -fx-font-size: 13px;
+    -fx-padding: 4 6;
 }
-
-.efecto {
-    -fx-background-color: #d9c97a;
-    -fx-border-color: #1a3a1a;
-    -fx-border-width: 1;
+.lista-seleccion .list-cell:hover {
+    -fx-background-color: #b8a45e;
+}
+.lista-seleccion .list-cell:selected {
+    -fx-background-color: #a8944e;
     -fx-text-fill: #1a3a1a;
-    -fx-font-size: 13px;
 }
 
 .boton-accion {

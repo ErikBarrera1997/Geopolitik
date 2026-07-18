@@ -3,6 +3,7 @@ package com.msservices.geopolitik.connection;
 import com.msservices.geopolitik.connection.Data.Country;
 import com.msservices.geopolitik.connection.Data.Province;
 import com.msservices.geopolitik.connection.Views.CountryDetails;
+import com.msservices.geopolitik.connection.Views.CountryPopulation;
 import com.msservices.geopolitik.connection.Views.CountryResources;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -92,6 +93,27 @@ public class queries {
         return null;
     }
 
+    public Country getCountryById(int id) {
+        String sql = "SELECT id_country, name, government, religion, ethnic_group, description FROM Countries WHERE id_country = ?";
+        try (var stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Country(
+                        rs.getInt("id_country"),
+                        rs.getString("name"),
+                        rs.getString("government"),
+                        rs.getString("religion"),
+                        rs.getString("ethnic_group"),
+                        rs.getString("description")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public Country getCountryByName(String name) {
         String sql = "SELECT id_country, name, government, religion, ethnic_group, description FROM Countries WHERE name_en = ?";
         try (var stmt = connection.prepareStatement(sql)) {
@@ -155,6 +177,23 @@ public class queries {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public CountryPopulation getTotalCountryPopulation(int idCountry) {
+        String sql = "SELECT v.country_name, v.total_population FROM totalCountryPopulation v JOIN Countries c ON c.name = v.country_name WHERE c.id_country = ?";
+        try (var stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, idCountry);
+            var rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new CountryPopulation(
+                        rs.getString("country_name"),
+                        rs.getLong("total_population")
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public List<Province> getProvincesByCountry(int countryId) {

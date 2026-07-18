@@ -14,5 +14,6 @@ public class loadGlobalVariables {
         loadWeapons.getWeapons();
         loadCombatActions.getCombatList();
         loadCombatActions.getOperationsList();
+        loadCombatActions.getCombatDescriptionsList();
     }
 }

@@ -1,0 +1,21 @@
+{
+  "combat_list": [
+    { "name": "Ataque de artílleria", "desc": "Ataque masivo con artillería, concentra el fuego de forma precisa o no para ver si le das a algo. "},
+    { "name": "Ataque de artílleria propulsada", "desc": "Ataque masivo con cohetes no guiados. Funciona de la misma manera que un ataque de artillería convencional" },
+    { "name": "Ataque aéreo", "desc": "Utiliza cazas para localizar y destruir objetivos. Ten en cuenta las defensas antiaéreas que pueda tener el enemigo. Imagina realizar un ataque y no lograr nada con esos costosos aparatos voladores....." },
+    { "name": "Bombardeo estratégico", "desc": "Bombardeo masivo, suelta toneladas de bombas sobre objetivos específicos o a ciegas. Ideal para mostrar que estás desesperado" },
+    { "name": "Ataque con misiles (Mar) ", "desc": "Lanzamiento de misiles a larga distancia. Destruye objetivos con precisión casi quirúrgica ¡desde el mar!" },
+    { "name": "Ataque con misiles (Submarino)", "desc": "Lanzamiento de misiles a larga distancia. Destruye objetivos con precisión casi quirúrgica ¡desde un submarino!" },
+    { "name": "Lanzar misiles balísticos", "desc": "Lanzamiento de misiles a larga distancia. Destruye objetivos con precisión casi quirúrgica" },
+    { "name": "Lanzar misiles de crucero", "desc": "\nLanzamiento de misiles a mediana y corta distancia. Extremadamente letales contra construcciones e instalaciones" },
+    { "name": "Asalto aéreo", "desc": "Búsqueda y destrucción de objetivos con ataques rápidos y sorpresivos, después regresa a tierra amiga " },
+    { "name": "Ataque con drones", "desc": "Envía drones para destruir cualquier cosa, débil contra instalaciones. No importa si te derriban uno, son fáciles de producir ¿o no?" },
+    { "name": "Asalto combinado", "desc": "Todo el poder de tus fuerzas armadas en una operación militar a gran escala. No hay vuelta atrás si fallas o no tus malvados planes" },
+    { "name": "Incursión terrestre", "desc": "Realiza un ataque rápido y sorpresivo con tropas de tierra" },
+    { "name": "Sabotaje", "desc": "Desestabiliza infraestructura estratégica de tus enemigos, arruina la logística y dales la peor migraña que hayan sentido nunca" },
+    { "name": "Operaciones especiales", "desc": "Operaciones de fuerzas especiales, realiza destrucción de objetivos militares específicos, sabotajes a la moral del enemigo, destrucción de instalaciones clave e infiltrate en la retaguardia" },
+    { "name": "Ataque nuclear", "desc": "¿Quieres la destrucción total de una provincia o un país completo? ¡ni lo intentes! Necesitas misiles con capacidad de portar ojivas nucleares para realizar un ataque nuclear" },
+    { "name": "Ataque con armas químicas", "desc": "Usa agentes nerviosos para causar bajas masivas y contaminar el área, las represalias pueden ser terribles" },
+    { "name": "Ataque con armas biológicas", "desc": "Usa patógenos para causar bajas masivas y contaminar el área, estarías completamente fuera de tus casillas ¡si intentas hacer esto!" }
+  ]
+}

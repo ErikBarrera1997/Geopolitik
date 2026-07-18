@@ -1,8 +1,11 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.init.loadCombatActions;
+import com.msservices.geopolitik.init.entity.combatDescription;
 import com.msservices.geopolitik.init.entity.combatOption;
+import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
+import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.attack;
 import com.msservices.geopolitik.interfaces.interaction;
 import com.msservices.geopolitik.functions.combatFuctions.artilleryAttack;
@@ -11,14 +14,13 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -28,23 +30,26 @@ public class AttackController implements interaction, attack {
 
     @FXML private VBox listaAcciones;
     @FXML private Button botonAtras;
-    @FXML private Rectangle cuadroIzquierdo;
-    @FXML private Rectangle cuadroDerecho;
-    @FXML private TextArea descripcion;
-    @FXML private VBox listaOpciones;
-    @FXML private CheckBox checkCivil;
-    @FXML private CheckBox checkMilitar;
-    @FXML private CheckBox checkPoblacion;
-    @FXML private CheckBox checkObjetivos;
-    @FXML private Rectangle iconCivil;
-    @FXML private Rectangle iconMilitar;
-    @FXML private Rectangle iconPoblacion;
-    @FXML private Rectangle iconObjetivos;
-    @FXML private TextArea efecto;
+    @FXML private ImageView lblCountryOrigin;
+    @FXML private ImageView lblCountryDestiny;
+    @FXML private Label descripcion;
+    @FXML private ListView<HBox> listaOpciones;
+    @FXML private ListView<HBox> listaResultados;
     @FXML private Button botonAtaque;
     @FXML private Button botonCancelar;
 
     private combatOption option;
+    private int countryId;
+    private String countryName;
+
+    private static final int ORIGIN_COUNTRY_ID = 11;
+
+    private static final String[][] ATTACK_TYPES = {
+        {"Atacar infraestructura civil", "1"},
+        {"Atacar infraestructura militar", "2"},
+        {"Atacar civiles", "12"},
+        {"Atacar objetivos militares", "11"}
+    };
 
     @FXML
     public void initialize() {
@@ -55,14 +60,81 @@ public class AttackController implements interaction, attack {
         if (botonCancelar != null) {
             botonCancelar.setOnAction(e -> goBack());
         }
-        if(botonAtaque != null) {
+        if (botonAtaque != null) {
             botonAtaque.setOnAction(e -> launchAttack());
+        }
+        if (listaOpciones != null) {
+            loadAttackTypes();
         }
     }
 
     public void setCombatOption(combatOption option) {
         this.option = option;
-        descripcion.setText("Acción seleccionada: " + option.name());
+        if (descripcion != null) {
+            List<combatDescription> descriptions = loadCombatActions.getCombatDescriptionsList();
+            for (combatDescription desc : descriptions) {
+                if (desc.name().equals(option.name())) {
+                    descripcion.setText(desc.desc());
+                    return;
+                }
+            }
+            descripcion.setText(option.name());
+        }
+    }
+
+    public void setCountryData(int countryId, String countryName) {
+        this.countryId = countryId;
+        this.countryName = countryName;
+        loadFlags();
+    }
+
+    private void loadFlags() {
+        if (lblCountryOrigin != null) {
+            flag originFlag = loadFlags.getFlag(ORIGIN_COUNTRY_ID);
+            if (originFlag != null) {
+                lblCountryOrigin.setImage(new Image(originFlag.path(), 80, 40, true, true));
+            }
+        }
+        if (lblCountryDestiny != null && countryId > 0) {
+            flag destinyFlag = loadFlags.getFlag(countryId);
+            if (destinyFlag != null) {
+                lblCountryDestiny.setImage(new Image(destinyFlag.path(), 80, 40, true, true));
+            }
+        }
+    }
+
+    private void loadAttackTypes() {
+        listaOpciones.getItems().clear();
+        for (String[] attack : ATTACK_TYPES) {
+            HBox row = new HBox(10);
+            row.setAlignment(javafx.geometry.Pos.CENTER_LEFT);
+
+            ImageView icon = new ImageView();
+            icon.setFitWidth(28);
+            icon.setFitHeight(28);
+            Image img = loadImages.getAttackIcon(attack[1]);
+            if (img != null) {
+                icon.setImage(img);
+            }
+
+            Label label = new Label(attack[0]);
+            label.getStyleClass().add("texto-dato");
+
+            row.getChildren().addAll(icon, label);
+            listaOpciones.getItems().add(row);
+        }
+
+        listaOpciones.setCellFactory(lv -> new ListCell<>() {
+            @Override
+            protected void updateItem(HBox item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(item);
+                }
+            }
+        });
     }
 
     private void loadCombatActions() {
@@ -98,6 +170,7 @@ public class AttackController implements interaction, attack {
             Parent root = loader.load();
             AttackController controller = loader.getController();
             controller.setCombatOption(option);
+            controller.setCountryData(countryId, countryName);
 
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -112,7 +185,7 @@ public class AttackController implements interaction, attack {
 
     @Override
     public void launchAttack() {
-        artilleryAttack.launchAttackToMilitaryUnits(2,100, 10);
+        artilleryAttack.launchAttackToMilitaryUnits(2, 100, 10);
     }
 
     @Override

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.WarMinisterController"
+            minWidth="600" minHeight="450">
+    <stylesheets>
+        /com/msservices/geopolitik/styles/warMinisterStyles.css
+    </stylesheets>
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-fuerzas">
+
+            <!-- Encabezado -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Rectangle fx:id="iconSuperior" width="80" height="60" styleClass="icono-blanco"/>
+                <Rectangle fx:id="etiquetaSuperior" width="400" height="60" styleClass="etiqueta-blanca"/>
+            </HBox>
+
+            <!-- Título -->
+            <Label text="Fuerzas armadas" styleClass="titulo"/>
+
+            <!-- Sección de listas -->
+            <HBox spacing="20" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Ejército -->
+                <VBox spacing="5" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Ejército" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaEjercito" spacing="3" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+                    <Rectangle fx:id="iconReclutamiento" width="30" height="30" styleClass="icono-blanco"/>
+                    <Label text="Centro de reclutamiento" styleClass="texto-dato"/>
+                </VBox>
+
+                <!-- Fuerza aérea -->
+                <VBox spacing="5" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Fuerza aérea" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaAerea" spacing="3" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+                    <Rectangle fx:id="iconProduccion" width="30" height="30" styleClass="icono-blanco"/>
+                    <Label text="Producción de armas" styleClass="texto-dato"/>
+                </VBox>
+
+                <!-- Marina de guerra -->
+                <VBox spacing="5" alignment="CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Marina de guerra" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaMarina" spacing="3" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+                    <Rectangle fx:id="iconProhibidas" width="30" height="30" styleClass="icono-blanco"/>
+                    <Label text="Armas prohibidas" styleClass="texto-dato"/>
+                </VBox>
+            </HBox>
+
+            <!-- Botón Atrás -->
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>

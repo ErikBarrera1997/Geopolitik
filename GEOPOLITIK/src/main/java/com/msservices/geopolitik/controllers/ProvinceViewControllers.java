@@ -39,9 +39,13 @@ public class ProvinceViewControllers implements interaction {
     @FXML private Button botonAtras;
 
     private int currentProvinceId;
+    private int currentCountryId;
+    private String currentCountryName;
 
     public void setProvinceData(ProvinceData data, String countryName) {
         currentProvinceId = data.getIdProvince();
+        currentCountryId = data.getIdCountry();
+        currentCountryName = countryName;
         lblNombreProvincia.setText(data.getName());
         valorPoblacion.setText(String.valueOf(data.getTotalCountryPopulation()));
         valorPIB.setText(String.valueOf(data.getTotalCountryIngresos()));
@@ -92,6 +96,8 @@ public class ProvinceViewControllers implements interaction {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/combatView.fxml"));
             Parent root = loader.load();
+            AttackController controller = loader.getController();
+            controller.setCountryData(currentCountryId, currentCountryName);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(botonAcciones.getScene().getWindow());

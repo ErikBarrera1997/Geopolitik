@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.PopulationController"
+            stylesheets="/com/msservices/geopolitik/styles/populationStyles.css">
+
+    <center>
+        <VBox spacing="15" alignment="TOP_CENTER" styleClass="panel-poblacion">
+            <padding>
+                <Insets top="20" right="20" bottom="20" left="20"/>
+            </padding>
+
+            <Label text="Población" styleClass="titulo"/>
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <ImageView fx:id="flagImage" fitWidth="80" fitHeight="40" preserveRatio="true"/>
+            </HBox>
+
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Rectangle fx:id="iconHabitantes" width="20" height="20" styleClass="icono"/>
+                <Label text="Total:" styleClass="subtitulo"/>
+                <Label fx:id="valorTotal" text="00000000" styleClass="valor"/>
+                <Label text="habitantes" styleClass="texto-dato"/>
+            </HBox>
+
+            <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" styleClass="panel-scroll">
+                <LineChart fx:id="graficaPoblacion" prefHeight="200" prefWidth="400"
+                           title="Evolución de la población"
+                           styleClass="grafica">
+                    <xAxis>
+                        <NumberAxis fx:id="xAxis" label="Turno" tickUnit="1" forceZeroInRange="false"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis fx:id="yAxis" label="Total" forceZeroInRange="false"/>
+                    </yAxis>
+                </LineChart>
+            </ScrollPane>
+
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>
