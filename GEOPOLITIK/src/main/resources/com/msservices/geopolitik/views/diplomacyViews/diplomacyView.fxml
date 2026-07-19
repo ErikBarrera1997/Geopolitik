@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
@@ -9,14 +10,14 @@
             fx:controller="com.msservices.geopolitik.controllers.DiplomacyCountryController"
             minWidth="600" minHeight="450">
     <stylesheets>
-        /com/msservices/geopolitik/styles/diplomacyStyles.css
+        /com/msservices/geopolitik/styles/diplomacyStyles/diplomacyStyles.css
     </stylesheets>
 
     <center>
         <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-diplomacia">
 
             <!-- Encabezado -->
-            <Rectangle fx:id="iconSuperior" width="100" height="40" styleClass="icono-blanco"/>
+            <ImageView fx:id="iconSuperior" fitWidth="120" fitHeight="60" preserveRatio="true"/>
 
             <!-- Sección izquierda + derecha -->
             <HBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">

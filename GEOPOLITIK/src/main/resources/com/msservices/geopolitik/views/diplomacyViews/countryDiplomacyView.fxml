@@ -17,9 +17,8 @@
         <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-relaciones">
 
             <!-- Encabezado -->
-            <HBox spacing="10" alignment="CENTER_LEFT">
-                <Rectangle fx:id="iconSuperior" width="80" height="60" styleClass="icono-blanco"/>
-                <Rectangle fx:id="etiquetaSuperior" width="400" height="60" styleClass="etiqueta-blanca"/>
+            <HBox spacing="10" alignment="CENTER">
+                <ImageView fx:id="iconSuperior" fitWidth="120" fitHeight="60" preserveRatio="true"/>
             </HBox>
 
             <!-- Sección principal -->
