@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.RelacionesController"
+            minWidth="600" minHeight="450">
+    <stylesheets>
+        /com/msservices/geopolitik/styles/diplomacyStyles/countryDiplomacyStyles.css
+    </stylesheets>
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-relaciones">
+
+            <!-- Encabezado -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Rectangle fx:id="iconSuperior" width="80" height="60" styleClass="icono-blanco"/>
+                <Rectangle fx:id="etiquetaSuperior" width="400" height="60" styleClass="etiqueta-blanca"/>
+            </HBox>
+
+            <!-- Sección principal -->
+            <HBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Lado izquierdo -->
+                <VBox spacing="8" alignment="TOP_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Aliados" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaAliados" spacing="5" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+
+                    <Label text="Enemigos" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaEnemigos" spacing="5" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+                </VBox>
+
+                <!-- Lado derecho -->
+                <VBox spacing="10" alignment="TOP_CENTER" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Estado actual" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaEstado" spacing="5" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+                </VBox>
+            </HBox>
+
+            <!-- Botón Atrás -->
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>

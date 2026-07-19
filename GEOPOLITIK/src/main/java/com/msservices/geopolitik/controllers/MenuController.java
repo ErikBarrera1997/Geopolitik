@@ -1,9 +1,9 @@
 package com.msservices.geopolitik.controllers;
 
-import com.msservices.geopolitik.connection.Data.Country;
+import com.msservices.geopolitik.connection.queries.country.Country;
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.Views.CountryResources;
-import com.msservices.geopolitik.connection.queries;
+import com.msservices.geopolitik.connection.queries.country.CountryResources;
+import com.msservices.geopolitik.connection.queries.country.countryQueries;
 import com.msservices.geopolitik.functions.mapFunctions;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadMap;
@@ -168,23 +168,23 @@ public class MenuController {
     }
 
     private void cargarDatosPais() {
-        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
-        CountryResources recursos = queries.getCountryResources(11);
+        countryQueries countryQueries = new countryQueries(DatabaseConnection.getInstance().getConnection());
+        CountryResources recursos = countryQueries.getCountryResources(11);
         if (recursos == null) return;
 
-        lblPoblacion.setText("Población: " + recursos.getPopulation());
-        lblFinanzas.setText("Finanzas: " + recursos.getIngresos());
-        lblArea.setText("Área: " + String.format("%.1f", recursos.getArea()));
-        lblGasNatural.setText("Gas natural: " + recursos.getGasNatural());
-        lblPetroleo.setText("Petróleo: " + recursos.getPetroleo());
-        lblMadera.setText("Madera: " + recursos.getMadera());
-        lblPesca.setText("Pesca: " + recursos.getPesca());
-        lblUranio.setText("Uranio: " + recursos.getUranio());
-        lblOro.setText("Oro: " + recursos.getOro());
-        lblAgricultura.setText("Agricultura: " + recursos.getAgricultura());
-        lblAcero.setText("Acero: " + recursos.getAcero());
-        lblIndustria.setText("Industria: " + recursos.getIndustria());
-        lblElectricidad.setText("Electricidad: " + recursos.getElectricidad());
+        lblPoblacion.setText("Población: " + recursos.population());
+        lblFinanzas.setText("Finanzas: " + recursos.ingresos());
+        lblArea.setText("Área: " + String.format("%.1f", recursos.area()));
+        lblGasNatural.setText("Gas natural: " + recursos.gasNatural());
+        lblPetroleo.setText("Petróleo: " + recursos.petroleo());
+        lblMadera.setText("Madera: " + recursos.madera());
+        lblPesca.setText("Pesca: " + recursos.pesca());
+        lblUranio.setText("Uranio: " + recursos.uranio());
+        lblOro.setText("Oro: " + recursos.oro());
+        lblAgricultura.setText("Agricultura: " + recursos.agricultura());
+        lblAcero.setText("Acero: " + recursos.acero());
+        lblIndustria.setText("Industria: " + recursos.industria());
+        lblElectricidad.setText("Electricidad: " + recursos.electricidad());
     }
 
     private void cargarIconos() {
@@ -231,24 +231,26 @@ public class MenuController {
 
         if (index == 0) {
             openWeaponsMarket();
+        } else if (index == 5) {
+            openDiplomacia();
         }
     }
 
     @FXML
     private void onPoblacionClick() {
-        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
-        var countryPop = queries.getTotalCountryPopulation(11);
+        countryQueries countryQueries = new countryQueries(DatabaseConnection.getInstance().getConnection());
+        var countryPop = countryQueries.getTotalCountryPopulation(11);
         if (countryPop == null) return;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/populationView.fxml"));
             Parent root = loader.load();
             PopulationController controller = loader.getController();
-            controller.setPopulationData(countryPop.getCountryName(), countryPop.getTotalPopulation(), 11);
+            controller.setPopulationData(countryPop.countryName(), countryPop.totalPopulation(), 11);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(imagenPrincipal.getScene().getWindow());
-            stage.setTitle("Población - " + countryPop.getCountryName());
+            stage.setTitle("Población - " + countryPop.countryName());
             stage.setResizable(false);
             stage.setScene(new Scene(root));
             stage.showAndWait();
@@ -259,25 +261,25 @@ public class MenuController {
 
     @FXML
     private void onFinanzasClick() {
-        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
-        CountryResources recursos = queries.getCountryResources(11);
+        countryQueries countryQueries = new countryQueries(DatabaseConnection.getInstance().getConnection());
+        CountryResources recursos = countryQueries.getCountryResources(11);
         if (recursos == null) return;
 
         javafx.scene.control.Alert alert = new javafx.scene.control.Alert(javafx.scene.control.Alert.AlertType.INFORMATION);
         alert.setTitle("Finanzas");
         alert.setHeaderText("Resumen financiero");
-        alert.setContentText("Ingresos: " + recursos.getIngresos() + "\n" +
-                "Petróleo: " + recursos.getPetroleo() + "\n" +
-                "Gas natural: " + recursos.getGasNatural() + "\n" +
-                "Oro: " + recursos.getOro() + "\n" +
-                "Acero: " + recursos.getAcero());
+        alert.setContentText("Ingresos: " + recursos.ingresos() + "\n" +
+                "Petróleo: " + recursos.petroleo() + "\n" +
+                "Gas natural: " + recursos.gasNatural() + "\n" +
+                "Oro: " + recursos.oro() + "\n" +
+                "Acero: " + recursos.acero());
         alert.initOwner(imagenPrincipal.getScene().getWindow());
         alert.showAndWait();
     }
 
     private void openWeaponsMarket() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsMarketView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsViews/weaponsMarketView.fxml"));
             Parent root = loader.load();
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
@@ -308,6 +310,21 @@ public class MenuController {
         }
     }
 
+    private void openDiplomacia() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/diplomacyView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Diplomacia");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public int getSelectedInferiorIndex() {
         return selectedInferiorIndex;
     }
@@ -331,8 +348,8 @@ public class MenuController {
         if (countryName.equals("Desconocido"))
             return;
 
-        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
-        Country country = queries.getCountryByName(countryName);
+        countryQueries countryQueries = new countryQueries(DatabaseConnection.getInstance().getConnection());
+        Country country = countryQueries.getCountryByName(countryName);
         if (country == null) return;
 
         openCountryView(country);
@@ -340,14 +357,14 @@ public class MenuController {
 
     private void openCountryView(Country country) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/countryView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/countryViews/countryView.fxml"));
             Parent root = loader.load();
             CountryViewControllers controller = loader.getController();
-            controller.setCountryData(country.getName(), country.getIdCountry());
+            controller.setCountryData(country.name(), country.idCountry());
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(imagenPrincipal.getScene().getWindow());
-            stage.setTitle(country.getName());
+            stage.setTitle(country.name());
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (Exception e) {

@@ -1,13 +1,12 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.Views.ArmyUnit;
-import com.msservices.geopolitik.connection.weaponQueries;
+import com.msservices.geopolitik.connection.queries.defense.ArmyUnit;
+import com.msservices.geopolitik.connection.queries.weapon.weaponQueries;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;

@@ -61,7 +61,7 @@ public class loadImages {
         new menuIcons("sandbags", "img/icons/sandbags.jpg"),
         new menuIcons("sawmill", "img/icons/sawmill.jpg"),
         new menuIcons("siderurgic", "img/icons/siderurgic.jpg"),
-        new menuIcons("star", "img/icons/star.png"),
+        new menuIcons("capital", "img/icons/capital.jpg"),
         new menuIcons("teocracy", "img/icons/teocracy.jpg"),
         new menuIcons("trenches", "img/icons/trenches.jpg"),
         new menuIcons("weapons_factory", "img/icons/weapons factory.jpg")
@@ -130,23 +130,23 @@ public class loadImages {
     private static final int WEAPON_ICON_SIZE = 40;
 
     private static final List<menuIcons> WEAPON_ICONS = List.of(
-        new menuIcons("Portaaviones", "img/weapons/aircraft carrier.jpg"),
-        new menuIcons("Sistema antiaéreo", "img/weapons/antiaircraft system.jpg"),
-        new menuIcons("Sistema antimisil", "img/weapons/antimissile system.jpg"),
-        new menuIcons("Artillería", "img/weapons/artillery.jpg"),
-        new menuIcons("Vehículo de asalto", "img/weapons/assault vehicle.jpg"),
-        new menuIcons("Dron de ataque", "img/weapons/attac drone.jpg"),
-        new menuIcons("Avión de ataque", "img/weapons/attacker.jpg"),
-        new menuIcons("Misil balístico", "img/weapons/ballistic missile.jpg"),
+        new menuIcons("portaaviones", "img/weapons/aircraft carrier.jpg"),
+        new menuIcons("sistema antiaéreo", "img/weapons/antiaircraft system.jpg"),
+        new menuIcons("sistema antimisil", "img/weapons/antimissile system.jpg"),
+        new menuIcons("artillería", "img/weapons/artillery.jpg"),
+        new menuIcons("vehículo de asalto", "img/weapons/assault vehicle.jpg"),
+        new menuIcons("dron de ataque", "img/weapons/attac drone.jpg"),
+        new menuIcons("avión de ataque", "img/weapons/attacker.jpg"),
+        new menuIcons("misil balístico", "img/weapons/ballistic missile.jpg"),
         new menuIcons("bombardero", "img/weapons/bomber.jpg"),
-        new menuIcons("Misil de crucero", "img/weapons/cruice missile.jpg"),
-        new menuIcons("Destructor", "img/weapons/destroyer.jpg"),
-        new menuIcons("Caza", "img/weapons/fighter.jpg"),
-        new menuIcons("Helicóptero", "img/weapons/helicopter.jpg"),
-        new menuIcons("Artillería propulsada", "img/weapons/propeled artillery.jpg"),
-        new menuIcons("Dron de reconocimiento", "img/weapons/reccon drone.jpg"),
-        new menuIcons("Submarino", "img/weapons/submarine.jpg"),
-        new menuIcons("Tanque", "img/weapons/tank.jpg")
+        new menuIcons("misil de crucero", "img/weapons/cruice missile.jpg"),
+        new menuIcons("destructor", "img/weapons/destroyer.jpg"),
+        new menuIcons("caza", "img/weapons/fighter.jpg"),
+        new menuIcons("helicóptero", "img/weapons/helicopter.jpg"),
+        new menuIcons("artillería propulsada", "img/weapons/propeled artillery.jpg"),
+        new menuIcons("dron de reconocimiento", "img/weapons/reccon drone.jpg"),
+        new menuIcons("submarino", "img/weapons/submarine.jpg"),
+        new menuIcons("tanque", "img/weapons/tank.jpg")
     );
 
     public static Map<String, Image> getWeaponImages() {

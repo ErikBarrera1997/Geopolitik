@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.AttackController"
+            stylesheets="/com/msservices/geopolitik/styles/combatStyles/combatStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-accion">
+
+            <!-- Título -->
+            <Label text="Selecciona una acción" styleClass="titulo"/>
+
+            <!-- Lista con scroll -->
+            <ScrollPane prefHeight="250" prefWidth="300" fitToWidth="true">
+                <VBox fx:id="listaAcciones" spacing="5" styleClass="lista-scroll"/>
+            </ScrollPane>
+
+            <!-- Botón Atrás -->
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>

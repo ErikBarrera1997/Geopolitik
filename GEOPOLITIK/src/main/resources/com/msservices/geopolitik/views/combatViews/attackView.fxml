@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.AttackController"
+            stylesheets="/com/msservices/geopolitik/styles/combatStyles/attackStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-ataque">
+
+            <!-- Encabezado con banderas y flecha -->
+            <HBox spacing="20" alignment="CENTER">
+                <ImageView fx:id="lblCountryOrigin" fitWidth="80" fitHeight="40" preserveRatio="true" styleClass="bandera"/>
+                <Label text="➜" styleClass="flecha"/>
+                <ImageView fx:id="lblCountryDestiny" fitWidth="80" fitHeight="40" preserveRatio="true" styleClass="bandera"/>
+            </HBox>
+
+            <!-- Descripcion -->
+            <Label fx:id="descripcion" text="" wrapText="true" styleClass="descripcion"/>
+
+            <!-- Listas lado a lado -->
+            <HBox spacing="20" alignment="CENTER">
+                <ListView fx:id="listaOpciones" prefHeight="150" prefWidth="280" styleClass="lista-seleccion"/>
+                <ListView fx:id="listaResultados" prefHeight="150" prefWidth="280" styleClass="lista-seleccion"/>
+            </HBox>
+
+            <!-- Botones -->
+            <HBox spacing="40" alignment="CENTER">
+                <Button fx:id="botonAtaque" text="Al ataque" styleClass="boton-accion"/>
+                <Button fx:id="botonCancelar" text="Mejor lo pienso" styleClass="boton-cancelar"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

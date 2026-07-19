@@ -1,8 +1,8 @@
 package com.msservices.geopolitik.init;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.weaponQueries;
-import com.msservices.geopolitik.connection.Data.Weapon;
+import com.msservices.geopolitik.connection.queries.weapon.weaponQueries;
+import com.msservices.geopolitik.connection.queries.weapon.Weapon;
 
 import java.util.List;
 

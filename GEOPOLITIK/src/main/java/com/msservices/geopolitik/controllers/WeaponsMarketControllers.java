@@ -1,11 +1,9 @@
 package com.msservices.geopolitik.controllers;
 
-import com.msservices.geopolitik.connection.Data.Weapon;
+import com.msservices.geopolitik.connection.queries.weapon.Weapon;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadWeapons;
 import com.msservices.geopolitik.interfaces.interaction;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
@@ -15,9 +13,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,7 +36,10 @@ public class WeaponsMarketControllers implements interaction {
     private Label etiquetaTexto;
 
     @FXML
-    private ComboBox<Weapon> listaDesplegable;
+    private FlowPane gridArmas;
+
+    @FXML
+    private ScrollPane scrollArmas;
 
     @FXML
     private Slider sliderCantidad;
@@ -74,34 +75,16 @@ public class WeaponsMarketControllers implements interaction {
     @FXML
     public void initialize() {
         List<Weapon> weapons = loadWeapons.getWeapons();
-        ObservableList<Weapon> weaponItems = FXCollections.observableArrayList(weapons);
-        listaDesplegable.setItems(weaponItems);
+        gridArmas.getChildren().clear();
 
-        listaDesplegable.setPromptText("Armas disponibles");
+        for (Weapon weapon : weapons) {
+            VBox tile = createWeaponTile(weapon);
+            gridArmas.getChildren().add(tile);
+        }
 
-        listaDesplegable.setCellFactory(param -> new WeaponTileCell());
-        listaDesplegable.setButtonCell(new ListCell<Weapon>() {
-            @Override
-            protected void updateItem(Weapon weapon, boolean empty) {
-                super.updateItem(weapon, empty);
-                if (empty || weapon == null) {
-                    setText(null);
-                    setGraphic(null);
-                } else {
-                    setText(weapon.getName());
-                    setGraphic(null);
-                }
-            }
-        });
-
-        listaDesplegable.setOnAction(e -> {
-            selectedWeapon = listaDesplegable.getValue();
-            if (selectedWeapon != null) {
-                etiquetaTexto.setText(selectedWeapon.getName());
-                agregarAlCarrito(selectedWeapon);
-            }
-            actualizarBotonCantidad();
-        });
+        gridArmas.widthProperty().addListener((obs, old, val) -> recalcularAnchoTiles());
+        gridArmas.parentProperty().addListener((obs, old, val) -> recalcularAnchoTiles());
+        gridArmas.sceneProperty().addListener((obs, old, val) -> recalcularAnchoTiles());
 
         sliderCantidad.valueProperty().addListener((obs, old, val) -> actualizarBotonCantidad());
         campoCantidad.textProperty().addListener((obs, old, val) -> actualizarBotonCantidad());
@@ -109,60 +92,80 @@ public class WeaponsMarketControllers implements interaction {
         botonComprar.setOnAction(e -> onComprarClick());
     }
 
+    private void recalcularAnchoTiles() {
+        double availableWidth = gridArmas.getWidth();
+        if (availableWidth <= 0) return;
+        int cols = 3;
+        double hgap = 8;
+        double tileWidth = (availableWidth - (cols - 1) * hgap) / cols;
+        for (javafx.scene.Node child : gridArmas.getChildren()) {
+            if (child instanceof VBox tile) {
+                tile.setPrefWidth(tileWidth);
+            }
+        }
+    }
+
+    private VBox createWeaponTile(Weapon weapon) {
+        ImageView imageView = new ImageView();
+        imageView.setFitWidth(40);
+        imageView.setFitHeight(40);
+        imageView.setPreserveRatio(true);
+
+        Image img = loadImages.getWeaponImage(weapon.name());
+        if (img != null) {
+            imageView.setImage(img);
+        }
+
+        Label nameLabel = new Label(weapon.name());
+        nameLabel.setStyle("-fx-text-fill: #f0ead0; -fx-font-size: 10px; -fx-font-weight: bold;");
+        nameLabel.setWrapText(true);
+        nameLabel.setAlignment(Pos.CENTER);
+
+        Label costLabel = new Label("$" + String.format("%.0f", weapon.cost()));
+        costLabel.setStyle("-fx-text-fill: #d9c97a; -fx-font-size: 9px;");
+        costLabel.setAlignment(Pos.CENTER);
+
+        VBox tile = new VBox(4, imageView, nameLabel, costLabel);
+        tile.setAlignment(Pos.CENTER);
+        tile.setPadding(new Insets(6));
+        tile.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
+
+        tile.setOnMouseClicked(e -> {
+            selectedWeapon = weapon;
+            etiquetaTexto.setText(weapon.name());
+            agregarAlCarrito(weapon);
+            actualizarBotonCantidad();
+            for (javafx.scene.Node child : gridArmas.getChildren()) {
+                child.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
+            }
+            tile.setStyle("-fx-background-color: #4a6a4a; -fx-border-color: #c49a3a; -fx-border-width: 2; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
+        });
+
+        tile.setOnMouseEntered(e -> {
+            if (selectedWeapon != weapon) {
+                tile.setStyle("-fx-background-color: #4a6a4a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
+            }
+        });
+
+        tile.setOnMouseExited(e -> {
+            if (selectedWeapon != weapon) {
+                tile.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
+            }
+        });
+
+        return tile;
+    }
+
     private void agregarAlCarrito(Weapon weapon) {
         int cantidad = (int) sliderCantidad.getValue();
-        cartNames.add(weapon.getName());
+        cartNames.add(weapon.name());
         cartQtys.add(cantidad);
-        cartCosts.add(weapon.getCost());
+        cartCosts.add(weapon.cost());
     }
 
     private void actualizarBotonCantidad() {
         int cantidad = (int) sliderCantidad.getValue();
         botonCantidad.setText("Cantidad: " + cantidad);
-    }
-
-    private class WeaponTileCell extends ListCell<Weapon> {
-        @Override
-        protected void updateItem(Weapon weapon, boolean empty) {
-            super.updateItem(weapon, empty);
-            if (empty || weapon == null) {
-                setGraphic(null);
-                setText(null);
-            } else {
-                Image img = loadImages.getWeaponImage(weapon.getName());
-                javafx.scene.Node graphic;
-                if (img != null) {
-                    ImageView imageView = new ImageView(img);
-                    imageView.setFitWidth(40);
-                    imageView.setFitHeight(40);
-                    graphic = imageView;
-                } else {
-                    Rectangle rect = new Rectangle(40, 40);
-                    rect.setFill(Color.web("#d9c97a"));
-                    rect.setStroke(Color.web("#1a3a1a"));
-                    rect.setStrokeWidth(2);
-                    rect.setArcWidth(5);
-                    rect.setArcHeight(5);
-                    graphic = rect;
-                }
-
-                Label nameLabel = new Label(weapon.getName());
-                nameLabel.setStyle("-fx-text-fill: #1a3a1a; -fx-font-size: 11px; -fx-font-weight: bold;");
-
-                Label costLabel = new Label("$" + String.format("%.0f", weapon.getCost()));
-                costLabel.setStyle("-fx-text-fill: #5a3a1a; -fx-font-size: 10px;");
-
-                VBox info = new VBox(2, nameLabel, costLabel);
-                info.setAlignment(Pos.CENTER_LEFT);
-
-                HBox cell = new HBox(10, graphic, info);
-                cell.setAlignment(Pos.CENTER_LEFT);
-                cell.setPadding(new Insets(4));
-
-                setGraphic(cell);
-                setText(null);
-            }
-        }
     }
 
     @FXML
@@ -241,7 +244,7 @@ public class WeaponsMarketControllers implements interaction {
         if (cartNames.isEmpty()) return;
 
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/marketConfirmView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsViews/marketConfirmView.fxml"));
             Parent root = loader.load();
             MarketConfirmControllers controller = loader.getController();
 

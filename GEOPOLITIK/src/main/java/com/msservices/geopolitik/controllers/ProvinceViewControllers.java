@@ -1,9 +1,9 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.Views.ProvinceData;
-import com.msservices.geopolitik.connection.Views.ProvinceDefense;
-import com.msservices.geopolitik.connection.defensesQueries;
+import com.msservices.geopolitik.connection.queries.province.ProvinceData;
+import com.msservices.geopolitik.connection.queries.defense.ProvinceDefense;
+import com.msservices.geopolitik.connection.queries.defense.defenseQueries;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -74,7 +74,7 @@ public class ProvinceViewControllers implements interaction {
     }
 
     private void loadDefenses() {
-        defensesQueries queries = new defensesQueries(DatabaseConnection.getInstance().getConnection());
+        defenseQueries queries = new defenseQueries(DatabaseConnection.getInstance().getConnection());
         List<ProvinceDefense> defenses = queries.getProvinceDefenses(currentProvinceId);
 
         defenseList.getChildren().clear();
@@ -94,7 +94,7 @@ public class ProvinceViewControllers implements interaction {
 
     private void openCombatView() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/combatView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/combatViews/combatView.fxml"));
             Parent root = loader.load();
             AttackController controller = loader.getController();
             controller.setCountryData(currentCountryId, currentCountryName);

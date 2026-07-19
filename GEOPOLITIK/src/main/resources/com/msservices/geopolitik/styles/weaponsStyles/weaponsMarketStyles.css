@@ -1,0 +1,192 @@
+.root {
+    -fx-font-family: "Georgia";
+    -fx-background-color: #2e4e2e;
+}
+
+.panel-mercado {
+    -fx-background-color: #2e4e2e;
+    -fx-padding: 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 2;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 6, 0, 2, 2);
+}
+
+.panel-mercado .label {
+    -fx-text-fill: #f0ead0;
+}
+
+.titulo {
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+
+.subtitulo {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+
+.imagen-icono {
+    -fx-fill: #d9c97a;
+    -fx-stroke: #1a3a1a;
+    -fx-stroke-width: 2;
+}
+
+.etiqueta-texto {
+    -fx-background-color: #d9c97a;
+    -fx-padding: 5 10;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-size: 13px;
+}
+
+.lista-desplegable {
+    -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+}
+
+.lista-desplegable .list-cell {
+    -fx-background-color: #d9c97a;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-family: "Georgia";
+}
+
+.lista-desplegable .list-cell:hover {
+    -fx-background-color: #c4b06a;
+}
+
+.lista-desplegable .text-field {
+    -fx-text-fill: #1a3a1a;
+}
+
+.campo-cantidad {
+    -fx-background-color: #f0ead0;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-text-fill: #1a3a1a;
+}
+
+.boton-cantidad {
+    -fx-background-color: #c49a3a;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 8 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-cantidad:hover {
+    -fx-background-color: #d4aa4a;
+}
+
+.boton-cantidad:pressed {
+    -fx-background-color: #b48a2a;
+}
+
+.boton-comprar {
+    -fx-background-color: #3a5a3a;
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-comprar:hover {
+    -fx-background-color: #4a6a4a;
+}
+
+.boton-comprar:pressed {
+    -fx-background-color: #2a4a2a;
+}
+
+.boton-mercado-negro {
+    -fx-background-color: #1a3a1a;
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #000000;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-mercado-negro:hover {
+    -fx-background-color: #2a4a2a;
+}
+
+.boton-mercado-negro:pressed {
+    -fx-background-color: #0a1a0a;
+}
+
+.boton-regresar {
+    -fx-background-color: #c49a3a;
+    -fx-text-fill: #1a3a1a;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+}
+
+.boton-regresar:hover {
+    -fx-background-color: #d4aa4a;
+}
+
+.boton-regresar:pressed {
+    -fx-background-color: #b48a2a;
+}
+
+.slider .track {
+    -fx-background-color: #d9c97a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+}
+
+.slider .thumb {
+    -fx-background-color: #3a5a3a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+}
+
+.scroll-armas {
+    -fx-background-color: #2e4e2e;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+}
+
+.scroll-armas .viewport {
+    -fx-background-color: #2e4e2e;
+}
+
+.scroll-armas .scroll-bar {
+    -fx-background-color: #2e4e2e;
+}
+
+.scroll-armas .scroll-bar .thumb {
+    -fx-background-color: #c49a3a;
+    -fx-border-color: #1a3a1a;
+    -fx-border-width: 1;
+}
+
+.scroll-armas .scroll-bar .increment-button,
+.scroll-armas .scroll-bar .decrement-button {
+    -fx-background-color: #3a5a3a;
+    -fx-border-color: #1a3a1a;
+}

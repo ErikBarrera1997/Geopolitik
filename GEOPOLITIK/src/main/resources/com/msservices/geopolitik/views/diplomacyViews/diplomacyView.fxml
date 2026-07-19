@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.DiplomacyCountryController"
+            minWidth="600" minHeight="450">
+    <stylesheets>
+        /com/msservices/geopolitik/styles/diplomacyStyles.css
+    </stylesheets>
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-diplomacia">
+
+            <!-- Encabezado -->
+            <Rectangle fx:id="iconSuperior" width="100" height="40" styleClass="icono-blanco"/>
+
+            <!-- Sección izquierda + derecha -->
+            <HBox spacing="10" alignment="CENTER" VBox.vgrow="ALWAYS">
+                <!-- Izquierda -->
+                <VBox spacing="10" alignment="TOP_LEFT" HBox.hgrow="ALWAYS" maxWidth="Infinity">
+                    <Label text="Últimos sucesos" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaSucesos" spacing="5" styleClass="lista-scroll" fillWidth="true"/>
+                    </ScrollPane>
+
+                    <Label text="Aliados" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaAliados" spacing="5" styleClass="lista-scroll" fillWidth="true">
+                            <Label text="&lt;nombre&gt;" styleClass="texto-dato"/>
+                        </VBox>
+                    </ScrollPane>
+
+                    <Label text="Enemigos" styleClass="subtitulo"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" minWidth="0">
+                        <VBox fx:id="listaEnemigos" spacing="5" styleClass="lista-scroll" fillWidth="true">
+                            <Label text="&lt;nombre&gt;" styleClass="texto-dato"/>
+                        </VBox>
+                    </ScrollPane>
+
+                    <Button fx:id="botonStatus" text="Status quo" maxWidth="Infinity" styleClass="boton-status"/>
+                </VBox>
+
+                <!-- Derecha -->
+                <VBox fx:id="listaDiplomacia" spacing="8" alignment="TOP_LEFT" styleClass="lista-diplomacia" HBox.hgrow="ALWAYS" maxWidth="Infinity" VBox.vgrow="ALWAYS">
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Firmar tratado de no agresión" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Acuerdo comercial" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Crear alianza militar" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Solicitar acceso a espacio aéreo" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Enviar apoyo económico" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Enviar apoyo militar" styleClass="texto-dato"/>
+                    </HBox>
+                    <HBox spacing="8" alignment="CENTER_LEFT" styleClass="hbox-fila">
+                        <Rectangle width="24" height="24" styleClass="icono-blanco"/>
+                        <Label text="Enviar ultimátum" styleClass="texto-dato"/>
+                    </HBox>
+                </VBox>
+            </HBox>
+
+            <!-- Botón Atrás -->
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>

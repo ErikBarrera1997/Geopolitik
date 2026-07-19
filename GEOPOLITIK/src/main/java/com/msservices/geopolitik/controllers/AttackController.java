@@ -166,7 +166,7 @@ public class AttackController implements interaction, attack {
 
     private void openAttackView(combatOption option) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/attackView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/combatViews/attackView.fxml"));
             Parent root = loader.load();
             AttackController controller = loader.getController();
             controller.setCombatOption(option);

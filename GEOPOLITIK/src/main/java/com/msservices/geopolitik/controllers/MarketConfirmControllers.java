@@ -1,7 +1,7 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries;
+import com.msservices.geopolitik.connection.queries.country.countryQueries;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
@@ -103,7 +103,7 @@ public class MarketConfirmControllers implements interaction {
             listaElementos.getChildren().add(row);
         }
 
-        queries q = new queries(DatabaseConnection.getInstance().getConnection());
+        countryQueries q = new countryQueries(DatabaseConnection.getInstance().getConnection());
         double money = q.getCountryMoney(11);
 
         lblCosto.setText("$" + String.format("%.0f", total));

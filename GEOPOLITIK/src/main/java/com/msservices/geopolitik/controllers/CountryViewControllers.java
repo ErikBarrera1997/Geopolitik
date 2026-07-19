@@ -1,12 +1,13 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.Data.Province;
-import com.msservices.geopolitik.connection.Views.CountryDetails;
-import com.msservices.geopolitik.connection.Views.ProvinceData;
-import com.msservices.geopolitik.connection.queries;
-import com.msservices.geopolitik.connection.Views.provinceQueries;
+import com.msservices.geopolitik.connection.queries.province.Province;
+import com.msservices.geopolitik.connection.queries.country.CountryDetails;
+import com.msservices.geopolitik.connection.queries.province.ProvinceData;
+import com.msservices.geopolitik.connection.queries.country.countryQueries;
+import com.msservices.geopolitik.connection.queries.province.provinceQueries;
 import com.msservices.geopolitik.init.loadFlags;
+import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
@@ -20,7 +21,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -28,11 +28,11 @@ public class CountryViewControllers implements interaction {
 
     @FXML private Pane mapaProvincias;
     @FXML private ImageView bandera;
-    @FXML private Rectangle icon1;
-    @FXML private Rectangle icon2;
-    @FXML private Rectangle icon3;
-    @FXML private Rectangle icon4;
-    @FXML private Rectangle icon5;
+    @FXML private ImageView icon1;
+    @FXML private ImageView icon2;
+    @FXML private ImageView icon3;
+    @FXML private ImageView icon4;
+    @FXML private ImageView icon5;
     @FXML private VBox provincias;
     @FXML private Button botonAtras;
     @FXML private Label lblNombrePais;
@@ -52,16 +52,27 @@ public class CountryViewControllers implements interaction {
     }
 
     private void cargarDatos(int countryId) {
-        queries queries = new queries(DatabaseConnection.getInstance().getConnection());
+        countryQueries countryQueries = new countryQueries(DatabaseConnection.getInstance().getConnection());
 
-        CountryDetails details = queries.getCountryDetails(countryId);
-        java.util.List<Province> listaProvincias = queries.getProvincesByCountry(countryId);
+        CountryDetails details = countryQueries.getCountryDetails(countryId);
+        java.util.List<Province> listaProvincias = countryQueries.getProvincesByCountry(countryId);
 
         if (details != null) {
-            lblCapital.setText(details.getCapitalName());
-            lblGobierno.setText(details.getGovernment());
-            lblPoblacion.setText(String.valueOf(details.getTotalPopulation()));
-            lblIngresos.setText(String.valueOf(details.getTotalIngresos()));
+            lblCapital.setText(details.capitalName());
+            lblGobierno.setText(details.government());
+            lblPoblacion.setText(String.valueOf(details.totalPopulation()));
+            lblIngresos.setText(String.valueOf(details.totalIngresos()));
+
+            String gov = details.government().toLowerCase();
+            if (gov.contains("república") || gov.contains("republic")) {
+                icon2.setImage(loadImages.getIcon("republic"));
+            } else if (gov.contains("monarquía") || gov.contains("monarchy")) {
+                icon2.setImage(loadImages.getIcon("monarchy"));
+            } else if (gov.contains("teocrácia") || gov.contains("theocracy")) {
+                icon2.setImage(loadImages.getIcon("teocracy"));
+            } else {
+                icon2.setImage(loadImages.getIcon("dictatorship"));
+            }
         }
 
         Image flagImage = loadFlag(countryId);
@@ -80,12 +91,12 @@ public class CountryViewControllers implements interaction {
             if (flagImage != null) {
                 icon.setImage(flagImage);
             }
-            Label nameLabel = new Label(p.getName());
+            Label nameLabel = new Label(p.name());
             if (p.isCapital()) {
                 nameLabel.setText(nameLabel.getText() + " (Capital)");
             }
             row.getChildren().addAll(icon, nameLabel);
-            row.setOnMouseClicked(e -> openProvinceView(p.getName(), currentCountryId, currentCountryName));
+            row.setOnMouseClicked(e -> openProvinceView(p.name(), currentCountryId, currentCountryName));
             provincias.getChildren().add(row);
         }
     }
@@ -104,7 +115,7 @@ public class CountryViewControllers implements interaction {
             ProvinceData data = pQueries.getProvinceData(provinceName, countryId);
             if (data == null) return;
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/provinceView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/countryViews/provinceView.fxml"));
             Parent root = loader.load();
             ProvinceViewControllers controller = loader.getController();
             controller.setProvinceData(data, countryName);
@@ -119,6 +130,33 @@ public class CountryViewControllers implements interaction {
         }
     }
 
+    @FXML
+    private void openCountryDiplomacia() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/countryDiplomacyView.fxml"));
+            Parent root = loader.load();
+            RelacionesController controller = loader.getController();
+            controller.setCountryId(currentCountryId);
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(provincias.getScene().getWindow());
+            stage.setTitle("Diplomacia - " + currentCountryName);
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    public void initialize() {
+        icon1.setImage(loadImages.getIcon("capital"));
+        icon3.setImage(loadImages.getIcon("population"));
+        icon4.setImage(loadImages.getIcon("money"));
+        icon5.setImage(loadImages.getIcon("diplomacy"));
+        botonAtras.setOnAction(e -> goBack());
+    }
+
     @Override
     public void goBack() {
         Stage stage = (Stage) botonAtras.getScene().getWindow();
@@ -127,11 +165,5 @@ public class CountryViewControllers implements interaction {
 
     @Override
     public void goAhead() {
-    }
-
-    @FXML
-    public void initialize() {
-        
-        botonAtras.setOnAction(e -> goBack());
     }
 }
