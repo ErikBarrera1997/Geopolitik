@@ -7,27 +7,40 @@ public class artilleryAttack {
     static Random rand = new Random();
 
     //blind attack
-     public static void launchAttackToMilitaryUnits(int stat, int quantity, double percent){
-         int[] toDestroy = new int[19];
+    //Probability = 1/3
+     public static int[] launchAttackToMilitaryUnits(int quantity){
+         Random r = new Random();
+         int last = 0;
+         int p;
 
+         int Xo = r.nextInt(quantity);
+         last = quantity - Xo;
+         int X1 = r.nextInt(last);
+         last = last - X1;
+         int X2 = last;
 
-         double chance = rand.nextInt(100) + 1;
-         System.out.println("Chance: " + chance);
-         for(int i = 0; i < toDestroy.length; i++){
-             if(chance <= percent){
-                 chance++;
-                 //toDestroy[i] = rand.nextInt(quantity);
-                 int result = (int)(Math.round(rand.nextDouble(stat))*quantity);
-                 System.out.println(i + " - " + result);
-             }
+         int[] objetives = new int[21];
+         int destroyed = 0;
+
+         while(X1 >= 0){
+             p = r.nextInt(21);
+             destroyed = objetives[p];
+             objetives[p] = destroyed + 1;
+             X1--;
          }
 
-         //return toDestroy;
+         while(X2 >= 0){
+             p = r.nextInt(21);
+             destroyed = objetives[p];
+             objetives[p] = destroyed + 1;
+             X2--;
+         }
+
+        return objetives;
      }
 
-     public static int attackCivillians(int stat, int quantity, int civillians){
-         int result = (int)(Math.round(rand.nextDouble(stat))*quantity);
-
+     public static int attackCivillians(int quantity, int civillians){
+         int result = (int)(Math.round(rand.nextDouble(2))*quantity);
          return result;
      }
 

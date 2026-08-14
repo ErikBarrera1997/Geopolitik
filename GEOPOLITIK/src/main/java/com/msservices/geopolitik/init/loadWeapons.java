@@ -8,15 +8,41 @@ import java.util.List;
 
 public class loadWeapons {
 
-    private static List<Weapon> weapons;
+    public static List<Weapon> weapons;
 
-    public static List<Weapon> getWeapons() {
+    public static void getWeapons() {
         if (weapons == null) {
             weaponQueries queries = new weaponQueries(DatabaseConnection.getInstance().getConnection());
             weapons = queries.getWeapons();
         }
-        return weapons;
     }
 
+    public static int getWeaponCount(){
+        return weapons.size();
+    }
+
+    public static Weapon getWeapon(int index){
+        return weapons.get(index);
+    }
+
+    public static int getWeaponId(int index){
+        return weapons.get(index).idWeapon();
+    }
+
+    public static String getWeaponName(int index){
+        return weapons.get(index).name();
+    }
+
+    public static double getWeaponCost(int index){
+        return weapons.get(index).cost();
+    }
+
+    public static String getWeaponType(int index){
+        return weapons.get(index).type();
+    }
+
+    public static List<Weapon> getWeaponsList(){
+        return weapons;
+    }
 
 }

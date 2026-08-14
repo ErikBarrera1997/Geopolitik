@@ -3,6 +3,7 @@ package com.msservices.geopolitik.controllers;
 import com.msservices.geopolitik.connection.DatabaseConnection;
 import com.msservices.geopolitik.connection.queries.country.countryQueries;
 import com.msservices.geopolitik.init.loadImages;
+import com.msservices.geopolitik.init.loadWeapons;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -63,14 +64,15 @@ public class MarketConfirmControllers implements interaction {
         }
     }
 
-    public void setCartData(List<String> weaponNames, List<Integer> quantities, List<Double> costs, int countryId) {
+    public void setCartData(List<Integer> weaponIndices, List<Integer> quantities, int countryId) {
         listaElementos.getChildren().clear();
 
         double total = 0;
-        for (int i = 0; i < weaponNames.size(); i++) {
-            String name = weaponNames.get(i);
+        for (int i = 0; i < weaponIndices.size(); i++) {
+            int index = weaponIndices.get(i);
+            String name = loadWeapons.getWeaponName(index);
+            double unitCost = loadWeapons.getWeaponCost(index);
             int qty = quantities.get(i);
-            double unitCost = costs.get(i);
             double subtotal = unitCost * qty;
             total += subtotal;
 

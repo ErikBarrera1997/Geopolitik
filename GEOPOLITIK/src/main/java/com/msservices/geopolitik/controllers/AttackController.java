@@ -185,7 +185,7 @@ public class AttackController implements interaction, attack {
 
     @Override
     public void launchAttack() {
-        artilleryAttack.launchAttackToMilitaryUnits(2, 100, 10);
+        artilleryAttack.launchAttackToMilitaryUnits(2000);
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.msservices.geopolitik.controllers;
 
-import com.msservices.geopolitik.connection.queries.weapon.Weapon;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.init.loadWeapons;
 import com.msservices.geopolitik.interfaces.interaction;
@@ -62,11 +61,10 @@ public class WeaponsMarketControllers implements interaction {
     @FXML
     private VBox cantidadPanel;
 
-    private Weapon selectedWeapon;
+    private int selectedWeaponIndex = -1;
 
-    private final List<String> cartNames = new ArrayList<>();
+    private final List<Integer> cartIndices = new ArrayList<>();
     private final List<Integer> cartQtys = new ArrayList<>();
-    private final List<Double> cartCosts = new ArrayList<>();
 
     private Stage cantidadStage;
     private Slider popupSlider;
@@ -74,11 +72,11 @@ public class WeaponsMarketControllers implements interaction {
 
     @FXML
     public void initialize() {
-        List<Weapon> weapons = loadWeapons.getWeapons();
         gridArmas.getChildren().clear();
 
-        for (Weapon weapon : weapons) {
-            VBox tile = createWeaponTile(weapon);
+        int count = loadWeapons.getWeaponCount();
+        for (int i = 0; i < count; i++) {
+            VBox tile = createWeaponTile(i);
             gridArmas.getChildren().add(tile);
         }
 
@@ -105,23 +103,23 @@ public class WeaponsMarketControllers implements interaction {
         }
     }
 
-    private VBox createWeaponTile(Weapon weapon) {
+    private VBox createWeaponTile(int index) {
         ImageView imageView = new ImageView();
         imageView.setFitWidth(40);
         imageView.setFitHeight(40);
         imageView.setPreserveRatio(true);
 
-        Image img = loadImages.getWeaponImage(weapon.name());
+        Image img = loadImages.getWeaponImage(loadWeapons.getWeaponName(index));
         if (img != null) {
             imageView.setImage(img);
         }
 
-        Label nameLabel = new Label(weapon.name());
+        Label nameLabel = new Label(loadWeapons.getWeaponName(index));
         nameLabel.setStyle("-fx-text-fill: #f0ead0; -fx-font-size: 10px; -fx-font-weight: bold;");
         nameLabel.setWrapText(true);
         nameLabel.setAlignment(Pos.CENTER);
 
-        Label costLabel = new Label("$" + String.format("%.0f", weapon.cost()));
+        Label costLabel = new Label("$" + String.format("%.0f", loadWeapons.getWeaponCost(index)));
         costLabel.setStyle("-fx-text-fill: #d9c97a; -fx-font-size: 9px;");
         costLabel.setAlignment(Pos.CENTER);
 
@@ -131,9 +129,9 @@ public class WeaponsMarketControllers implements interaction {
         tile.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
 
         tile.setOnMouseClicked(e -> {
-            selectedWeapon = weapon;
-            etiquetaTexto.setText(weapon.name());
-            agregarAlCarrito(weapon);
+            selectedWeaponIndex = index;
+            etiquetaTexto.setText(loadWeapons.getWeaponName(index));
+            agregarAlCarrito(index);
             actualizarBotonCantidad();
             for (javafx.scene.Node child : gridArmas.getChildren()) {
                 child.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
@@ -142,13 +140,13 @@ public class WeaponsMarketControllers implements interaction {
         });
 
         tile.setOnMouseEntered(e -> {
-            if (selectedWeapon != weapon) {
+            if (selectedWeaponIndex != index) {
                 tile.setStyle("-fx-background-color: #4a6a4a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
             }
         });
 
         tile.setOnMouseExited(e -> {
-            if (selectedWeapon != weapon) {
+            if (selectedWeaponIndex != index) {
                 tile.setStyle("-fx-background-color: #3a5a3a; -fx-border-color: #1a3a1a; -fx-border-width: 1; -fx-border-radius: 4; -fx-background-radius: 4; -fx-cursor: hand;");
             }
         });
@@ -156,11 +154,10 @@ public class WeaponsMarketControllers implements interaction {
         return tile;
     }
 
-    private void agregarAlCarrito(Weapon weapon) {
+    private void agregarAlCarrito(int index) {
         int cantidad = (int) sliderCantidad.getValue();
-        cartNames.add(weapon.name());
+        cartIndices.add(index);
         cartQtys.add(cantidad);
-        cartCosts.add(weapon.cost());
     }
 
     private void actualizarBotonCantidad() {
@@ -215,8 +212,8 @@ public class WeaponsMarketControllers implements interaction {
                 sliderCantidad.setValue(popupSlider.getValue());
                 campoCantidad.setText(popupCampo.getText());
                 actualizarBotonCantidad();
-                if (selectedWeapon != null) {
-                    agregarAlCarrito(selectedWeapon);
+                if (selectedWeaponIndex >= 0) {
+                    agregarAlCarrito(selectedWeaponIndex);
                 }
                 cantidadStage.close();
             });
@@ -241,7 +238,7 @@ public class WeaponsMarketControllers implements interaction {
 
     @FXML
     private void onComprarClick() {
-        if (cartNames.isEmpty()) return;
+        if (cartIndices.isEmpty()) return;
 
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/weaponsViews/marketConfirmView.fxml"));
@@ -249,9 +246,8 @@ public class WeaponsMarketControllers implements interaction {
             MarketConfirmControllers controller = loader.getController();
 
             controller.setCartData(
-                new ArrayList<>(cartNames),
+                new ArrayList<>(cartIndices),
                 new ArrayList<>(cartQtys),
-                new ArrayList<>(cartCosts),
                 1
             );
 
@@ -268,9 +264,8 @@ public class WeaponsMarketControllers implements interaction {
             stage.showAndWait();
 
             if (controller.isResetCart()) {
-                cartNames.clear();
+                cartIndices.clear();
                 cartQtys.clear();
-                cartCosts.clear();
             }
         } catch (Exception e) {
             e.printStackTrace();
