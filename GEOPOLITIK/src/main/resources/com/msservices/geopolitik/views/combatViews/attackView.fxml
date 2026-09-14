@@ -3,6 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
@@ -20,12 +21,20 @@
             </HBox>
 
             <!-- Descripcion -->
-            <Label fx:id="descripcion" text="" wrapText="true" styleClass="descripcion"/>
+            <Label fx:id="descripcion" text="" wrapText="true" prefWidth="560" maxWidth="560" styleClass="descripcion"/>
 
             <!-- Listas lado a lado -->
             <HBox spacing="20" alignment="CENTER">
-                <ListView fx:id="listaOpciones" prefHeight="150" prefWidth="280" styleClass="lista-seleccion"/>
-                <ListView fx:id="listaResultados" prefHeight="150" prefWidth="280" styleClass="lista-seleccion"/>
+                <ListView fx:id="listaOpciones" prefHeight="210" prefWidth="280" styleClass="lista-seleccion"/>
+                <ListView fx:id="listaResultados" prefHeight="210" prefWidth="280" styleClass="lista-seleccion"/>
+            </HBox>
+
+            <!-- Objetivos fijados (tercera lista) -->
+            <Label text="Objetivos fijados" styleClass="subtitulo"/>
+            <HBox spacing="10" alignment="CENTER">
+                <ListView fx:id="listaObjetivosFijados" prefHeight="40" prefWidth="530" styleClass="lista-seleccion"/>
+                <Rectangle fx:id="botonEliminar" width="36" height="36" pickOnBounds="true"
+                           styleClass="boton-rojo" onMouseClicked="#borrarObjetivos"/>
             </HBox>
 
             <!-- Botones -->

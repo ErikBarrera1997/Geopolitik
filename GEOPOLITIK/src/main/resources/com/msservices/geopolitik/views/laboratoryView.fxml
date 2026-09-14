@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.LaboratoryController"
+            stylesheets="/com/msservices/geopolitik/styles/laboratoryStyles/laboratoryStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-investigacion">
+
+            <!-- Encabezado -->
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Circle fx:id="iconSuperior" radius="30" styleClass="icono-azul"/>
+                <Label text="Investigación" styleClass="titulo"/>
+                <Rectangle fx:id="iconExtra" width="30" height="30" styleClass="icono-blanco"/>
+            </HBox>
+
+            <!-- Tabs -->
+            <HBox spacing="5" alignment="CENTER_RIGHT">
+                <Label text="Militares" styleClass="etiqueta-tab"/>
+                <Label text="Civiles" styleClass="etiqueta-tab"/>
+            </HBox>
+
+            <!-- Lista con scroll -->
+            <ScrollPane prefHeight="250" prefWidth="600" fitToWidth="true">
+                <VBox fx:id="listaInvestigacion" spacing="10" styleClass="lista-scroll"/>
+            </ScrollPane>
+
+            <!-- Pie -->
+            <HBox spacing="10" alignment="CENTER_RIGHT">
+                <Label text="\$000000000" styleClass="precio-total"/>
+                <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

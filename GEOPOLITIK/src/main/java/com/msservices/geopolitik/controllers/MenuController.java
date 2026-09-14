@@ -231,6 +231,10 @@ public class MenuController {
 
         if (index == 0) {
             openWeaponsMarket();
+        } else if (index == 2) {
+            openNews();
+        } else if (index == 4) {
+            openLaboratory();
         } else if (index == 5) {
             openDiplomacia();
         }
@@ -303,6 +307,36 @@ public class MenuController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(imagenPrincipal.getScene().getWindow());
             stage.setTitle("Ministro de guerra");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openNews() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/newsView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Noticias");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openLaboratory() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/laboratoryView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Investigación");
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (Exception e) {

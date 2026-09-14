@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.NewsController"
+            stylesheets="/com/msservices/geopolitik/styles/newsStyles.css">
+
+    <center>
+        <VBox spacing="10" alignment="TOP_CENTER" styleClass="panel-registro">
+
+            <!-- Etiqueta superior -->
+            <Circle fx:id="iconSuperior" radius="45" styleClass="icono-azul"/>
+
+            <!-- Etiquetas de fecha -->
+            <HBox spacing="5" alignment="CENTER_RIGHT">
+                <Label fx:id="labelAnterior" text="&lt;" styleClass="etiqueta-fecha" onMouseClicked="#onFechaAnteriorClick"/>
+                <Label fx:id="labelFecha" text="Fecha" styleClass="etiqueta-fecha" onMouseClicked="#onFechaClick"/>
+                <Label fx:id="labelSiguiente" text="&gt;" styleClass="etiqueta-fecha" onMouseClicked="#onFechaSiguienteClick"/>
+            </HBox>
+
+            <!-- Lista con scroll -->
+            <ScrollPane prefHeight="200" prefWidth="400" fitToWidth="true">
+                <VBox fx:id="listaRegistros" spacing="5" styleClass="lista-scroll">
+                    <Label text="Registro 1"/>
+                    <Label text="Registro 2"/>
+                    <Label text="Registro 3"/>
+                </VBox>
+            </ScrollPane>
+
+            <!-- Botón inferior -->
+            <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
+        </VBox>
+    </center>
+</BorderPane>
