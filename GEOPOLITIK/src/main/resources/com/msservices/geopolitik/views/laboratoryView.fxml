@@ -22,18 +22,27 @@
 
             <!-- Tabs -->
             <HBox spacing="5" alignment="CENTER_RIGHT">
-                <Label text="Militares" styleClass="etiqueta-tab"/>
-                <Label text="Civiles" styleClass="etiqueta-tab"/>
+                <Button fx:id="filtroTodas" text="Todas" styleClass="boton-filtro"/>
+                <Button fx:id="filtroMilitares" text="Militares" styleClass="boton-filtro"/>
+                <Button fx:id="filtroCiviles" text="Civiles" styleClass="boton-filtro"/>
             </HBox>
 
             <!-- Lista con scroll -->
-            <ScrollPane prefHeight="250" prefWidth="600" fitToWidth="true">
+            <ScrollPane prefHeight="200" prefWidth="600" fitToWidth="true">
                 <VBox fx:id="listaInvestigacion" spacing="10" styleClass="lista-scroll"/>
+            </ScrollPane>
+
+            <!-- Etiqueta sobre la lista de seleccionadas -->
+            <Label text="En investigación" styleClass="titulo-seccion"/>
+
+            <!-- Detalle de la mejora seleccionada -->
+            <ScrollPane prefHeight="200" prefWidth="600" fitToWidth="true">
+                <VBox fx:id="listaSeleccionadas" spacing="10" styleClass="lista-scroll"/>
             </ScrollPane>
 
             <!-- Pie -->
             <HBox spacing="10" alignment="CENTER_RIGHT">
-                <Label text="\$000000000" styleClass="precio-total"/>
+                <Label fx:id="precioTotal" text="\$000000000" styleClass="precio-total"/>
                 <Button fx:id="botonAtras" text="Atrás" styleClass="boton-atras"/>
             </HBox>
         </VBox>

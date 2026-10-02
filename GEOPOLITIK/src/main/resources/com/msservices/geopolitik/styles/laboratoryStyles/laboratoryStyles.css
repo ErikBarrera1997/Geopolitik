@@ -55,6 +55,51 @@
     -fx-background-color: #b8a45e;
 }
 
+.titulo-seccion {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #f0ead0;
+}
+
+.boton-filtro {
+    -fx-background-color: #c4b06a;
+    -fx-text-fill: #0e2a4a;
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-border-color: #0e2a4a;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 5 12;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 3, 0, 1, 1);
+}
+
+.boton-filtro:hover {
+    -fx-background-color: #b8a45e;
+}
+
+.boton-filtro:pressed {
+    -fx-background-color: #a8944e;
+}
+
+.boton-filtro.activo {
+    -fx-background-color: #0e2a4a;
+    -fx-text-fill: #f0ead0;
+}
+
+.notificacion {
+    -fx-background-color: #8b2b2b;
+    -fx-text-fill: #f0ead0;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-padding: 6 10;
+    -fx-border-color: #0e2a4a;
+    -fx-border-width: 1;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+}
+
 .lista-scroll {
     -fx-background-color: #d9c97a;
     -fx-border-color: #0e2a4a;
@@ -80,6 +125,20 @@
     -fx-text-fill: #0e2a4a;
 }
 
+.columna-detalle {
+    -fx-alignment: center-left;
+}
+
+.texto-secundario {
+    -fx-font-size: 12px;
+    -fx-text-fill: #1b3a63;
+}
+
+.texto-descripcion {
+    -fx-font-size: 12px;
+    -fx-text-fill: #3a4a63;
+}
+
 .precio {
     -fx-font-size: 14px;
     -fx-font-weight: bold;
@@ -98,6 +157,28 @@
     -fx-border-color: #0e2a4a;
     -fx-border-width: 1;
     -fx-border-radius: 3;
+}
+
+.boton-borrar {
+    -fx-background-color: linear-gradient(to bottom, #a34040, #7d2c2c);
+    -fx-text-fill: #f0ead0;
+    -fx-font-weight: bold;
+    -fx-font-size: 12px;
+    -fx-padding: 6 14;
+    -fx-border-color: #0e2a4a;
+    -fx-border-width: 1;
+    -fx-border-radius: 4;
+    -fx-background-radius: 4;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 3, 0, 1, 1);
+}
+
+.boton-borrar:hover {
+    -fx-background-color: linear-gradient(to bottom, #b64b4b, #8f3434);
+}
+
+.boton-borrar:pressed {
+    -fx-background-color: linear-gradient(to bottom, #7d2c2c, #6a2525);
 }
 
 .boton-atras {
