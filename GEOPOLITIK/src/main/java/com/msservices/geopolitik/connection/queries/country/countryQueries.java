@@ -48,19 +48,20 @@ public class countryQueries {
             SELECT
                 SUM(p.population) AS population,
                 SUM(p.area) AS area,
-                SUM(pr."Ingresos") AS ingresos,
-                SUM(pr."Gas natural") AS gasNatural,
-                SUM(pr."Petróleo") AS petroleo,
-                SUM(pr."Madera") AS madera,
-                SUM(pr."Pesca") AS pesca,
-                SUM(pr."Uranio") AS uranio,
-                SUM(pr."Oro") AS oro,
-                SUM(pr."Agricultura") AS agricultura,
-                SUM(pr."Acero") AS acero,
-                SUM(pr."Industria") AS industria,
-                SUM(pr."electricidad") AS electricidad
+                COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN pr.production ELSE 0 END), 0) AS ingresos,
+                COALESCE(SUM(CASE WHEN r.name = 'Gas natural' THEN pr.production ELSE 0 END), 0) AS gasNatural,
+                COALESCE(SUM(CASE WHEN r.name = 'Petróleo' THEN pr.production ELSE 0 END), 0) AS petroleo,
+                COALESCE(SUM(CASE WHEN r.name = 'Madera' THEN pr.production ELSE 0 END), 0) AS madera,
+                COALESCE(SUM(CASE WHEN r.name = 'Pesca' THEN pr.production ELSE 0 END), 0) AS pesca,
+                COALESCE(SUM(CASE WHEN r.name = 'Uranio' THEN pr.production ELSE 0 END), 0) AS uranio,
+                COALESCE(SUM(CASE WHEN r.name = 'Oro' THEN pr.production ELSE 0 END), 0) AS oro,
+                COALESCE(SUM(CASE WHEN r.name = 'Agricultura' OR r.name = 'Agrícultura' THEN pr.production ELSE 0 END), 0) AS agricultura,
+                COALESCE(SUM(CASE WHEN r.name = 'Acero' THEN pr.production ELSE 0 END), 0) AS acero,
+                COALESCE(SUM(CASE WHEN r.name = 'Industria' THEN pr.production ELSE 0 END), 0) AS industria,
+                COALESCE(SUM(CASE WHEN r.name = 'Electricidad' THEN pr.production ELSE 0 END), 0) AS electricidad
             FROM Provinces p
-            JOIN ProvinceResources pr ON p.id_province = pr.id_provincia
+            JOIN ProvinceResources pr ON p.id_province = pr.id_province
+            LEFT JOIN Resources r ON r.id_resource = pr.id_resource
             WHERE p.id_country = ?
             """;
 
@@ -138,10 +139,11 @@ public class countryQueries {
                 c.government,
                 SUM(p.population) AS totalPopulation,
                 (SELECT pr2.name FROM Provinces pr2 WHERE pr2.id_country = c.id_country AND pr2.is_capital = 1 LIMIT 1) AS capitalName,
-                SUM(pr."Ingresos") AS totalIngresos
+                COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN pr.production ELSE 0 END), 0) AS totalIngresos
             FROM Countries c
             JOIN Provinces p ON p.id_country = c.id_country
-            JOIN ProvinceResources pr ON pr.id_provincia = p.id_province
+            JOIN ProvinceResources pr ON pr.id_province = p.id_province
+            LEFT JOIN Resources r ON r.id_resource = pr.id_resource
             WHERE c.id_country = ?
             """;
 
@@ -163,7 +165,7 @@ public class countryQueries {
     }
 
     public double getCountryMoney(int countryId) {
-        String sql = "SELECT money FROM TotalResources WHERE id_country = ?";
+        String sql = "SELECT COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN tr.total_amount ELSE 0 END), 0) AS money FROM TotalResources tr LEFT JOIN Resources r ON r.id_resource = tr.id_resource WHERE tr.id_country = ?";
         try (var stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, countryId);
             var rs = stmt.executeQuery();
