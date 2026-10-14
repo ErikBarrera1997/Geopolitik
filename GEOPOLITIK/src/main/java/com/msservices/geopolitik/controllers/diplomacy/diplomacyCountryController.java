@@ -1,4 +1,4 @@
-package com.msservices.geopolitik.controllers;
+package com.msservices.geopolitik.controllers.diplomacy;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
 import com.msservices.geopolitik.connection.queries.diplomacy.CountryDiplomacyStatus;
@@ -8,15 +8,19 @@ import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
+import javafx.stage.Stage;import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Modality;
 
-public class DiplomacyCountryController implements interaction {
+public class diplomacyCountryController implements interaction {
 
     @FXML private ImageView iconSuperior;
     @FXML private VBox listaSucesos;
@@ -32,7 +36,24 @@ public class DiplomacyCountryController implements interaction {
     public void initialize() {
         botonAtras.setOnAction(e -> goBack());
         botonStatus.setOnAction(e -> onStatusClick());
-        loadData();
+        loadData();        if (listaDiplomacia != null) {
+            listaDiplomacia.getChildren().forEach(node -> {
+                if (node instanceof javafx.scene.layout.HBox hbox) {
+                    hbox.setOnMouseClicked(e -> {
+                        String text = "";
+                        for (javafx.scene.Node n : hbox.getChildren()) {
+                            if (n instanceof Label l) {
+                                text = l.getText();
+                                break;
+                            }
+                        }
+                        if ("Acuerdo comercial".equals(text)) {
+                            openTradeView(text);
+                        }
+                    });
+                }
+            });
+        }
     }
 
     private void loadData() {
@@ -49,7 +70,10 @@ public class DiplomacyCountryController implements interaction {
         listaEnemigos.getChildren().clear();
 
         if (status.alliedName() != null) {
-            listaAliados.getChildren().add(buildRow(status.alliedId(), status.alliedName()));
+            HBox alliedRow = buildRow(status.alliedId(), status.alliedName());
+            alliedRow.setCursor(Cursor.HAND);
+            alliedRow.setOnMouseClicked(e -> openDiplomacyActions(status.alliedName()));
+            listaAliados.getChildren().add(alliedRow);
         }
 
         if (status.enemyName() != null) {
@@ -99,4 +123,44 @@ public class DiplomacyCountryController implements interaction {
     @Override
     public void goAhead() {
     }
+
+    private void openDiplomacyActions(String countryName) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/diplomacyActions.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            if (botonAtras != null && botonAtras.getScene() != null) {
+                stage.initOwner(botonAtras.getScene().getWindow());
+            }
+            stage.setTitle("Acciones diplomáticas - " + countryName);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openTradeView(String treatyType) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/tradeView.fxml"));
+            Parent root = loader.load();
+            treatyController controller = loader.getController();
+            controller.setCountryData(COUNTRY_ID, COUNTRY_ID); // adjust as needed
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            if (botonAtras != null && botonAtras.getScene() != null) {
+                stage.initOwner(botonAtras.getScene().getWindow());
+            }
+            stage.setTitle(treatyType);
+            stage.setScene(new Scene(root));
+            stage.setResizable(false);
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
+
+

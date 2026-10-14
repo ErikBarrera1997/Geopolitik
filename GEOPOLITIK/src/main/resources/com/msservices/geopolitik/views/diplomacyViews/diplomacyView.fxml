@@ -7,7 +7,7 @@
 <?import javafx.geometry.*?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.msservices.geopolitik.controllers.DiplomacyCountryController"
+            fx:controller="com.msservices.geopolitik.controllers.diplomacy.diplomacyCountryController"
             minWidth="600" minHeight="450">
     <stylesheets>
         /com/msservices/geopolitik/styles/diplomacyStyles/diplomacyStyles.css

@@ -1,0 +1,14 @@
+﻿.root { -fx-background-color: #2b2b2b; -fx-font-family: "Segoe UI", Arial, sans-serif; }
+.main-container { -fx-padding: 20px; -fx-background-color: #3a3a3a; }
+.image-label, .flag-label { -fx-background-color: #4a4a4a; -fx-border-color: #666666; -fx-border-width: 1px; }
+.resource-list { -fx-background-color: #4a4a4a; -fx-border-color: #666666; -fx-border-width: 1px; -fx-padding: 5px; max-height: 120px; -fx-min-width: 140px; -fx-pref-width: 140px; }
+.resource-row { -fx-padding: 2px 5px; }
+.resource-text { -fx-text-fill: #ffffff; -fx-font-size: 11px; }
+.gauge-background { -fx-fill: #4a4a4a; -fx-stroke: #666666; -fx-stroke-width: 1px; }
+.gauge-indicator { -fx-stroke: #4a8c4a; -fx-stroke-width: 3px; }
+.gauge-center { -fx-stroke: #888888; -fx-stroke-width: 1px; }
+.label-text { -fx-text-fill: #ffffff; -fx-font-size: 12px; }
+.percent-label { -fx-text-fill: #ffffff; -fx-font-size: 11px; }
+.percent-field { -fx-pref-width: 50px; }
+.button { -fx-background-color: #4a6da7; -fx-text-fill: #ffffff; -fx-border-color: #666666; -fx-border-width: 1px; }
+.button:hover { -fx-background-color: #5a7db7; }
