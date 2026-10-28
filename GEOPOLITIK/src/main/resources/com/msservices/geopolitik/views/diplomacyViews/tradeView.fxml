@@ -55,11 +55,20 @@
 
             </HBox>
 
-            <!-- Probability title -->
-            <Label text="Probabilidad de Éxito" styleClass="subtitulo"/>
+            <!-- Action information -->
+            <Label fx:id="actionInfoLabel"
+                   text=""
+                   wrapText="true"
+                   alignment="CENTER"
+                   maxWidth="420"
+                   styleClass="texto-dato"/>
 
-            <!-- Resources -->
-            <HBox alignment="CENTER" spacing="10">
+            <!-- Commercial agreement: resources -->
+            <HBox fx:id="resourcesBox"
+                  alignment="CENTER"
+                  spacing="10"
+                  visible="false"
+                  managed="false">
                 <ScrollPane fx:id="resourceScroll" fitToWidth="true" hbarPolicy="NEVER"
                             prefHeight="100" prefWidth="180">
                     <content>
@@ -74,52 +83,102 @@
                 </HBox>
             </HBox>
 
-            <!-- Agreement -->
+            <!-- Commercial agreement: agreement text -->
             <TextField fx:id="agreement"
                        promptText="Acuerdo"
                        prefWidth="180" maxWidth="180"
+                       visible="false"
+                       managed="false"
                        styleClass="lista-scroll"/>
 
-            <!-- Gauge -->
-            <Pane fx:id="probabilityGauge"
-                  maxWidth="320"
-                  maxHeight="40"
-                  prefWidth="320"
-                  prefHeight="40">
-
-                <!-- Gauge background -->
-                <Rectangle fx:id="gaugeBackground"
-                           x="20"
-                           y="14"
-                           width="280"
-                           height="12"
-                           styleClass="icono"/>
-
-                <!-- Center marker -->
-                <Line startX="160"
-                      startY="8"
-                      endX="160"
-                      endY="32"/>
-
-                <!-- Movable indicator -->
-                <Line fx:id="probabilityIndicator"
-                      startX="160"
-                      startY="8"
-                      endX="160"
-                      endY="32"/>
-
-            </Pane>
-
-            <!-- Labels -->
-            <HBox prefWidth="320">
-
-                <Label text="Baja" styleClass="subtitulo"/>
-
-                <Region HBox.hgrow="ALWAYS"/>
-
-                <Label text="Alta" styleClass="subtitulo"/>
-
+            <!-- Economic support: available money and amount -->
+            <HBox fx:id="moneyBox"
+                  alignment="CENTER"
+                  spacing="10"
+                  visible="false"
+                  managed="false">
+                <Label text="Dinero disponible:" styleClass="texto-dato"/>
+                <Label fx:id="moneyLabel" text="\$0" styleClass="texto-dato"/>
+                <TextField fx:id="moneyField"
+                           promptText="0"
+                           prefWidth="120" maxWidth="120"
+                           styleClass="lista-scroll"/>
             </HBox>
+
+            <!-- Military support: empty list -->
+            <ScrollPane fx:id="militaryListScroll"
+                        fitToWidth="true"
+                        minWidth="200"
+                        prefHeight="100"
+                        visible="false"
+                        managed="false">
+                <content>
+                    <VBox fx:id="militaryList" spacing="5" styleClass="lista-scroll"/>
+                </content>
+            </ScrollPane>
+
+            <!-- Ultimatum: empty list above the gauge -->
+            <ScrollPane fx:id="ultimatumListScroll"
+                        fitToWidth="true"
+                        minWidth="200"
+                        prefHeight="100"
+                        visible="false"
+                        managed="false">
+                <content>
+                    <VBox fx:id="ultimatumList" spacing="5" styleClass="lista-scroll"/>
+                </content>
+            </ScrollPane>
+
+            <!-- Probability gauge -->
+            <VBox fx:id="gaugeBox"
+                  alignment="CENTER"
+                  spacing="6"
+                  visible="false"
+                  managed="false">
+
+                <Label text="Probabilidad de Éxito" styleClass="subtitulo"/>
+
+                <Pane fx:id="probabilityGauge"
+                      maxWidth="320"
+                      maxHeight="40"
+                      prefWidth="320"
+                      prefHeight="40">
+
+                    <!-- Gauge background -->
+                    <Rectangle fx:id="gaugeBackground"
+                               x="20"
+                               y="14"
+                               width="280"
+                               height="12"
+                               styleClass="icono"/>
+
+                    <!-- Center marker -->
+                    <Line startX="160"
+                          startY="8"
+                          endX="160"
+                          endY="32"/>
+
+                    <!-- Movable indicator -->
+                    <Line fx:id="probabilityIndicator"
+                          startX="160"
+                          startY="8"
+                          endX="160"
+                          endY="32"/>
+
+                </Pane>
+
+                <!-- Labels -->
+                <HBox prefWidth="320">
+
+                    <Label text="Baja" styleClass="subtitulo"/>
+
+                    <Region HBox.hgrow="ALWAYS"/>
+
+                    <Label text="Alta" styleClass="subtitulo"/>
+
+                </HBox>
+
+            </VBox>
 
             <!-- Buttons -->
             <HBox alignment="CENTER"

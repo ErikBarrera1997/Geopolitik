@@ -1,6 +1,7 @@
 package com.msservices.geopolitik.controllers.diplomacy;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
+import com.msservices.geopolitik.connection.queries.country.countryQueries;
 import com.msservices.geopolitik.connection.queries.diplomacy.countryResource;
 import com.msservices.geopolitik.connection.queries.diplomacy.countryResourceQueries;
 import com.msservices.geopolitik.init.loadFlags;
@@ -10,6 +11,7 @@ import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -30,24 +32,87 @@ public class treatyController implements interaction {
     @FXML private Label sourceCountryFlag;
     @FXML private Label treatyTypeImage;
     @FXML private Label targetCountryFlag;
+    @FXML private Label actionInfoLabel;
+    @FXML private HBox resourcesBox;
     @FXML private VBox resourceList;
     @FXML private ScrollPane resourceScroll;
     @FXML private TextField percentField;
     @FXML private Label percentLabel;
     @FXML private TextField agreement;
+    @FXML private HBox moneyBox;
+    @FXML private Label moneyLabel;
+    @FXML private TextField moneyField;
+    @FXML private ScrollPane militaryListScroll;
+    @FXML private VBox militaryList;
+    @FXML private ScrollPane ultimatumListScroll;
+    @FXML private VBox ultimatumList;
+    @FXML private VBox gaugeBox;
     @FXML private Button signTreatyButton;
     @FXML private Button backButton;
 
+    private static final String ACTION_COMMERCIAL = "Acuerdo comercial";
+    private static final String ACTION_NON_AGGRESSION = "Firmar tratado de no agresión";
+    private static final String ACTION_MILITARY_ALLIANCE = "Crear alianza militar";
+    private static final String ACTION_AIRSPACE = "Solicitar acceso a espacio aéreo";
+    private static final String ACTION_ECONOMIC_SUPPORT = "Enviar apoyo económico";
+    private static final String ACTION_MILITARY_SUPPORT = "Enviar apoyo militar";
+    private static final String ACTION_ULTIMATUM = "Enviar ultimátum";
+
     private int sourceCountryId;
     private int targetCountryId;
+    private String actionName;
     private HBox selectedRow;
     private countryResource selectedResource;
 
-    public void setCountryData(int sourceCountryId, int targetCountryId) {
+    public void setCountryData(int sourceCountryId, int targetCountryId, String actionName) {
         this.sourceCountryId = sourceCountryId;
         this.targetCountryId = targetCountryId;
+        this.actionName = actionName;
+        treatyNameLabel.setText(actionName);
         loadFlags();
-        loadResources();
+        applyActionLayout();
+        if (ACTION_COMMERCIAL.equals(actionName)) {
+            loadResources();
+        }
+        if (ACTION_ECONOMIC_SUPPORT.equals(actionName)) {
+            loadMoney();
+        }
+        militaryList.getChildren().clear();
+        ultimatumList.getChildren().clear();
+    }
+
+    public void setActionInfo(String text) {
+        actionInfoLabel.setText(text == null ? "" : text);
+    }
+
+    private void applyActionLayout() {
+        boolean commercial = ACTION_COMMERCIAL.equals(actionName);
+        boolean economicSupport = ACTION_ECONOMIC_SUPPORT.equals(actionName);
+        boolean militarySupport = ACTION_MILITARY_SUPPORT.equals(actionName);
+        boolean ultimatum = ACTION_ULTIMATUM.equals(actionName);
+        boolean gauge = commercial
+                || ACTION_NON_AGGRESSION.equals(actionName)
+                || ACTION_MILITARY_ALLIANCE.equals(actionName)
+                || ACTION_AIRSPACE.equals(actionName)
+                || ultimatum;
+
+        setVisible(resourcesBox, commercial);
+        setVisible(agreement, commercial);
+        setVisible(moneyBox, economicSupport);
+        setVisible(militaryListScroll, militarySupport);
+        setVisible(ultimatumListScroll, ultimatum);
+        setVisible(gaugeBox, gauge);
+    }
+
+    private void setVisible(Node node, boolean visible) {
+        node.setVisible(visible);
+        node.setManaged(visible);
+    }
+
+    private void loadMoney() {
+        countryQueries queries = new countryQueries(DatabaseConnection.getInstance().getConnection());
+        double money = queries.getCountryMoney(sourceCountryId);
+        moneyLabel.setText("$" + String.format("%.0f", money));
     }
 
     private void loadFlags() {
@@ -156,6 +221,12 @@ public class treatyController implements interaction {
             return value >= 1 && value <= 100 ? change : null;
         }));
         percentField.textProperty().addListener((obs, oldValue, newValue) -> updateAgreement());
+        moneyField.setTextFormatter(new TextFormatter<>(change -> {
+            if (!change.isContentChange()) {
+                return change;
+            }
+            return change.getControlNewText().matches("\\d{0,9}") ? change : null;
+        }));
     }
 
     @Override

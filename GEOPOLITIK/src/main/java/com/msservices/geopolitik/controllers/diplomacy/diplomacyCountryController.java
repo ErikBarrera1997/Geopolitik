@@ -36,24 +36,25 @@ public class diplomacyCountryController implements interaction {
     public void initialize() {
         botonAtras.setOnAction(e -> goBack());
         botonStatus.setOnAction(e -> onStatusClick());
-        loadData();        if (listaDiplomacia != null) {
+        loadData();
+
+        if (listaDiplomacia != null) {
             listaDiplomacia.getChildren().forEach(node -> {
-                if (node instanceof javafx.scene.layout.HBox hbox) {
-                    hbox.setOnMouseClicked(e -> {
-                        String text = "";
-                        for (javafx.scene.Node n : hbox.getChildren()) {
-                            if (n instanceof Label l) {
-                                text = l.getText();
-                                break;
-                            }
-                        }
-                        if ("Acuerdo comercial".equals(text)) {
-                            openTradeView(text);
-                        }
-                    });
+                if (node instanceof HBox hbox) {
+                    hbox.setCursor(Cursor.HAND);
+                    hbox.setOnMouseClicked(e -> openTradeView(getRowText(hbox)));
                 }
             });
         }
+    }
+
+    private String getRowText(HBox row) {
+        for (javafx.scene.Node node : row.getChildren()) {
+            if (node instanceof Label label) {
+                return label.getText();
+            }
+        }
+        return "";
     }
 
     private void loadData() {
@@ -72,15 +73,21 @@ public class diplomacyCountryController implements interaction {
         if (status.alliedName() != null) {
             HBox alliedRow = buildRow(status.alliedId(), status.alliedName());
             alliedRow.setCursor(Cursor.HAND);
-            alliedRow.setOnMouseClicked(e -> openDiplomacyActions(status.alliedName()));
+            alliedRow.setOnMouseClicked(e -> openDiplomacyActions(status.alliedName(), true));
             listaAliados.getChildren().add(alliedRow);
         }
 
         if (status.enemyName() != null) {
-            listaEnemigos.getChildren().add(buildRow(status.enemyId(), status.enemyName()));
+            HBox enemyRow = buildRow(status.enemyId(), status.enemyName());
+            enemyRow.setCursor(Cursor.HAND);
+            enemyRow.setOnMouseClicked(e -> openDiplomacyActions(status.enemyName(), false));
+            listaEnemigos.getChildren().add(enemyRow);
         }
         if (status.warName() != null) {
-            listaEnemigos.getChildren().add(buildRow(status.warId(), status.warName()));
+            HBox warRow = buildRow(status.warId(), status.warName());
+            warRow.setCursor(Cursor.HAND);
+            warRow.setOnMouseClicked(e -> openDiplomacyActions(status.warName(), false));
+            listaEnemigos.getChildren().add(warRow);
         }
 
     }
@@ -124,10 +131,12 @@ public class diplomacyCountryController implements interaction {
     public void goAhead() {
     }
 
-    private void openDiplomacyActions(String countryName) {
+    private void openDiplomacyActions(String countryName, boolean allied) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/diplomacyActions.fxml"));
             Parent root = loader.load();
+            diplomacyActionsController controller = loader.getController();
+            controller.setAlliedContext(allied);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             if (botonAtras != null && botonAtras.getScene() != null) {
@@ -142,18 +151,18 @@ public class diplomacyCountryController implements interaction {
         }
     }
 
-    private void openTradeView(String treatyType) {
+    private void openTradeView(String actionName) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/tradeView.fxml"));
             Parent root = loader.load();
             treatyController controller = loader.getController();
-            controller.setCountryData(COUNTRY_ID, COUNTRY_ID); // adjust as needed
+            controller.setCountryData(COUNTRY_ID, COUNTRY_ID, actionName);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             if (botonAtras != null && botonAtras.getScene() != null) {
                 stage.initOwner(botonAtras.getScene().getWindow());
             }
-            stage.setTitle(treatyType);
+            stage.setTitle(actionName);
             stage.setScene(new Scene(root));
             stage.setResizable(false);
             stage.showAndWait();

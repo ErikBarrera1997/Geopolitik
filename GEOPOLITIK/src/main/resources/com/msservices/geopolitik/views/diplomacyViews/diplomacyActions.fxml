@@ -19,8 +19,13 @@
 
             <Label text="Acciones diplomáticas" styleClass="titulo"/>
 
-            <ScrollPane fitToWidth="true" prefWidth="240" prefHeight="250">
+            <ScrollPane fx:id="allyScroll" fitToWidth="true" prefHeight="250">
                 <VBox fx:id="actionsList" spacing="5" styleClass="lista-acciones"/>
+            </ScrollPane>
+
+            <ScrollPane fx:id="enemyScroll" fitToWidth="true" prefHeight="250"
+                        visible="false" managed="false">
+                <VBox fx:id="enemyActionsList" spacing="5" styleClass="lista-acciones"/>
             </ScrollPane>
 
             <Button fx:id="backButton"

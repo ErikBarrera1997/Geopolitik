@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -19,14 +20,26 @@ public class diplomacyActionsController implements interaction {
     private VBox actionsList;
 
     @FXML
+    private VBox enemyActionsList;
+
+    @FXML
+    private ScrollPane allyScroll;
+
+    @FXML
+    private ScrollPane enemyScroll;
+
+    @FXML
     private Button backButton;
 
-    private static final List<String> ACCIONES = List.of(
+    private static final List<String> ALLY_ACTIONS = List.of(
             "Romper alianza",
             "Revisar tratados",
             "Pedir ayuda económica",
-            "Pedir ayuda militar",
             "Retirar embajada",
+            "Pedir ayuda militar"
+    );
+
+    private static final List<String> ENEMY_ACTIONS = List.of(
             "Declarar la guerra",
             "Exigir recursos",
             "Pedir tregua",
@@ -34,27 +47,51 @@ public class diplomacyActionsController implements interaction {
             "Retirar embajada"
     );
 
+    private boolean alliedContext = true;
+
     @FXML
     public void initialize() {
         if (backButton != null) {
             backButton.setOnAction(e -> goBack());
         }
 
-        actionsList.getChildren().clear();
-        for (String accion : ACCIONES) {
-            HBox row = new HBox(8);
-            row.setAlignment(Pos.CENTER_LEFT);
-            row.getStyleClass().add("fila-accion");
+        fillList(actionsList, ALLY_ACTIONS);
+        fillList(enemyActionsList, ENEMY_ACTIONS);
+        applyContext();
+    }
 
-            ImageView icon = new ImageView(loadImages.getIcon("diplomacy"));
-            icon.setFitWidth(20);
-            icon.setFitHeight(20);
-            icon.setPreserveRatio(true);
-            row.getChildren().add(icon);
+    public void setAlliedContext(boolean allied) {
+        this.alliedContext = allied;
+        applyContext();
+    }
 
-            row.getChildren().add(new Label(accion));
-            actionsList.getChildren().add(row);
+    private void applyContext() {
+        allyScroll.setVisible(alliedContext);
+        allyScroll.setManaged(alliedContext);
+        enemyScroll.setVisible(!alliedContext);
+        enemyScroll.setManaged(!alliedContext);
+    }
+
+    private void fillList(VBox target, List<String> actions) {
+        target.getChildren().clear();
+        for (String action : actions) {
+            target.getChildren().add(buildRow(action));
         }
+    }
+
+    private HBox buildRow(String action) {
+        HBox row = new HBox(8);
+        row.setAlignment(Pos.CENTER_LEFT);
+        row.getStyleClass().add("fila-accion");
+
+        ImageView icon = new ImageView(loadImages.getIcon("diplomacy"));
+        icon.setFitWidth(20);
+        icon.setFitHeight(20);
+        icon.setPreserveRatio(true);
+        row.getChildren().add(icon);
+
+        row.getChildren().add(new Label(action));
+        return row;
     }
 
     @Override
