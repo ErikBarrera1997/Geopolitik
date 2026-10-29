@@ -9,6 +9,8 @@
 | Diplomacy | `views/diplomacyViews/diplomacyView.fxml` | `controllers.diplomacy.diplomacyCountryController` | `styles/diplomacyStyles/diplomacyStyles.css` | `MenuController.openDiplomacia()` |
 | Diplomacy actions | `views/diplomacyViews/diplomacyActions.fxml` | `controllers.diplomacy.diplomacyActionsController` | `styles/diplomacyStyles/diplomacyActionsStyles.css` | Ally / enemy row in the diplomacy window |
 | Commercial agreement / treaty | `views/diplomacyViews/tradeView.fxml` | `controllers.diplomacy.treatyController` | `styles/countryStyles/provinceStyles.css` | Any row in `listaDiplomacia` of the diplomacy window |
+| War declaration | `views/diplomacyViews/warDeclarationView.fxml` | `controllers.diplomacy.warDeclarationController` | `styles/diplomacyStyles/warDeclarationStyles.css` | "Declarar la guerra" in the enemy action list |
+| Cancel alliance | `views/diplomacyViews/cancelTreaty.fxml` | `controllers.diplomacy.cancelTreatyController` | `styles/diplomacyStyles/cancelTreatyStyles.css` | "Romper alianza comercial" / "Romper alianza militar" in the ally action list |
 | Country relations | `views/diplomacyViews/countryDiplomacyView.fxml` | `controllers.RelacionesController` | `styles/diplomacyStyles/countryDiplomacyStyles.css` | `CountryViewControllers.openCountryDiplomacia()` |
 | Transaction confirmation | `views/diplomacyViews/transactionView.fxml` | `controllers.TreatyConfirmationController` (does not exist) | none | Not referenced by any code |
 
@@ -20,7 +22,9 @@ All paths above are classpath resources under `src/main/resources/com/msservices
 Main menu
   └─ index 5 → Diplomacy (diplomacyView.fxml)
                  ├─ click row in listaAliados   → Diplomacy actions (ally set)
+                 │                                  └─ click "Romper alianza comercial" / "Romper alianza militar" → Cancel alliance (cancelTreaty.fxml)
                  ├─ click row in listaEnemigos  → Diplomacy actions (enemy set)
+                 │                                  └─ click "Declarar la guerra" → War declaration (warDeclarationView.fxml)
                  └─ click a listaDiplomacia row → Action window (tradeView.fxml, action-specific)
 
 Country view
@@ -83,7 +87,7 @@ private static final int COUNTRY_ID = 11; // Israel
 | `listaEnemigos` | `status.enemyId()` / `status.enemyName()` | Opens diplomacy actions with the **enemy** set |
 | `listaEnemigos` | `status.warId()` / `status.warName()` | Opens diplomacy actions with the **enemy** set |
 
-Country rows get `Cursor.HAND`. `openDiplomacyActions(String countryName, boolean allied)` loads `diplomacyActions.fxml`, obtains the controller, calls `setAlliedContext(allied)`, sets the title to `"Acciones diplomáticas - " + countryName`, configures an `APPLICATION_MODAL` stage owned by `botonAtras`'s window and calls `showAndWait()`.
+Country rows get `Cursor.HAND`. `openDiplomacyActions(int countryId, String countryName, boolean allied)` loads `diplomacyActions.fxml`, obtains the controller, calls `setContext(countryId, countryName, allied)`, sets the title to `"Acciones diplomáticas - " + countryName`, configures an `APPLICATION_MODAL` stage owned by `botonAtras`'s window and calls `showAndWait()`. The id is kept so the war declaration window can show the selected enemy's flag.
 
 ### `listaDiplomacia`
 
@@ -117,15 +121,16 @@ The window contains two independent lists with the same visual component and sty
 
 ### Action sets
 
-Ally context (`setAlliedContext(true)`):
+Ally context (`setContext(id, name, true)`):
 
-1. Romper alianza
-2. Revisar tratados
-3. Pedir ayuda económica
-4. Retirar embajada
-5. Pedir ayuda militar
+1. Romper alianza comercial
+2. Romper alianza militar
+3. Revisar tratados
+4. Pedir ayuda económica
+5. Retirar embajada
+6. Pedir ayuda militar
 
-Enemy context (`setAlliedContext(false)`):
+Enemy context (`setContext(id, name, false)`):
 
 1. Declarar la guerra
 2. Exigir recursos
@@ -133,13 +138,32 @@ Enemy context (`setAlliedContext(false)`):
 4. Firmar tratado de paz
 5. Retirar embajada
 
-`initialize()` fills both `VBox` containers with `buildRow(String)` and calls `applyContext()`. `setAlliedContext(boolean)` only updates the flag and toggles `visible`/`managed` on `allyScroll` and `enemyScroll`.
+`initialize()` fills both `VBox` containers with `buildRow(String)` and calls `applyContext()`. `setContext(int, String, boolean)` stores the selected country id/name and the ally/enemy flag, then calls `applyContext()`, which toggles `visible`/`managed` on `allyScroll` and `enemyScroll`. The id and name are used by the war declaration window.
 
 Both `ScrollPane`s use computed width: `prefWidth` is not set in FXML. The visible list's longest action text determines the width, and the hidden list uses `managed="false"` so it does not affect the calculation.
 
 `buildRow` creates an `HBox` with style class `fila-accion`, a 20×20 `ImageView` using the `"diplomacy"` icon from `loadImages`, and a `Label` with the action text.
 
-The action rows are **display only**: no click handlers are attached and no game/database operation is executed.
+Three rows have click handlers: "Declarar la guerra" calls `openWarDeclaration()`; "Romper alianza comercial" and "Romper alianza militar" call `openCancelTreaty(action)`. Both methods load their FXML, pass the player id (`11`) plus the selected country id/name through the controller's setter, build the title as `"<action> - <country>"` and open the window modally over the actions window. The remaining action rows have no handlers yet.
+
+### 5.1 War declaration window (`warDeclarationView.fxml`)
+
+Controller: `warDeclarationController`; stylesheet `warDeclarationStyles.css` (same green/gold palette as the other diplomacy windows).
+
+- `setCountryData(int sourceCountryId, int targetCountryId)` sets `flag1` and `flag2` from `loadFlags` and loads the `military_actions` icon into `iconLabel`.
+- The Casus Belli list is a `VBox` (`casusBelliList`) inside a `ScrollPane`; it is currently empty.
+- `rejectButton` closes the window through `goBack()`.
+- `declareWarButton` has no handler yet; no war state or `CountryDiplomacyStatus` row is modified.
+- `declarationLabel` is currently empty.
+
+### 5.2 Cancel alliance window (`cancelTreaty.fxml`)
+
+Controller: `cancelTreatyController`; stylesheet `cancelTreatyStyles.css` (same green/gold palette as the other diplomacy windows).
+
+- `setContext(int sourceCountryId, int targetCountryId, String countryName, String action)` selects the commercial or military wording from `"Romper alianza comercial"` / `"Romper alianza militar"`.
+- It sets `titleLabel`, writes the consequence into `infoLabel`, fills `flag1`/`flag2` from `loadFlags`, loads the `diplomacy` icon into `optionIcon`, and adds one `fila-accion` row to `conflictList` describing the affected alliance.
+- `rejectButton` closes the window through `goBack()`.
+- `acceptButton` has no handler yet; no alliance or `CountryDiplomacyStatus` row is modified.
 
 ## 6. Commercial agreement / action window (`tradeView.fxml`)
 
@@ -341,6 +365,8 @@ The working directory must be `GEOPOLITIK/`: `DatabaseConnection` opens `db/midd
 
 - `diplomacyStyles.css`: `panel-diplomacia`, `titulo`, `subtitulo`, `texto-dato`, `icono-blanco`, `lista-scroll`, `lista-diplomacia`, `hbox-fila`, `fila-pais`, `boton-status`, `boton-atras`.
 - `diplomacyActionsStyles.css`: `panel-acciones`, `titulo`, `lista-acciones`, `fila-accion`, `boton-atras`.
+- `warDeclarationStyles.css`: `main-container`, `flag-label`, `icon-label`, `declaration-label`, `section-title`, `lista-scroll`, `scroll-pane`, `primary-button`, `secondary-button`.
+- `cancelTreatyStyles.css`: `main-container`, `titulo`, `flag-label`, `icon-label`, `info-label`, `section-title`, `lista-scroll`, `fila-accion`, `scroll-pane`, `primary-button`, `secondary-button`.
 - `countryDiplomacyStyles.css`: `panel-relaciones` and the same list/row classes used by `RelacionesController`.
 - `tradeView.fxml` reuses `countryStyles/provinceStyles.css`.
 
@@ -349,7 +375,9 @@ The working directory must be `GEOPOLITIK/`: `DatabaseConnection` opens `db/midd
 - `COUNTRY_ID = 11` is hardcoded in `diplomacyCountryController`; the player country is not read from match data.
 - `listaSucesos` and `botonStatus` are empty/no-op; `LastEvents` is not queried.
 - `listaDiplomacia` is static; all seven rows open `tradeView`, but no action is persisted or validated.
-- The diplomacy-actions rows have no click handlers and do not modify `CountryDiplomacyStatus`.
+- In the diplomacy-actions window only "Declarar la guerra" has a handler; the other rows are display only and none modify `CountryDiplomacyStatus`.
+- In the war declaration window `declareWarButton` is not wired and the casus belli list is empty, so no war is declared.
+- In the cancel alliance window `acceptButton` is not wired, so the commercial/military alliance is not actually removed.
 - `openTradeView` passes `(11, 11, actionName)` to `treatyController`; the target country clicked in `listaAliados` / `listaEnemigos` is not propagated.
 - `signTreatyButton` has no handler; no probability is calculated for the gauge; `treatyImage` and `treatyTypeImage` are never assigned.
 - `actionInfoLabel` is empty because `setActionInfo` is not called yet.
@@ -372,6 +400,8 @@ src/main/java/com/msservices/geopolitik/
     diplomacy/
       diplomacyCountryController.java         # diplomacy window
       diplomacyActionsController.java         # actions window (ally/enemy sets)
+      warDeclarationController.java           # war declaration window
+      cancelTreatyController.java             # cancel alliance window
       treatyController.java                   # tradeView
       tradeController.java                    # empty
       transactionController.java              # empty
@@ -389,11 +419,15 @@ src/main/resources/com/msservices/geopolitik/
   views/diplomacyViews/
     diplomacyView.fxml
     diplomacyActions.fxml
+    warDeclarationView.fxml
+    cancelTreaty.fxml
     tradeView.fxml
     transactionView.fxml
     countryDiplomacyView.fxml
   styles/diplomacyStyles/
     diplomacyStyles.css
     diplomacyActionsStyles.css
+    warDeclarationStyles.css
+    cancelTreatyStyles.css
     countryDiplomacyStyles.css
 ```

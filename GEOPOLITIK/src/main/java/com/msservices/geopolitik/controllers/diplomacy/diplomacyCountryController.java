@@ -73,20 +73,20 @@ public class diplomacyCountryController implements interaction {
         if (status.alliedName() != null) {
             HBox alliedRow = buildRow(status.alliedId(), status.alliedName());
             alliedRow.setCursor(Cursor.HAND);
-            alliedRow.setOnMouseClicked(e -> openDiplomacyActions(status.alliedName(), true));
+            alliedRow.setOnMouseClicked(e -> openDiplomacyActions(status.alliedId(), status.alliedName(), true));
             listaAliados.getChildren().add(alliedRow);
         }
 
         if (status.enemyName() != null) {
             HBox enemyRow = buildRow(status.enemyId(), status.enemyName());
             enemyRow.setCursor(Cursor.HAND);
-            enemyRow.setOnMouseClicked(e -> openDiplomacyActions(status.enemyName(), false));
+            enemyRow.setOnMouseClicked(e -> openDiplomacyActions(status.enemyId(), status.enemyName(), false));
             listaEnemigos.getChildren().add(enemyRow);
         }
         if (status.warName() != null) {
             HBox warRow = buildRow(status.warId(), status.warName());
             warRow.setCursor(Cursor.HAND);
-            warRow.setOnMouseClicked(e -> openDiplomacyActions(status.warName(), false));
+            warRow.setOnMouseClicked(e -> openDiplomacyActions(status.warId(), status.warName(), false));
             listaEnemigos.getChildren().add(warRow);
         }
 
@@ -131,12 +131,12 @@ public class diplomacyCountryController implements interaction {
     public void goAhead() {
     }
 
-    private void openDiplomacyActions(String countryName, boolean allied) {
+    private void openDiplomacyActions(int countryId, String countryName, boolean allied) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/diplomacyViews/diplomacyActions.fxml"));
             Parent root = loader.load();
             diplomacyActionsController controller = loader.getController();
-            controller.setAlliedContext(allied);
+            controller.setContext(countryId, countryName, allied);
             Stage stage = new Stage();
             stage.initModality(Modality.APPLICATION_MODAL);
             if (botonAtras != null && botonAtras.getScene() != null) {

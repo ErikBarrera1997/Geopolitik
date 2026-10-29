@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Pos?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.msservices.geopolitik.controllers.diplomacy.warDeclarationController"
+            stylesheets="/com/msservices/geopolitik/styles/diplomacyStyles/warDeclarationStyles.css"
+            minWidth="600" minHeight="450">
+
+    <center>
+
+        <VBox alignment="CENTER"
+              spacing="15"
+              styleClass="main-container">
+
+            <!-- Flags + Icon -->
+
+            <HBox alignment="CENTER"
+                  spacing="40">
+
+                <Label fx:id="flag1"
+                       prefWidth="140"
+                       prefHeight="80"
+                       styleClass="flag-label"/>
+
+                <Label fx:id="iconLabel"
+                       prefWidth="90"
+                       prefHeight="90"
+                       styleClass="icon-label"/>
+
+                <Label fx:id="flag2"
+                       prefWidth="140"
+                       prefHeight="80"
+                       styleClass="flag-label"/>
+
+            </HBox>
+
+            <!-- Declaration text -->
+
+            <Label fx:id="declarationLabel"
+                   wrapText="true"
+                   alignment="TOP_LEFT"
+                   prefWidth="650"
+                   prefHeight="120"
+                   styleClass="declaration-label"/>
+
+            <!-- Casus belli -->
+
+            <Label text="Casus Belli"
+                   styleClass="section-title"/>
+
+            <ScrollPane fitToWidth="true"
+                        prefWidth="650"
+                        prefHeight="160">
+                <VBox fx:id="casusBelliList" spacing="5" styleClass="lista-scroll"/>
+            </ScrollPane>
+
+            <!-- Buttons -->
+
+            <HBox spacing="30"
+                  alignment="CENTER">
+
+                <Button fx:id="declareWarButton"
+                        text="Declarar la guerra"
+                        styleClass="primary-button"/>
+
+                <Button fx:id="rejectButton"
+                        text="Cancelar"
+                        styleClass="secondary-button"/>
+
+            </HBox>
+
+        </VBox>
+
+    </center>
+
+</BorderPane>
