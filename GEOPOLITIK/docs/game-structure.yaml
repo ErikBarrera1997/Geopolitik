@@ -1,0 +1,1276 @@
+# =============================================================================
+# GEOPOLITIK - Documentacion de la estructura del juego
+# =============================================================================
+# Documento generado leyendo el codigo fuente y el esquema real de la base de
+# datos (PRAGMA/.schema), no una plantilla generica.
+#
+# Objetivo: describir la arquitectura de clases y, sobre todo, la cadena
+#   Controlador -> clase de consultas -> metodo -> SQL -> tablas/vistas
+# que conecta la interfaz JavaFX con SQLite.
+#
+# Fuente de verdad del esquema: GEOPOLITIK/db/middleeastdb.db
+# =============================================================================
+
+metadata:
+  project: GEOPOLITIK
+  document: game-structure
+  language: es
+  stack:
+    language: Java 21
+    ui: JavaFX 21 (FXML + CSS)
+    persistence: SQLite (JDBC, driver org.xerial sqlite-jdbc)
+    build: Maven (pom.xml dentro de GEOPOLITIK/, sin wrapper)
+    json: Gson
+  database_file: GEOPOLITIK/db/middleeastdb.db
+  schema_snapshot_rows:
+    Countries: 22
+    Provinces: 348
+    ProvinceResources: 4176
+    Resources: 12
+    ProvinceDefenses: 357
+    ProvinceInfraestructure: 1
+    Infraestructure: 24
+    Weapons: 21
+    Improvements: 18
+    CountryDiplomacyStatus: 22
+    DiplomacyRate: 54
+    Spying: 21
+    TotalResources: 264
+    Powers: 5
+    CountryImprovements: 0
+    InternationalComunity: 0
+    NonAgressionAgreement: 0
+    ComercialAgreement: 0
+    LastEvents: 0
+  notes:
+    - "Todas las consultas del codigo son SELECT. El juego NO escribe en SQLite."
+    - "El estado de partida vive en memoria (campos de controladores y singletons de functions/)."
+    - "Ejecutar siempre desde GEOPOLITIK/ o los loaders de imagenes/JSON y la BD fallan."
+
+# =============================================================================
+# 1. CAPAS DE LA APLICACION
+# =============================================================================
+layers:
+  entrypoint:
+    class: com.msservices.geopolitik.App
+    extends: javafx.application.Application
+    starts: "views/mainView.fxml (controller MenuController)"
+    bootstrap: com.msservices.geopolitik.init.loadGlobalVariables.load()
+
+  bootstrap:
+    class: com.msservices.geopolitik.init.loadGlobalVariables
+    order:
+      - loadDataBases.load()            # DatabaseConnection.init()
+      - loadMatch.loadMatch(loadMatch.getJsonData())
+      - loadImages.getIcons()
+      - loadFlags.getFlags()
+      - loadWeapons.getWeapons()        # unica consulta SQL del arranque
+      - loadCombatActions.getCombatList()
+      - loadCombatActions.getOperationsList()
+      - loadCombatActions.getCombatDescriptionsList()
+
+  connection:
+    class: com.msservices.geopolitik.connection.DatabaseConnection
+    pattern: singleton con init() perezoso
+    url: "jdbc:sqlite:db/middleeastdb.db"
+    api:
+      - "init(): crea la unica Connection. Lo llama loadDataBases."
+      - "getInstance(): lanza IllegalStateException si init() no se ejecuto."
+      - "getConnection(): devuelve la Connection compartida."
+      - "close(): cierra la conexion (nunca se invoca)."
+    warning: "Las clases de consultas reciben esta Connection; nunca abren conexiones."
+
+  queries:
+    package: com.msservices.geopolitik.connection.queries.*
+    pattern: "clase con constructor (Connection), sin singletons, instanciada por cada controlador"
+    classes:
+      - countryQueries
+      - attackQueries
+      - provinceQueries
+      - improvementQueries
+      - weaponQueries
+      - defenseQueries
+      - diplomacyQueries
+      - countryResourceQueries
+
+  entities:
+    description: "records (o POJO) devueltos por las consultas; se mapean 1:1 desde ResultSet"
+    records: [Country, CountryDetails, CountryPopulation, CountryResources,
+              Province, ProvinceData, ProvinceObjective, ProvinceDefense, ArmyUnit,
+              Improvement, Weapon, CountryDiplomacyStatus, DiplomacyRate, countryResource]
+
+  controllers:
+    package: com.msservices.geopolitik.controllers*
+    pattern: "FXML inyecta un controlador sin argumentos; los datos llegan por setters publicos"
+    interface: com.msservices.geopolitik.interfaces.interaction
+    interface_methods: [goBack, goAhead]
+    warning: "initialize() corre antes de show(); getScene() es null ahi."
+
+  functions:
+    package: com.msservices.geopolitik.functions.*
+    role: "logica de combate, mapa, produccion e investigaciones en memoria"
+    classes:
+      - functions.mapFunctions
+      - functions.indicator (ProbabilityGaugeController)
+      - functions.combatFuctions.aerialActions
+      - functions.combatFuctions.artilleryAttack
+      - functions.combatFuctions.options (interfaz vacia)
+      - functions.improvementsFunctions.investigations
+      - functions.improvementsFunctions.countryInvestigations
+      - functions.resourceFunctions.production (vacia)
+
+# =============================================================================
+# 2. BASE DE DATOS
+# =============================================================================
+database:
+  engine: SQLite
+  file: db/middleeastdb.db
+  jdbc_url: "jdbc:sqlite:db/middleeastdb.db"
+  access: "solo lectura desde Java (SELECT); sin INSERT/UPDATE/DELETE en el codigo"
+
+  tables:
+    Countries:
+      columns:
+        id_country:    { type: INTEGER, pk: true, autoincrement: true }
+        name:          { type: VARCHAR(30), not_null: true }
+        government:    { type: TEXT, check: "Anarquía|Dictadura|Monarquía absoluta|República|Monarquía parlamentaria|Teocrácia" }
+        religion:      { type: TEXT, check: "Cristianismo|Islam|Budismo|Catolicismo|Iglesia ortodoxa|Judaísmo" }
+        ethnic_group:  { type: VARCHAR(30), not_null: true }
+        description:   { type: TEXT }
+        name_en:       { type: VARCHAR(30), note: "columna anadida a posteriori con ALTER-style; usada por getCountryByName" }
+      rows: 22
+      used_by: [countryQueries, diplomacyQueries]
+
+    Provinces:
+      columns:
+        id_province: { type: INTEGER, pk: true, autoincrement: true }
+        name:        { type: VARCHAR(50), not_null: true }
+        environment: { type: TEXT, check: "Desert|Plains|Montains|Hills|Coast|City|Forest|Jungle|Taiga" }
+        population:  { type: INTEGER, check: ">= 0" }
+        area:        { type: DOUBLE, not_null: true, check: "> 0" }
+        is_capital:  { type: BOOLEAN, default: 0 }
+        is_coastal:  { type: BOOLEAN, default: 0 }
+        id_country:  { type: INTEGER, fk: "Countries.id_country ON DELETE CASCADE" }
+        morale:      { type: INTEGER, default: 100 }
+      rows: 348
+      used_by: [countryQueries, provinceQueries, attackQueries, weaponQueries]
+
+    Resources:
+      columns:
+        id_resource: { type: INTEGER, pk: true }
+        name:        { type: VARCHAR(15), not_null: true }
+        description: { type: TEXT }
+      rows: 12
+      seed:
+        1: Agrícultura
+        2: Petróleo
+        3: Industria
+        4: Madera
+        5: Carbón
+        6: Gas natural
+        7: Pesca
+        8: Oro
+        9: Uranio
+        10: Acero
+        11: Electricidad
+        12: Dinero
+      notes:
+        - "countryQueries compara por nombre literal y acepta las dos grafias de agricultura: 'Agricultura' y 'Agrícultura'."
+        - "'Dinero' es un recurso mas: los ingresos se calculan sumando su produccion/stock."
+      used_by: [countryQueries, provinceQueries, countryResourceQueries]
+
+    ProvinceResources:
+      columns:
+        id_province: { type: INTEGER, fk: "Provinces.id_province ON DELETE CASCADE" }
+        id_resource: { type: INTEGER, fk: "Resources.id_resource ON DELETE CASCADE" }
+        production:  { type: NUMERIC, check: ">= 0" }
+      primary_key: "(ninguna: tabla de detalle sin PK)"
+      rows: 4176
+      used_by: [countryQueries, provinceQueries]
+
+    TotalResources:
+      columns:
+        id_country:   { type: INTEGER, fk: "Countries.id_country" }
+        id_resource:  { type: INTEGER, not_null: true, fk: "Resources.id_resource ON DELETE CASCADE" }
+        total_amount: { type: INTEGER, check: ">= 0" }
+      rows: 264
+      used_by: [countryQueries, countryResourceQueries]
+
+    Infraestructure:
+      columns:
+        id_infraestructure: { type: INTEGER, pk: true }
+        name:               { type: TEXT(20), not_null: true, unique: true }
+        cost:               { type: NUMERIC }
+        constrution_limit:  { type: INTEGER }
+        type:               { type: TEXT(15), not_null: true, check: "Militar|Civil" }
+      rows: 24
+      used_by: [attackQueries]
+      note: "type es exactamente 'Civil' o 'Militar' (singular, en espanol)."
+
+    ProvinceInfraestructure:
+      columns:
+        id_province:        { type: INTEGER, pk: true, fk: "Provinces.id_province" }
+        id_infraestructure: { type: INTEGER, fk: "Infraestructure.id_infraestructure" }
+        quantity:           { type: INTEGER(100) }
+        level:              { type: INTEGER(5), not_null: true, default: 1 }
+      rows: 1
+      schema_bug: "La PK es solo id_province, asi que solo puede existir UNA fila de infraestructura por provincia."
+      used_by: [attackQueries]
+
+    Weapons:
+      columns:
+        id_weapon:   { type: INTEGER, pk: true }
+        name:        { type: TEXT(20), not_null: true }
+        cost:        { type: NUMERIC }
+        type:        { type: TEXT(50), not_null: true }
+        description: { type: TEXT, default: "Sin descripcion" }
+      rows: 21
+      types:
+        tierra: 10
+        aire: 6
+        mar: 3
+        misil: 2
+      used_by: [weaponQueries, attackQueries, defenseQueries]
+
+    ProvinceDefenses:
+      columns:
+        id_province: { type: INTEGER, fk: "Provinces.id_province", pk: true }
+        id_weapon:   { type: INTEGER, fk: "Weapons.id_weapon", pk: true }
+        quantity:    { type: INTEGER, default: 0 }
+        morale:      { type: NUMERIC(5,2), default: 100, check: ">= 0" }
+        damage:      { type: NUMERIC(5,2), not_null: true, check: ">= 0" }
+      composite_pk: [id_province, id_weapon]
+      rows: 357
+      note: "El record ProvinceDefense solo mapea name y quantity; morale/damage se ignoran."
+      used_by: [weaponQueries, attackQueries, defenseQueries]
+
+    Improvements:
+      columns:
+        id_improvement:   { type: INTEGER, pk: true }
+        name:             { type: TEXT(20), not_null: true }
+        production_value: { type: NUMERIC(99), nullable: true }
+        price:            { type: NUMERIC, nullable: true }
+        type:             { type: TEXT(10), not_null: true }
+        description:      { type: TEXT, default: "Sin descripcion" }
+        duration:         { type: INTEGER, not_null: true, default: 0 }
+      rows: 18
+      types: { Civil: 11, Militar: 7 }
+      used_by: [improvementQueries]
+
+    CountryImprovements:
+      columns:
+        id_country:     { type: INTEGER, pk: true, fk: "Countries.id_country ON DELETE CASCADE" }
+        id_improvement: { type: INTEGER, fk: "Improvements.id_improvement" }
+      rows: 0
+      used_by: []
+      note: "Sin clase de consulta. La investigacion vive en countryInvestigations (memoria)."
+
+    CountryDiplomacyStatus:
+      columns:
+        id_country:        { type: INTEGER, pk: true, fk: "Countries.id_country" }
+        allied:            { type: INTEGER, fk: "Countries.id_country" }
+        neutral:           { type: INTEGER, fk: "Countries.id_country" }
+        enemy:             { type: INTEGER, fk: "Countries.id_country" }
+        in_peace:          { type: INTEGER, fk: "Countries.id_country" }
+        in_war:            { type: INTEGER, fk: "Countries.id_country" }
+        vassal:            { type: INTEGER, fk: "Countries.id_country" }
+        trade_agreement:   { type: INTEGER, fk: "Countries.id_country" }
+        military_alliance: { type: INTEGER, fk: "Countries.id_country" }
+      rows: 22
+      model: "Una fila por pais con 8 FKs; no permite varias relaciones del mismo tipo."
+      used_by: [diplomacyQueries]
+
+    DiplomacyRate:
+      columns:
+        id_relation:     { type: INTEGER, pk: true, autoincrement: true }
+        id_country:      { type: INTEGER, fk: "Countries.id_country ON DELETE CASCADE" }
+        neighbor:        { type: INTEGER, fk: "Countries.id_country" }
+        morale:          { type: NUMERIC(100), check: "0..100" }
+        friendship_rate: { type: NUMERIC(100), check: "0..100" }
+      rows: 54
+      used_by: [diplomacyQueries]
+
+    Spying:
+      columns:
+        id_option:             { type: INTEGER, pk: true }
+        id_country:            { type: INTEGER, fk: "Countries.id_country" }
+        name:                  { type: TEXT(15), not_null: true }
+        eficiency:             { type: NUMERIC(100), not_null: true, check: "0..100" }
+        information_eficiency: { type: NUMERIC(100), not_null: true, check: "0..100" }
+        drone_eficiency:       { type: NUMERIC(100), not_null: true, check: "0..100" }
+      rows: 21
+      used_by: []
+      note: "El paquete connection/queries/spy/ esta vacio: no hay consultas de espionaje."
+
+    NonAgressionAgreement:
+      columns:
+        id_agreement:       { type: INTEGER, pk: true }
+        id_first_country:   { type: INTEGER, fk: "Countries.id_country" }
+        id_second_country:  { type: INTEGER, fk: "Countries.id_country" }
+        duration:           { type: INTEGER(100), check: "> 0" }
+        status:             { type: TEXT, default: active, check: "active|inactive" }
+      rows: 0
+      used_by: []
+
+    ComercialAgreement:
+      columns:
+        id_agreement: { type: INTEGER, pk: true }
+      rows: 0
+      used_by: []
+
+    Powers:
+      columns:
+        id_power:   { type: INTEGER, pk: true }
+        name:       { type: TEXT(30), not_null: true }
+        description: { type: TEXT, default: "No hay descripcion" }
+      rows: 5
+      used_by: []
+
+    InternationalComunity:
+      columns:
+        id_country_power: { type: INTEGER, pk: true, fk: "Powers.id_power" }
+        id_country:       { type: INTEGER, fk: "Countries.id_country" }
+        patienty:         { type: NUMERIC(100), not_null: true, check: "0..100" }
+        is_sanctioned:    { type: INTEGER(2), not_null: true, check: "0..1" }
+      rows: 0
+      used_by: []
+
+    LastEvents:
+      columns:
+        id_event:    { type: INTEGER, pk: true }
+        date:        { type: TEXT, not_null: true }
+        type:        { type: TEXT, not_null: true, check: "Military|Comertial|Diplomatic" }
+        descirption: { type: TEXT(100), not_null: true, note: "typo real de la columna" }
+      rows: 0
+      used_by: []
+
+  views:
+    totalCountryPopulation:
+      definition: "Paises + Provinces agrupados por nombre: country_name, total_population"
+      used_by:
+        - "countryQueries.getTotalCountryPopulation (join por name)"
+      rows: 22
+    militaryInfraestructureCountry:
+      definition: "ProvinceInfraestructure + Provinces + Countries + Infraestructure WHERE type='Militar'"
+      used_by: []
+      rows: 1
+    civillianInfraestructureCountry:
+      definition: "Igual que la anterior con WHERE type='civil' (literal en minuscula; no coincide con 'Civil')"
+      used_by: []
+      rows: 0
+    TotalCountryDefenses:
+      definition: "ProvinceDefenses + Provinces + Countries + Weapons agrupado por country_name, weapon_name"
+      used_by: []
+      rows: 25
+
+  foreign_key_map:
+    - { from: Provinces.id_country, to: Countries.id_country, on_delete: CASCADE }
+    - { from: ProvinceResources.id_province, to: Provinces.id_province, on_delete: CASCADE }
+    - { from: ProvinceResources.id_resource, to: Resources.id_resource, on_delete: CASCADE }
+    - { from: TotalResources.id_country, to: Countries.id_country }
+    - { from: TotalResources.id_resource, to: Resources.id_resource, on_delete: CASCADE }
+    - { from: ProvinceDefenses.id_province, to: Provinces.id_province }
+    - { from: ProvinceDefenses.id_weapon, to: Weapons.id_weapon }
+    - { from: ProvinceInfraestructure.id_province, to: Provinces.id_province }
+    - { from: ProvinceInfraestructure.id_infraestructure, to: Infraestructure.id_infraestructure }
+    - { from: CountryImprovements.id_country, to: Countries.id_country, on_delete: CASCADE }
+    - { from: CountryImprovements.id_improvement, to: Improvements.id_improvement }
+    - { from: CountryDiplomacyStatus.id_country, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.allied, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.enemy, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.in_war, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.in_peace, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.neutral, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.vassal, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.trade_agreement, to: Countries.id_country }
+    - { from: CountryDiplomacyStatus.military_alliance, to: Countries.id_country }
+    - { from: DiplomacyRate.id_country, to: Countries.id_country, on_delete: CASCADE }
+    - { from: DiplomacyRate.neighbor, to: Countries.id_country }
+    - { from: Spying.id_country, to: Countries.id_country }
+    - { from: NonAgressionAgreement.id_first_country, to: Countries.id_country }
+    - { from: NonAgressionAgreement.id_second_country, to: Countries.id_country }
+    - { from: InternationalComunity.id_country_power, to: Powers.id_power }
+    - { from: InternationalComunity.id_country, to: Countries.id_country }
+
+# =============================================================================
+# 3. ENTIDADES (records / POJOs)
+# =============================================================================
+entities:
+  Country:
+    file: connection/queries/country/Country.java
+    kind: record
+    fields: [idCountry:int, name:String, government:String, religion:String, ethnicGroup:String, description:String]
+    source: Countries
+  CountryDetails:
+    file: connection/queries/country/CountryDetails.java
+    kind: record
+    fields: [government:String, totalPopulation:long, capitalName:String, totalIngresos:int]
+  CountryPopulation:
+    file: connection/queries/country/CountryPopulation.java
+    kind: record
+    fields: [countryName:String, totalPopulation:long]
+  CountryResources:
+    file: connection/queries/country/CountryResources.java
+    kind: record
+    fields:
+      - [population:long, area:double]
+      - [ingresos:int, gasNatural:int, petroleo:int, madera:int, pesca:int, uranio:int]
+      - [oro:int, agricultura:int, acero:int, industria:int, electricidad:int]
+  Province:
+    file: connection/queries/province/Province.java
+    kind: record
+    fields: [idProvince:int, name:String, environment:String, population:int, area:double,
+             isCapital:boolean, isCoastal:boolean, idCountry:int, morale:int]
+  ProvinceData:
+    file: connection/queries/province/ProvinceData.java
+    kind: class (POJO con getters)
+    fields: [idProvince:int, name:String, idCountry:int, totalCountryPopulation:long,
+             totalCountryIngresos:int, resources:Map<String,Integer>]
+  ProvinceObjective:
+    file: connection/queries/attack/ProvinceObjective.java
+    kind: record
+    fields: [idProvince:int, provinceName:String, idObjective:int, objectiveName:String, objectiveQuantity:int]
+    note: "Reutilizado para infraestructura, poblacion civil y unidades militares."
+  ProvinceDefense:
+    file: connection/queries/defense/ProvinceDefense.java
+    kind: record
+    fields: [weaponName:String, quantity:int]
+  ArmyUnit:
+    file: connection/queries/defense/ArmyUnit.java
+    kind: record
+    fields: [name:String, totalQuantity:int, avgMorale:double, type:String]
+  Improvement:
+    file: connection/queries/improvement/Improvement.java
+    kind: record
+    fields: [idImprovement:int, name:String, productionValue:Double, price:Double,
+             type:String, description:String, duration:int]
+    note: "productionValue y price son Double (nullable)."
+  Weapon:
+    file: connection/queries/weapon/Weapon.java
+    kind: record
+    fields: [idWeapon:int, name:String, cost:double, type:String]
+  CountryDiplomacyStatus:
+    file: connection/queries/diplomacy/CountryDiplomacyStatus.java
+    kind: record
+    fields: [idCountry:int, countryName:String,
+             alliedId:int, alliedName:String, enemyId:int, enemyName:String,
+             peaceId:int, peaceName:String, warId:int, warName:String,
+             neutralId:int, neutralName:String, vassalId:int, vassalName:String,
+             tradeId:int, tradeName:String, militaryId:int, militaryName:String]
+  DiplomacyRate:
+    file: connection/queries/diplomacy/DiplomacyRate.java
+    kind: record
+    fields: [idCountry:int, countryName:String, neighborId:int, neighborName:String,
+             morale:double, friendshipRate:double]
+  countryResource:
+    file: connection/queries/diplomacy/countryResource.java
+    kind: record (nombre en minuscula deliberadamente)
+    fields: [resourceName:String, amount:int]
+
+# =============================================================================
+# 4. CLASES DE CONSULTAS: METODO -> SQL -> TABLAS -> USUARIO
+# =============================================================================
+query_classes:
+  countryQueries:
+    file: connection/queries/country/countryQueries.java
+    constructor: "countryQueries(Connection connection)"
+    entity_package: country
+    methods:
+      getCountries:
+        signature: "List<Country> getCountries()"
+        tables: [Countries]
+        used: false
+        sql: |
+          SELECT id_country, name, government, religion, ethnic_group, description FROM Countries
+      getCountryResources:
+        signature: "CountryResources getCountryResources(int idCountry)"
+        tables: [Provinces, ProvinceResources, Resources]
+        used_by: ["MenuController.cargarDatosPais (id 11)", "MenuController.onFinanzasClick (id 11)"]
+        sql: |
+          SELECT
+              SUM(p.population) AS population,
+              SUM(p.area) AS area,
+              COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN pr.production ELSE 0 END), 0) AS ingresos,
+              COALESCE(SUM(CASE WHEN r.name = 'Gas natural' THEN pr.production ELSE 0 END), 0) AS gasNatural,
+              COALESCE(SUM(CASE WHEN r.name = 'Petróleo' THEN pr.production ELSE 0 END), 0) AS petroleo,
+              COALESCE(SUM(CASE WHEN r.name = 'Madera' THEN pr.production ELSE 0 END), 0) AS madera,
+              COALESCE(SUM(CASE WHEN r.name = 'Pesca' THEN pr.production ELSE 0 END), 0) AS pesca,
+              COALESCE(SUM(CASE WHEN r.name = 'Uranio' THEN pr.production ELSE 0 END), 0) AS uranio,
+              COALESCE(SUM(CASE WHEN r.name = 'Oro' THEN pr.production ELSE 0 END), 0) AS oro,
+              COALESCE(SUM(CASE WHEN r.name = 'Agricultura' OR r.name = 'Agrícultura' THEN pr.production ELSE 0 END), 0) AS agricultura,
+              COALESCE(SUM(CASE WHEN r.name = 'Acero' THEN pr.production ELSE 0 END), 0) AS acero,
+              COALESCE(SUM(CASE WHEN r.name = 'Industria' THEN pr.production ELSE 0 END), 0) AS industria,
+              COALESCE(SUM(CASE WHEN r.name = 'Electricidad' THEN pr.production ELSE 0 END), 0) AS electricidad
+          FROM Provinces p
+          JOIN ProvinceResources pr ON p.id_province = pr.id_province
+          LEFT JOIN Resources r ON r.id_resource = pr.id_resource
+          WHERE p.id_country = ?
+        note: "Sin GROUP BY: devuelve siempre una unica fila agregada. Ojo, SUM(p.population)/SUM(p.area) se duplican por el JOIN con ProvinceResources (ver known_quirks)."
+      getCountryById:
+        signature: "Country getCountryById(int id)"
+        tables: [Countries]
+        used: false
+        sql: |
+          SELECT id_country, name, government, religion, ethnic_group, description FROM Countries WHERE id_country = ?
+      getCountryByName:
+        signature: "Country getCountryByName(String name)"
+        tables: [Countries]
+        used_by: ["MenuController.onImagenPrincipalClick (nombre resuelto desde el color del mapa)"]
+        sql: |
+          SELECT id_country, name, government, religion, ethnic_group, description FROM Countries WHERE name_en = ?
+        note: "Filtra por name_en aunque el parametro se llame name."
+      getCountryDetails:
+        signature: "CountryDetails getCountryDetails(int countryId)"
+        tables: [Countries, Provinces, ProvinceResources, Resources]
+        used_by: ["CountryViewControllers.cargarDatos"]
+        sql: |
+          SELECT
+              c.government,
+              SUM(p.population) AS totalPopulation,
+              (SELECT pr2.name FROM Provinces pr2 WHERE pr2.id_country = c.id_country AND pr2.is_capital = 1 LIMIT 1) AS capitalName,
+              COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN pr.production ELSE 0 END), 0) AS totalIngresos
+          FROM Countries c
+          JOIN Provinces p ON p.id_country = c.id_country
+          JOIN ProvinceResources pr ON pr.id_province = p.id_province
+          LEFT JOIN Resources r ON r.id_resource = pr.id_resource
+          WHERE c.id_country = ?
+      getCountryMoney:
+        signature: "double getCountryMoney(int countryId)"
+        tables: [TotalResources, Resources]
+        used_by:
+          - "LaboratoryController.cargarDinero (id 11)"
+          - "MarketConfirmControllers.setCartData (id 11)"
+          - "treatyController.loadMoney"
+        sql: |
+          SELECT COALESCE(SUM(CASE WHEN r.name = 'Dinero' THEN tr.total_amount ELSE 0 END), 0) AS money
+          FROM TotalResources tr
+          LEFT JOIN Resources r ON r.id_resource = tr.id_resource
+          WHERE tr.id_country = ?
+        note: "Lee el stock (TotalResources), no la produccion."
+      getTotalCountryPopulation:
+        signature: "CountryPopulation getTotalCountryPopulation(int idCountry)"
+        tables: ["view totalCountryPopulation", Countries]
+        used_by: ["MenuController.onPoblacionClick (id 11)"]
+        sql: |
+          SELECT v.country_name, v.total_population
+          FROM totalCountryPopulation v
+          JOIN Countries c ON c.name = v.country_name
+          WHERE c.id_country = ?
+      getProvincesByCountry:
+        signature: "List<Province> getProvincesByCountry(int countryId)"
+        tables: [Provinces]
+        used_by: ["CountryViewControllers.cargarDatos"]
+        sql: |
+          SELECT id_province, name, environment, population, area, is_capital, is_coastal, id_country, morale
+          FROM Provinces
+          WHERE id_country = ?
+
+  provinceQueries:
+    file: connection/queries/province/provinceQueries.java
+    constructor: "provinceQueries(Connection connection)"
+    methods:
+      getProvinceData:
+        signature: "ProvinceData getProvinceData(String provinceName, int countryId)"
+        tables: [Provinces, ProvinceResources, Resources]
+        used_by: ["CountryViewControllers.openProvinceView"]
+        sql: |
+          SELECT
+              p.id_province,
+              p.name,
+              p.id_country,
+              (SELECT COALESCE(SUM(population), 0) FROM Provinces WHERE id_country = p.id_country) AS totalPopulation,
+              (SELECT COALESCE(SUM(pr2.production), 0)
+               FROM ProvinceResources pr2
+               JOIN Provinces p2 ON pr2.id_province = p2.id_province
+               LEFT JOIN Resources r2 ON r2.id_resource = pr2.id_resource
+               WHERE p2.id_country = p.id_country AND r2.name = 'Dinero') AS totalIngresos
+          FROM Provinces p
+          WHERE p.name = ? AND p.id_country = ?
+        note: "Llama internamente a getProvinceResources(idProvince) y compone el Map."
+      getProvinceResources:
+        signature: "Map<String,Integer> getProvinceResources(int idProvince) (privado)"
+        tables: [ProvinceResources, Resources]
+        used_by: ["provinceQueries.getProvinceData"]
+        sql: |
+          SELECT r.name, pr.production
+          FROM ProvinceResources pr
+          JOIN Resources r ON r.id_resource = pr.id_resource
+          WHERE pr.id_province = ?
+          ORDER BY r.id_resource
+    dead_code:
+      - "RESOURCE_COLUMNS (array de nombres) se declara y nunca se usa."
+
+  attackQueries:
+    file: connection/queries/attack/attackQueries.java
+    constructor: "attackQueries(Connection connection)"
+    methods:
+      getCivilInfrastructureByCountry:
+        signature: "List<ProvinceObjective> getCivilInfrastructureByCountry(int idCountry)"
+        delegates: "getInfrastructureByType(idCountry, \"Civil\")"
+        used_by: ["AttackController.loadResultados (selector por defecto)"]
+      getMilitaryInfrastructureByCountry:
+        signature: "List<ProvinceObjective> getMilitaryInfrastructureByCountry(int idCountry)"
+        delegates: "getInfrastructureByType(idCountry, \"Militar\")"
+        used_by: ["AttackController.loadResultados (MILITARY_INFRA)"]
+      getInfrastructureByType:
+        signature: "List<ProvinceObjective> getInfrastructureByType(int idCountry, String type) (privado)"
+        tables: [Provinces, ProvinceInfraestructure, Infraestructure]
+        sql: |
+          SELECT
+              p.id_province,
+              p.name AS province_name,
+              pi.id_infraestructure,
+              i.name AS infra_name,
+              pi.quantity
+          FROM Provinces p
+          LEFT JOIN ProvinceInfraestructure pi
+                 ON pi.id_province = p.id_province
+                AND pi.id_infraestructure IN (SELECT id_infraestructure FROM Infraestructure WHERE type = ?)
+          LEFT JOIN Infraestructure i ON i.id_infraestructure = pi.id_infraestructure
+          WHERE p.id_country = ?
+          ORDER BY p.id_province, i.name
+        note: "El LEFT JOIN conserva provincias sin infraestructura con objectiveName null."
+      getCiviliansByCountry:
+        signature: "List<ProvinceObjective> getCiviliansByCountry(int idCountry)"
+        tables: [Provinces]
+        used_by: ["AttackController.loadResultados (CIVILIANS)"]
+        sql: |
+          SELECT
+              p.id_province,
+              p.name AS province_name,
+              p.population
+          FROM Provinces p
+          WHERE p.id_country = ?
+          ORDER BY p.id_province
+        mapping: "objectiveName fijo = 'Poblacion civil'; idObjective = idProvince; quantity = population."
+      getMilitaryObjectivesByCountry:
+        signature: "List<ProvinceObjective> getMilitaryObjectivesByCountry(int idCountry)"
+        tables: [ProvinceDefenses, Provinces, Weapons]
+        used_by: ["AttackController.loadResultados (MILITARY_OBJECTIVES)"]
+        sql: |
+          SELECT
+              p.id_province,
+              p.name AS province_name,
+              w.id_weapon,
+              w.name AS weapon_name,
+              pd.quantity
+          FROM ProvinceDefenses pd
+          JOIN Provinces p ON pd.id_province = p.id_province
+          JOIN Weapons w ON pd.id_weapon = w.id_weapon
+          WHERE p.id_country = ?
+          ORDER BY p.id_province, w.name
+
+  improvementQueries:
+    file: connection/queries/improvement/improvementQueries.java
+    constructor: "improvementQueries(Connection connection)"
+    methods:
+      getImprovements:
+        signature: "List<Improvement> getImprovements()"
+        tables: [Improvements]
+        used_by: ["LaboratoryController.cargarMejoras"]
+        sql: |
+          SELECT id_improvement, name, production_value, price, type, description, duration
+          FROM Improvements
+          ORDER BY id_improvement
+        note: "production_value y price se leen con getObject() para preservar null."
+      getImprovementById:
+        signature: "Improvement getImprovementById(int idImprovement)"
+        tables: [Improvements]
+        used: false
+        sql: |
+          SELECT id_improvement, name, production_value, price, type, description, duration
+          FROM Improvements
+          WHERE id_improvement = ?
+
+  weaponQueries:
+    file: connection/queries/weapon/weaponQueries.java
+    constructor: "weaponQueries(Connection connection)"
+    methods:
+      getWeapons:
+        signature: "List<Weapon> getWeapons()"
+        tables: [Weapons]
+        used_by: ["loadWeapons.getWeapons (arranque, cachea loadWeapons.weapons)"]
+        sql: |
+          SELECT id_weapon, name, cost, type FROM Weapons
+          WHERE type NOT IN ('Infantería', 'Fuerzas especiales', 'Insurgencia', 'Mercenarios')
+        note: "El catalogo del mercado excluye las 4 categorias de infanteria/milicia (17 de 21 armas)."
+      getArmy:
+        signature: "List<ArmyUnit> getArmy(int idCountry)"
+        tables: [ProvinceDefenses, Weapons, Provinces]
+        used_by: ["WarMinisterController.setCountryId"]
+        sql: |
+          SELECT w.name, SUM(pd.quantity) AS totalQuantity, AVG(p.morale) AS avgMorale, w.type
+          FROM ProvinceDefenses pd
+          JOIN Weapons w ON pd.id_weapon = w.id_weapon
+          JOIN Provinces p ON pd.id_province = p.id_province
+          WHERE p.id_country = ?
+          GROUP BY w.name, w.type
+
+  defenseQueries:
+    file: connection/queries/defense/defenseQueries.java
+    constructor: "defenseQueries(Connection connection)"
+    methods:
+      getProvinceDefenses:
+        signature: "List<ProvinceDefense> getProvinceDefenses(int idProvince)"
+        tables: [ProvinceDefenses, Weapons]
+        used_by: ["ProvinceViewControllers.loadDefenses"]
+        sql: |
+          SELECT w.name, pd.quantity
+          FROM ProvinceDefenses pd
+          JOIN Weapons w ON pd.id_weapon = w.id_weapon
+          WHERE pd.id_province = ?
+
+  diplomacyQueries:
+    file: connection/queries/diplomacy/diplomacyQueries.java
+    constructor: "diplomacyQueries(Connection connection)"
+    methods:
+      getCountryDiplomacyStatus:
+        signature: "CountryDiplomacyStatus getCountryDiplomacyStatus(int idCountry)"
+        tables: [CountryDiplomacyStatus, Countries]
+        used_by:
+          - "RelacionesController.setCountryId"
+          - "diplomacyCountryController.loadData (id 11)"
+        sql: |
+          SELECT cds.id_country, c.name AS countryName,
+                 cds.allied, c1.name AS alliedName,
+                 cds.enemy, c2.name AS enemyName,
+                 cds.in_peace, c3.name AS peaceName,
+                 cds.in_war, c4.name AS warName,
+                 cds.neutral, c5.name AS neutralName,
+                 cds.vassal, c6.name AS vassalName,
+                 cds.trade_agreement, c7.name AS tradeName,
+                 cds.military_alliance, c8.name AS militaryName
+          FROM CountryDiplomacyStatus cds
+          JOIN Countries c ON c.id_country = cds.id_country
+          LEFT JOIN Countries c1 ON c1.id_country = cds.allied
+          LEFT JOIN Countries c2 ON c2.id_country = cds.enemy
+          LEFT JOIN Countries c3 ON c3.id_country = cds.in_peace
+          LEFT JOIN Countries c4 ON c4.id_country = cds.in_war
+          LEFT JOIN Countries c5 ON c5.id_country = cds.neutral
+          LEFT JOIN Countries c6 ON c6.id_country = cds.vassal
+          LEFT JOIN Countries c7 ON c7.id_country = cds.trade_agreement
+          LEFT JOIN Countries c8 ON c8.id_country = cds.military_alliance
+          WHERE cds.id_country = ?
+      getDiplomacyRate:
+        signature: "DiplomacyRate getDiplomacyRate(int idCountry, int neighborId)"
+        tables: [DiplomacyRate, Countries]
+        used: false
+        sql: |
+          SELECT dr.morale, dr.friendship_rate,
+                 c1.name AS countryName, c2.name AS neighborName
+          FROM DiplomacyRate dr
+          JOIN Countries c1 ON c1.id_country = dr.id_country
+          JOIN Countries c2 ON c2.id_country = dr.neighbor
+          WHERE dr.id_country = ? AND dr.neighbor = ?
+
+  countryResourceQueries:
+    file: connection/queries/diplomacy/countryResourceQueries.java
+    constructor: "countryResourceQueries(Connection connection)"
+    methods:
+      getCountryResources:
+        signature: "List<countryResource> getCountryResources(int countryId)"
+        tables: [TotalResources, Resources]
+        used_by: ["treatyController.loadResources"]
+        sql: |
+          SELECT r.name, COALESCE(SUM(tr.total_amount), 0) AS total_amount
+          FROM TotalResources tr
+          JOIN Resources r ON r.id_resource = tr.id_resource
+          WHERE tr.id_country = ?
+          GROUP BY r.id_resource, r.name
+          ORDER BY r.name
+
+# =============================================================================
+# 5. CONTROLADORES Y VISTAS
+# =============================================================================
+controllers:
+  MenuController:
+    file: controllers/MenuController.java
+    view: views/mainView.fxml
+    implements: []
+    queries_used:
+      - { class: countryQueries, method: getCountryResources, args: [11] }
+      - { class: countryQueries, method: getTotalCountryPopulation, args: [11] }
+      - { class: countryQueries, method: getCountryByName, args: ["nombre resuelto del mapa"] }
+    opens:
+      - views/populationView.fxml
+      - views/weaponsViews/weaponsMarketView.fxml
+      - views/warMinisterView.fxml
+      - views/newsView.fxml
+      - views/laboratoryView.fxml
+      - views/diplomacyViews/diplomacyView.fxml
+      - views/countryViews/countryView.fxml
+    other:
+      - "loadMap.loadMapFromMatch(imagenPrincipal) en initialize"
+      - "onImagenPrincipalClick: color del pixel -> mapFunctions.getCountryFromList -> pais"
+
+  CountryViewControllers:
+    file: controllers/CountryViewControllers.java
+    view: views/countryViews/countryView.fxml
+    implements: [interaction]
+    setter: "setCountryData(String countryName, int countryId)"
+    queries_used:
+      - { class: countryQueries, method: getCountryDetails }
+      - { class: countryQueries, method: getProvincesByCountry }
+      - { class: provinceQueries, method: getProvinceData }
+    opens:
+      - views/countryViews/provinceView.fxml
+      - views/diplomacyViews/countryDiplomacyView.fxml
+
+  ProvinceViewControllers:
+    file: controllers/ProvinceViewControllers.java
+    view: views/countryViews/provinceView.fxml
+    implements: [interaction]
+    setter: "setProvinceData(ProvinceData data, String countryName)"
+    queries_used:
+      - { class: defenseQueries, method: getProvinceDefenses }
+    opens:
+      - views/combatViews/combatView.fxml
+
+  AttackController:
+    file: controllers/AttackController.java
+    views:
+      - views/combatViews/attackView.fxml
+      - views/combatViews/combatView.fxml
+      - views/combatViews/combatObjetivesView.fxml
+    implements: [interaction, attack]
+    setters: ["setCombatOption(combatOption)", "setCountryData(int countryId, String countryName)"]
+    constants: { ORIGIN_COUNTRY_ID: 11 }
+    queries_used:
+      - { class: attackQueries, method: getMilitaryInfrastructureByCountry }
+      - { class: attackQueries, method: getCiviliansByCountry }
+      - { class: attackQueries, method: getMilitaryObjectivesByCountry }
+      - { class: attackQueries, method: getCivilInfrastructureByCountry }
+    sources_non_sql: [loadCombatActions, loadFlags, loadImages]
+    opens: [views/combatViews/attackView.fxml]
+    notes:
+      - "launchAttack() invoca artilleryAttack.launchAttackToMilitaryUnits(2000) (simulacion)."
+
+  LaboratoryController:
+    file: controllers/LaboratoryController.java
+    view: views/laboratoryView.fxml
+    implements: [interaction]
+    constants: { ID_PAIS: 11 }
+    queries_used:
+      - { class: countryQueries, method: getCountryMoney, args: [11] }
+      - { class: improvementQueries, method: getImprovements }
+    in_memory_state: "countryInvestigations.getInstance().addInvestigations(11)"
+    notes:
+      - "filtrar() compara improvement.type() con 'Militar'/'Civil' literal."
+      - "No persiste: la seleccion solo vive en el singleton."
+
+  WarMinisterController:
+    file: controllers/WarMinisterController.java
+    view: views/warMinisterView.fxml
+    implements: [interaction]
+    queries_used:
+      - { class: weaponQueries, method: getArmy }
+
+  WeaponsMarketControllers:
+    file: controllers/WeaponsMarketControllers.java
+    view: views/weaponsViews/weaponsMarketView.fxml
+    implements: [interaction]
+    queries_used: []
+    sources_non_sql: [loadWeapons (cache estatica de getWeapons)]
+    opens: [views/weaponsViews/marketConfirmView.fxml]
+
+  MarketConfirmControllers:
+    file: controllers/MarketConfirmControllers.java
+    view: views/weaponsViews/marketConfirmView.fxml
+    implements: [interaction]
+    setter: "setCartData(List<Integer> weaponIndices, List<Integer> quantities, int countryId)"
+    queries_used:
+      - { class: countryQueries, method: getCountryMoney, args: [11] }
+    note: "onComprarClick solo cierra el stage: la compra no se persiste."
+
+  PopulationController:
+    file: controllers/PopulationController.java
+    view: views/populationView.fxml
+    implements: [interaction]
+    setters: ["setPopulationData(...)", "addTurnData(int, long)"]
+    queries_used: []
+
+  NewsController:
+    file: controllers/NewsController.java
+    view: views/newsView.fxml
+    implements: [interaction]
+    queries_used: []
+
+  RelacionesController:
+    file: controllers/RelacionesController.java
+    view: views/diplomacyViews/countryDiplomacyView.fxml
+    implements: [interaction]
+    setter: "setCountryId(int countryId)"
+    queries_used:
+      - { class: diplomacyQueries, method: getCountryDiplomacyStatus }
+
+  diplomacyCountryController:
+    file: controllers/diplomacy/diplomacyCountryController.java
+    view: views/diplomacyViews/diplomacyView.fxml
+    implements: [interaction]
+    constants: { COUNTRY_ID: 11 }
+    queries_used:
+      - { class: diplomacyQueries, method: getCountryDiplomacyStatus, args: [11] }
+    opens:
+      - views/diplomacyViews/diplomacyActions.fxml
+      - views/diplomacyViews/tradeView.fxml
+
+  diplomacyActionsController:
+    file: controllers/diplomacy/diplomacyActionsController.java
+    view: views/diplomacyViews/diplomacyActions.fxml
+    implements: [interaction]
+    setter: "setContext(int countryId, String countryName, boolean allied)"
+    queries_used: []
+    opens:
+      - views/diplomacyViews/warDeclarationView.fxml
+      - views/diplomacyViews/cancelTreaty.fxml
+
+  warDeclarationController:
+    file: controllers/diplomacy/warDeclarationController.java
+    view: views/diplomacyViews/warDeclarationView.fxml
+    implements: [interaction]
+    setter: "setCountryData(int sourceCountryId, int targetCountryId)"
+    queries_used: []
+
+  cancelTreatyController:
+    file: controllers/diplomacy/cancelTreatyController.java
+    view: views/diplomacyViews/cancelTreaty.fxml
+    implements: [interaction]
+    setter: "setContext(int sourceCountryId, int targetCountryId, String countryName, String action)"
+    queries_used: []
+
+  treatyController:
+    file: controllers/diplomacy/treatyController.java
+    view: views/diplomacyViews/tradeView.fxml
+    implements: [interaction]
+    setter: "setCountryData(int sourceCountryId, int targetCountryId, String actionName)"
+    queries_used:
+      - { class: countryQueries, method: getCountryMoney }
+      - { class: countryResourceQueries, method: getCountryResources }
+
+  tradeController:
+    file: controllers/diplomacy/tradeController.java
+    kind: stub_vacio
+    queries_used: []
+
+  transactionController:
+    file: controllers/diplomacy/transactionController.java
+    kind: stub_vacio
+    queries_used: []
+
+# =============================================================================
+# 6. CARGA DE RECURSOS NO-SQL (arranque)
+# =============================================================================
+bootstrap_loaders:
+  loadDataBases:
+    produces: "DatabaseConnection inicializada"
+    source: "db/middleeastdb.db"
+  loadMatch:
+    produces: "Match (matchs/match.json) + Map<String,String> colorList (data/middle_east_list.json)"
+    fields: [map, rules, flag, leader, database]
+    note: "match.json trae 'country' pero Match no tiene ese campo: Gson lo descarta."
+  loadMap:
+    produces: "mapColors[] y mapWidth/mapHeight a partir de la imagen del mapa"
+    usage: "cuantiza colores (precision 32) y asigna un id por color"
+  loadImages:
+    produces: "Map<String,Image> de iconos, iconos de ataque e imagenes de armas"
+    source_dirs: ["img/icons", "img/attack icons", "img/weapons"]
+  loadFlags:
+    produces: "Map<Integer,flag> con id de pais -> ruta de bandera"
+    source_dir: "img/flags"
+    id_map_note: "israel = 11"
+  loadWeapons:
+    produces: "List<Weapon> cacheada (weaponQueries.getWeapons)"
+  loadCombatActions:
+    produces: ["combat_list", "operations_list", "combat_descriptions"]
+    source: ["data/combat_options_list.json", "data/combat_descriptions.json"]
+
+# =============================================================================
+# 7. RELACIONES ENTRE CLASES (aristas explicitas)
+# =============================================================================
+class_relationships:
+  - { from: App, to: loadGlobalVariables, type: calls }
+  - { from: App, to: MenuController, type: loads_fxml }
+  - { from: loadGlobalVariables, to: loadDataBases, type: calls }
+  - { from: loadGlobalVariables, to: loadMatch, type: calls }
+  - { from: loadGlobalVariables, to: loadImages, type: calls }
+  - { from: loadGlobalVariables, to: loadFlags, type: calls }
+  - { from: loadGlobalVariables, to: loadWeapons, type: calls }
+  - { from: loadGlobalVariables, to: loadCombatActions, type: calls }
+  - { from: loadDataBases, to: DatabaseConnection, type: init }
+  - { from: loadWeapons, to: weaponQueries, type: instantiates }
+  - { from: loadWeapons, to: Weapon, type: caches }
+
+  - { from: MenuController, to: countryQueries, type: instantiates }
+  - { from: MenuController, to: mapFunctions, type: calls }
+  - { from: MenuController, to: loadMap, type: calls }
+  - { from: MenuController, to: CountryViewControllers, type: opens }
+  - { from: MenuController, to: PopulationController, type: opens }
+  - { from: MenuController, to: WeaponsMarketControllers, type: opens }
+  - { from: MenuController, to: WarMinisterController, type: opens }
+  - { from: MenuController, to: NewsController, type: opens }
+  - { from: MenuController, to: LaboratoryController, type: opens }
+  - { from: MenuController, to: diplomacyCountryController, type: opens }
+
+  - { from: CountryViewControllers, to: countryQueries, type: instantiates }
+  - { from: CountryViewControllers, to: provinceQueries, type: instantiates }
+  - { from: CountryViewControllers, to: ProvinceViewControllers, type: opens }
+  - { from: CountryViewControllers, to: RelacionesController, type: opens }
+
+  - { from: ProvinceViewControllers, to: defenseQueries, type: instantiates }
+  - { from: ProvinceViewControllers, to: AttackController, type: opens }
+
+  - { from: AttackController, to: attackQueries, type: instantiates }
+  - { from: AttackController, to: artilleryAttack, type: calls }
+  - { from: AttackController, to: loadCombatActions, type: calls }
+  - { from: AttackController, to: loadFlags, type: calls }
+  - { from: AttackController, to: loadImages, type: calls }
+
+  - { from: LaboratoryController, to: countryQueries, type: instantiates }
+  - { from: LaboratoryController, to: improvementQueries, type: instantiates }
+  - { from: LaboratoryController, to: countryInvestigations, type: uses_singleton }
+
+  - { from: WarMinisterController, to: weaponQueries, type: instantiates }
+  - { from: WeaponsMarketControllers, to: loadWeapons, type: reads_cache }
+  - { from: WeaponsMarketControllers, to: MarketConfirmControllers, type: opens }
+  - { from: MarketConfirmControllers, to: countryQueries, type: instantiates }
+
+  - { from: RelacionesController, to: diplomacyQueries, type: instantiates }
+  - { from: diplomacyCountryController, to: diplomacyQueries, type: instantiates }
+  - { from: diplomacyCountryController, to: diplomacyActionsController, type: opens }
+  - { from: diplomacyCountryController, to: treatyController, type: opens }
+  - { from: diplomacyActionsController, to: warDeclarationController, type: opens }
+  - { from: diplomacyActionsController, to: cancelTreatyController, type: opens }
+  - { from: treatyController, to: countryQueries, type: instantiates }
+  - { from: treatyController, to: countryResourceQueries, type: instantiates }
+
+  - { from: countryQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: attackQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: provinceQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: improvementQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: weaponQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: defenseQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: diplomacyQueries, to: DatabaseConnection, type: receives_connection }
+  - { from: countryResourceQueries, to: DatabaseConnection, type: receives_connection }
+
+  - { from: countryQueries, to: Country, type: returns }
+  - { from: countryQueries, to: CountryDetails, type: returns }
+  - { from: countryQueries, to: CountryPopulation, type: returns }
+  - { from: countryQueries, to: CountryResources, type: returns }
+  - { from: countryQueries, to: Province, type: returns }
+  - { from: provinceQueries, to: ProvinceData, type: returns }
+  - { from: attackQueries, to: ProvinceObjective, type: returns }
+  - { from: defenseQueries, to: ProvinceDefense, type: returns }
+  - { from: weaponQueries, to: Weapon, type: returns }
+  - { from: weaponQueries, to: ArmyUnit, type: returns }
+  - { from: improvementQueries, to: Improvement, type: returns }
+  - { from: diplomacyQueries, to: CountryDiplomacyStatus, type: returns }
+  - { from: diplomacyQueries, to: DiplomacyRate, type: returns }
+  - { from: countryResourceQueries, to: countryResource, type: returns }
+
+  - { from: countryInvestigations, to: investigations, type: extends }
+  - { from: countryInvestigations, to: Improvement, type: stores }
+  - { from: investigations, to: Row, type: contains }
+
+# =============================================================================
+# 8. TRAZABILIDAD INVERSA (tabla -> consultas y controlador -> tablas)
+# =============================================================================
+traceability:
+  table_to_queries:
+    Countries:
+      - countryQueries.getCountries
+      - countryQueries.getCountryById
+      - countryQueries.getCountryByName
+      - countryQueries.getCountryDetails
+      - countryQueries.getTotalCountryPopulation
+      - diplomacyQueries.getCountryDiplomacyStatus
+      - diplomacyQueries.getDiplomacyRate
+    Provinces:
+      - countryQueries.getCountryResources
+      - countryQueries.getCountryDetails
+      - countryQueries.getProvincesByCountry
+      - provinceQueries.getProvinceData
+      - attackQueries.getInfrastructureByType
+      - attackQueries.getCiviliansByCountry
+      - attackQueries.getMilitaryObjectivesByCountry
+      - weaponQueries.getArmy
+    ProvinceResources:
+      - countryQueries.getCountryResources
+      - countryQueries.getCountryDetails
+      - provinceQueries.getProvinceData
+      - provinceQueries.getProvinceResources
+    Resources:
+      - countryQueries.getCountryResources
+      - countryQueries.getCountryDetails
+      - countryQueries.getCountryMoney
+      - provinceQueries.getProvinceData
+      - provinceQueries.getProvinceResources
+      - countryResourceQueries.getCountryResources
+    TotalResources:
+      - countryQueries.getCountryMoney
+      - countryResourceQueries.getCountryResources
+    Infraestructure:
+      - attackQueries.getInfrastructureByType
+    ProvinceInfraestructure:
+      - attackQueries.getInfrastructureByType
+    Weapons:
+      - weaponQueries.getWeapons
+      - weaponQueries.getArmy
+      - attackQueries.getMilitaryObjectivesByCountry
+      - defenseQueries.getProvinceDefenses
+    ProvinceDefenses:
+      - weaponQueries.getArmy
+      - attackQueries.getMilitaryObjectivesByCountry
+      - defenseQueries.getProvinceDefenses
+    Improvements:
+      - improvementQueries.getImprovements
+      - improvementQueries.getImprovementById
+    CountryDiplomacyStatus:
+      - diplomacyQueries.getCountryDiplomacyStatus
+    DiplomacyRate:
+      - diplomacyQueries.getDiplomacyRate
+    "view totalCountryPopulation":
+      - countryQueries.getTotalCountryPopulation
+
+  controller_to_tables:
+    MenuController: [Countries, Provinces, ProvinceResources, Resources, totalCountryPopulation]
+    CountryViewControllers: [Countries, Provinces, ProvinceResources, Resources]
+    ProvinceViewControllers: [ProvinceDefenses, Weapons]
+    AttackController: [Provinces, ProvinceInfraestructure, Infraestructure, ProvinceDefenses, Weapons]
+    LaboratoryController: [TotalResources, Resources, Improvements]
+    WarMinisterController: [ProvinceDefenses, Weapons, Provinces]
+    WeaponsMarketControllers: [Weapons]
+    MarketConfirmControllers: [TotalResources, Resources]
+    PopulationController: []
+    NewsController: []
+    RelacionesController: [CountryDiplomacyStatus, Countries]
+    diplomacyCountryController: [CountryDiplomacyStatus, Countries]
+    diplomacyActionsController: []
+    warDeclarationController: []
+    cancelTreatyController: []
+    treatyController: [TotalResources, Resources]
+    tradeController: []
+    transactionController: []
+
+# =============================================================================
+# 9. FLUJOS DE PUNTA A PUNTA
+# =============================================================================
+flows:
+  click_en_mapa:
+    steps:
+      - "MenuController.onImagenPrincipalClick(MouseEvent)"
+      - "mapFunctions.getColor(x, y) -> indice de color del pixel en loadMap.mapColors"
+      - "mapFunctions.getCountryFromList(color) -> nombre via loadMatch.colorList (data/middle_east_list.json)"
+      - "countryQueries.getCountryByName(name) -> SELECT ... WHERE name_en = ?"
+      - "MenuController.openCountryView(country) -> countryView.fxml + setCountryData"
+  ver_pais:
+    steps:
+      - "CountryViewControllers.setCountryData -> cargarDatos(countryId)"
+      - "countryQueries.getCountryDetails(countryId) -> capital, gobierno, poblacion, ingresos"
+      - "countryQueries.getProvincesByCountry(countryId) -> filas de provincias (construidas en codigo)"
+      - "bandera via loadFlags.getFlag(countryId)"
+  ver_provincia:
+    steps:
+      - "Click en fila de provincia -> CountryViewControllers.openProvinceView"
+      - "provinceQueries.getProvinceData(provinceName, countryId)"
+      - "provinceQueries.getProvinceResources(idProvince) -> Map recurso->produccion"
+      - "ProvinceViewControllers.setProvinceData(data, countryName)"
+      - "defenseQueries.getProvinceDefenses(idProvince) -> armas y cantidades"
+  ataque:
+    steps:
+      - "ProvinceViewControllers.openCombatView -> combatView.fxml (AttackController)"
+      - "AttackController.setCountryData(countryId, countryName)"
+      - "AttackController.loadResultados(selector) decide que metodo de attackQueries usar"
+      - "attackQueries devuelve List<ProvinceObjective>; el controlador agrupa por provincia"
+      - "launchAttack() ejecuta la simulacion artilleryAttack (sin escribir en BD)"
+  diplomacia:
+    steps:
+      - "diplomacyCountryController.loadData -> diplomacyQueries.getCountryDiplomacyStatus(11)"
+      - "filas aliado/enemigo -> openDiplomacyActions o openTradeView"
+      - "treatyController -> countryQueries.getCountryMoney + countryResourceQueries.getCountryResources"
+      - "warDeclarationController / cancelTreatyController solo cierran el dialogo (sin persistir)"
+  laboratorio:
+    steps:
+      - "LaboratoryController.cargarDinero -> countryQueries.getCountryMoney(11)"
+      - "LaboratoryController.cargarMejoras -> improvementQueries.getImprovements()"
+      - "filtrar(tipo) en memoria; seleccion guardada en countryInvestigations (singleton)"
+      - "no se escribe en CountryImprovements"
+  mercado_de_armas:
+    steps:
+      - "WeaponsMarketControllers.initialize -> loadWeapons (cache de weaponQueries.getWeapons)"
+      - "carrito en memoria -> marketConfirmView.fxml"
+      - "MarketConfirmControllers.setCartData -> countryQueries.getCountryMoney(11)"
+      - "onComprarClick solo cierra: no se persiste nada"
+
+# =============================================================================
+# 10. ESTADO EN MEMORIA (sustituye a la persistencia)
+# =============================================================================
+in_memory_state:
+  countryInvestigations:
+    file: functions/improvementsFunctions/countryInvestigations.java
+    singleton: true
+    structure: "Map<Integer idPais, investigations>"
+    used_by: [LaboratoryController]
+    persists: false
+  loadWeapons.weapons:
+    type: "List<Weapon> estatica"
+    used_by: [WeaponsMarketControllers]
+  loadMatch.match / loadMatch.colorList:
+    type: "Match y Map<String,String> estaticos"
+    used_by: [loadMap, mapFunctions, MenuController]
+  loadImages / loadFlags caches:
+    type: "Map estaticos"
+    used_by: [MenuController, CountryViewControllers, provincia, diplomacia, ataque]
+
+# =============================================================================
+# 11. CODIGO SIN USO DETECTADO
+# =============================================================================
+unused_code:
+  query_methods:
+    - "countryQueries.getCountries"
+    - "countryQueries.getCountryById"
+    - "improvementQueries.getImprovementById"
+    - "diplomacyQueries.getDiplomacyRate"
+  tables_without_queries:
+    - CountryImprovements
+    - Spying
+    - NonAgressionAgreement
+    - ComercialAgreement
+    - LastEvents
+    - Powers
+    - InternationalComunity
+  views_without_queries:
+    - militaryInfraestructureCountry
+    - civillianInfraestructureCountry
+    - TotalCountryDefenses
+  classes:
+    - "functions/combatFuctions/aerialActions.java (metodos vacios)"
+    - "functions/combatFuctions/options.java (interfaz vacia)"
+    - "functions/resourceFunctions/production.java (clase vacia)"
+    - "controllers/diplomacy/tradeController.java (stub)"
+    - "controllers/diplomacy/transactionController.java (stub)"
+  dead_constants:
+    - "provinceQueries.RESOURCE_COLUMNS"
+  unreferenced_resource:
+    - "data/combat_effects_dialogs.json"
+  broken_fxml_reference:
+    - "views/diplomacyViews/transactionView.fxml declara fx:controller='controllers.TreatyConfirmationController', clase inexistente."
+
+# =============================================================================
+# 12. PARTICULARIDADES CONOCIDAS
+# =============================================================================
+known_quirks:
+  - "Todo el acceso a SQLite es de lectura; no hay capa de escritura ni transacciones."
+  - "El pais jugador esta fijado a Israel (id 11): MenuController, AttackController.ORIGIN_COUNTRY_ID,
+     LaboratoryController.ID_PAIS, diplomacyCountryController.COUNTRY_ID, MarketConfirmControllers."
+  - "countryQueries.getCountryByName filtra por Countries.name_en, no por name."
+  - "Los ingresos se derivan del recurso 'Dinero' (producion en ProvinceResources; stock en TotalResources)."
+  - "Resources contiene 'Agricultura' con acento, por eso la consulta acepta ambas grafias."
+  - "Infraestructure.type usa 'Civil'/'Militar'; la vista civillianInfraestructureCountry filtra por 'civil' y por eso devuelve 0 filas."
+  - "ProvinceInfraestructure tiene PK solo en id_province: modela como maximo una infraestructura por provincia."
+  - "Las vistas se consultan directamente (totalCountryPopulation) o se ignoran; no hay mapeo ORM."
+  - "getCountryResources y getCountryDetails suman Provinces.population/area despues de un JOIN con
+     ProvinceResources: cada provincia aparece una vez por recurso, asi que la poblacion/area se
+     multiplican por el numero de recursos de la provincia. La vista totalCountryPopulation no
+     tiene ese problema porque solo agrega Provinces."
+  - "Las listas de la UI nunca usan ListView/TableView de datos: son VBox/FlowPane llenados a mano."
+  - "Los controladores se comunican con los dialogos por setters publicos, no por inyeccion de dependencias."
