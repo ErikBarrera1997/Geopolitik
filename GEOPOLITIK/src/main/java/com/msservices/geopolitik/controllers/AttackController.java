@@ -8,7 +8,6 @@ import com.msservices.geopolitik.init.entity.combatDescription;
 import com.msservices.geopolitik.init.entity.combatOption;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.attack;
 import com.msservices.geopolitik.interfaces.interaction;
 import com.msservices.geopolitik.functions.combatFuctions.artilleryAttack;
@@ -110,7 +109,7 @@ public class AttackController implements interaction, attack {
     public void setCountryData(int countryId, String countryName) {
         this.countryId = countryId;
         this.countryName = countryName;
-        loadFlags();
+       // loadFlags();
         if (listaResultados != null) {
             loadResultados(selectedQuery != null ? selectedQuery : "CIVIL_INFRA");
         }
@@ -118,13 +117,13 @@ public class AttackController implements interaction, attack {
 
     private void loadFlags() {
         if (lblCountryOrigin != null) {
-            flag originFlag = loadFlags.getFlag(ORIGIN_COUNTRY_ID);
+            var originFlag = loadFlags.getFlags(ORIGIN_COUNTRY_ID);
             if (originFlag != null) {
                 lblCountryOrigin.setImage(new Image(originFlag.path(), 80, 40, true, true));
             }
         }
         if (lblCountryDestiny != null && countryId > 0) {
-            flag destinyFlag = loadFlags.getFlag(countryId);
+            var destinyFlag = loadFlags.getFlags(countryId);
             if (destinyFlag != null) {
                 lblCountryDestiny.setImage(new Image(destinyFlag.path(), 80, 40, true, true));
             }

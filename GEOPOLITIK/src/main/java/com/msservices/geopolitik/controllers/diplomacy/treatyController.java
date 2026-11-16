@@ -6,7 +6,6 @@ import com.msservices.geopolitik.connection.queries.diplomacy.countryResource;
 import com.msservices.geopolitik.connection.queries.diplomacy.countryResourceQueries;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -117,13 +116,13 @@ public class treatyController implements interaction {
 
     private void loadFlags() {
         if (sourceCountryId > 0) {
-            flag f = loadFlags.getFlag(sourceCountryId);
+            var f = loadFlags.getFlags(sourceCountryId);
             if (f != null) {
                 sourceCountryFlag.setStyle("-fx-background-image: url('" + f.path() + "'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;");
             }
         }
         if (targetCountryId > 0) {
-            flag f = loadFlags.getFlag(targetCountryId);
+            var f = loadFlags.getFlags(targetCountryId);
             if (f != null) {
                 targetCountryFlag.setStyle("-fx-background-image: url('" + f.path() + "'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;");
             }

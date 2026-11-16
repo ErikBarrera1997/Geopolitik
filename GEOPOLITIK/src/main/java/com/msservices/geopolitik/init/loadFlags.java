@@ -1,13 +1,14 @@
 package com.msservices.geopolitik.init;
 
-import com.msservices.geopolitik.init.entity.flag;
-
 import java.io.File;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
 public class loadFlags {
+
+    public record flag(int id, String path) {
+    }
 
     private static Map<Integer, flag> flagCache;
 
@@ -37,7 +38,7 @@ public class loadFlags {
         FLAGS.put("syria", 22);
     }
 
-    public static Map<Integer, flag> getFlags() {
+    protected static Map<Integer, flag> getFlags() {
         if (flagCache != null) return flagCache;
         flagCache = new HashMap<>();
 
@@ -61,7 +62,7 @@ public class loadFlags {
         return flagCache;
     }
 
-    public static flag getFlag(int countryId) {
+    public static flag getFlags(int countryId) {
         return getFlags().get(countryId);
     }
 }

@@ -4,7 +4,6 @@ import com.msservices.geopolitik.connection.DatabaseConnection;
 import com.msservices.geopolitik.connection.queries.diplomacy.CountryDiplomacyStatus;
 import com.msservices.geopolitik.connection.queries.diplomacy.diplomacyQueries;
 import com.msservices.geopolitik.init.loadFlags;
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.geometry.Pos;
@@ -79,7 +78,7 @@ public class RelacionesController implements interaction {
         ImageView flagView = new ImageView();
         flagView.setFitWidth(24);
         flagView.setFitHeight(16);
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             flagView.setImage(new Image(f.path(), 24, 16, true, true));
         }
@@ -100,7 +99,7 @@ public class RelacionesController implements interaction {
         ImageView flagView = new ImageView();
         flagView.setFitWidth(24);
         flagView.setFitHeight(16);
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             flagView.setImage(new Image(f.path(), 24, 16, true, true));
         }
@@ -115,7 +114,7 @@ public class RelacionesController implements interaction {
     }
 
     private Image loadFlag(int countryId) {
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             return new Image(f.path(), 120, 60, true, true);
         }

@@ -1,7 +1,6 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.init.loadFlags;
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -29,7 +28,7 @@ public class PopulationController implements interaction {
     public void setPopulationData(String countryName, long totalPopulation, int countryId) {
         valorTotal.setText(String.valueOf(totalPopulation));
 
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             flagImage.setImage(new Image(f.path(), 80, 40, true, true));
         }

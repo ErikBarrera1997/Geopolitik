@@ -8,7 +8,6 @@ import com.msservices.geopolitik.connection.queries.country.countryQueries;
 import com.msservices.geopolitik.connection.queries.province.provinceQueries;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -102,7 +101,7 @@ public class CountryViewControllers implements interaction {
     }
 
     private Image loadFlag(int countryId) {
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             return new Image(f.path(), 120, 60, true, true);
         }

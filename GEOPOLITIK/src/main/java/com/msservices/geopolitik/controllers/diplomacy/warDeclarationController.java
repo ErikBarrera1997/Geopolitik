@@ -1,6 +1,5 @@
 package com.msservices.geopolitik.controllers.diplomacy;
 
-import com.msservices.geopolitik.init.entity.flag;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;
@@ -57,7 +56,7 @@ public class warDeclarationController implements interaction {
     }
 
     private void applyFlag(Label label, int countryId) {
-        flag f = loadFlags.getFlag(countryId);
+        var f = loadFlags.getFlags(countryId);
         if (f != null) {
             label.setStyle("-fx-background-image: url('" + f.path() + "'); -fx-background-size: cover; -fx-background-repeat: no-repeat; -fx-background-position: center;");
         }
