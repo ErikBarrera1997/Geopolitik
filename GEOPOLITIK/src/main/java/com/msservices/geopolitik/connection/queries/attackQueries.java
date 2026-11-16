@@ -1,4 +1,4 @@
-package com.msservices.geopolitik.connection.queries.attack;
+package com.msservices.geopolitik.connection.queries;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,6 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class attackQueries {
+
+    public record ProvinceObjective(int idProvince, String provinceName, int idObjective, String objectiveName, int objectiveQuantity) {
+    }
+
 
     private final Connection connection;
 

@@ -1,8 +1,8 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.defense.ArmyUnit;
-import com.msservices.geopolitik.connection.queries.weapon.weaponQueries;
+import com.msservices.geopolitik.connection.queries.defenseQueries.ArmyUnit;
+import com.msservices.geopolitik.connection.queries.weaponQueries;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;

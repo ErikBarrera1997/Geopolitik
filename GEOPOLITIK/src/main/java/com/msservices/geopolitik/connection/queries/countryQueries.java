@@ -1,6 +1,5 @@
-package com.msservices.geopolitik.connection.queries.country;
+package com.msservices.geopolitik.connection.queries;
 
-import com.msservices.geopolitik.connection.queries.province.Province;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,6 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class countryQueries {
+
+    public record Country(int idCountry, String name, String government, String religion, String ethnicGroup, String description) {
+    }
+
+    public record CountryDetails(String government, long totalPopulation, String capitalName, int totalIngresos) {
+    }
+
+    public record CountryPopulation(String countryName, long totalPopulation) {
+    }
+
+    public record CountryResources(long population, double area, int ingresos, int gasNatural, int petroleo, int madera, int pesca, int uranio, int oro, int agricultura, int acero, int industria, int electricidad) {
+    }
 
     private final Connection connection;
 
@@ -195,15 +206,15 @@ public class countryQueries {
         return null;
     }
 
-    public List<Province> getProvincesByCountry(int countryId) {
-        List<Province> provinces = new ArrayList<>();
+    public List<provinceQueries.Province> getProvincesByCountry(int countryId) {
+        List<provinceQueries.Province> provinces = new ArrayList<>();
         String sql = "SELECT id_province, name, environment, population, area, is_capital, is_coastal, id_country, morale FROM Provinces WHERE id_country = ?";
 
         try (var stmt = connection.prepareStatement(sql)) {
             stmt.setInt(1, countryId);
             var rs = stmt.executeQuery();
             while (rs.next()) {
-                Province province = new Province(
+                provinceQueries.Province province = new provinceQueries.Province(
                         rs.getInt("id_province"),
                         rs.getString("name"),
                         rs.getString("environment"),

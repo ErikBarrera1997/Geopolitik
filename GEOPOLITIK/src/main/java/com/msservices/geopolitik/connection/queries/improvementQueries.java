@@ -1,4 +1,4 @@
-package com.msservices.geopolitik.connection.queries.improvement;
+package com.msservices.geopolitik.connection.queries;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -7,6 +7,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class improvementQueries {
+
+    public record Improvement(
+            int idImprovement,
+            String name,
+            Double productionValue,
+            Double price,
+            String type,
+            String description,
+            int duration
+    ) {
+    }
+
 
     private final Connection connection;
 

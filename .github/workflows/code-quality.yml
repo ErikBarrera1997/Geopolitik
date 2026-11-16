@@ -1,0 +1,137 @@
+name: Code Quality
+
+on:
+  push:
+    branches: [ "alpha", "alpha2", "master" ]
+  pull_request:
+    branches: [ "alpha", "alpha2", "master" ]
+
+jobs:
+  java-quality:
+    name: Java code quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+
+      - name: Compile
+        working-directory: GEOPOLITIK
+        run: mvn -B -q -DskipTests compile
+
+      - name: PMD static analysis
+        working-directory: GEOPOLITIK
+        run: mvn -B -q pmd:pmd pmd:cpd
+        continue-on-error: true
+
+      - name: Upload PMD reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pmd-reports
+          path: |
+            GEOPOLITIK/target/site/pmd.html
+            GEOPOLITIK/target/site/pmd.xml
+            GEOPOLITIK/target/site/cpd.html
+            GEOPOLITIK/target/site/cpd.xml
+          if-no-files-found: ignore
+
+      - name: SpotBugs analysis
+        working-directory: GEOPOLITIK
+        run: mvn -B -q compile com.github.spotbugs:spotbugs-maven-plugin:4.8.6.6:spotbugs
+        continue-on-error: true
+
+      - name: Upload SpotBugs report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: spotbugs-report
+          path: |
+            GEOPOLITIK/target/spotbugsXml.xml
+            GEOPOLITIK/target/site/spotbugs.html
+          if-no-files-found: ignore
+
+  db-api-practices:
+    name: API and database connection practices
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+
+      - name: Compile
+        working-directory: GEOPOLITIK
+        run: mvn -B -q -DskipTests compile
+
+      - name: Check database/API usage patterns
+        working-directory: GEOPOLITIK
+        shell: bash
+        run: |
+          set -euo pipefail
+          echo "== Checking for direct DriverManager usage outside DatabaseConnection =="
+          if grep -RIn --include='*.java' 'DriverManager\.getConnection' src | grep -v 'connection/DatabaseConnection.java'; then
+            echo "Found direct DriverManager.getConnection usage outside DatabaseConnection"
+            exit 1
+          fi
+
+          echo "== Checking for Statement/Connection usage without try-with-resources (heuristic) =="
+          # Flag createStatement/prepareStatement calls not obviously inside try-with-resources
+          if grep -RIn --include='*.java' '\.createStatement(' src | grep -v 'try ('; then
+            echo "Warning: potential createStatement usage outside try-with-resources"
+          fi
+          if grep -RIn --include='*.java' '\.prepareStatement(' src | grep -v 'try ('; then
+            echo "Warning: potential prepareStatement usage outside try-with-resources"
+          fi
+
+          echo "== Checking for printStackTrace in connection/query code =="
+          if grep -RIn --include='*.java' 'printStackTrace' src/main/java/com/msservices/geopolitik/connection; then
+            echo "Warning: printStackTrace found in connection/query code; prefer structured error handling/logging"
+          fi
+
+          echo "== Checking DatabaseConnection singleton access =="
+          if ! grep -RIn --include='*.java' 'DatabaseConnection\.getInstance()' src >/dev/null; then
+            echo "No DatabaseConnection.getInstance() usages found"
+            exit 1
+          fi
+
+          echo "Database/API practice checks completed"
+
+  dependency-updates:
+    name: Obsolete libraries and resources
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+          cache: maven
+
+      - name: Check dependency and plugin updates
+        working-directory: GEOPOLITIK
+        run: |
+          mvn -B versions:display-dependency-updates versions:display-plugin-updates versions:display-property-updates
+
+      - name: Check Maven wrapper/plugin/resource freshness (enforcer rules via CLI)
+        working-directory: GEOPOLITIK
+        run: |
+          mvn -B org.apache.maven.plugins:maven-enforcer-plugin:3.5.0:enforce \
+            -Drules=requireMavenVersion,requireJavaVersion \
+            -DrequireMavenVersion.version='[3.9,)' \
+            -DrequireJavaVersion.version='[21,)'
+        continue-on-error: true

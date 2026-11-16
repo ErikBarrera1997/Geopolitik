@@ -1,11 +1,11 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.province.Province;
-import com.msservices.geopolitik.connection.queries.country.CountryDetails;
-import com.msservices.geopolitik.connection.queries.province.ProvinceData;
-import com.msservices.geopolitik.connection.queries.country.countryQueries;
-import com.msservices.geopolitik.connection.queries.province.provinceQueries;
+import com.msservices.geopolitik.connection.queries.provinceQueries.Province;
+import com.msservices.geopolitik.connection.queries.countryQueries;
+import com.msservices.geopolitik.connection.queries.countryQueries.CountryDetails;
+import com.msservices.geopolitik.connection.queries.provinceQueries.ProvinceData;
+import com.msservices.geopolitik.connection.queries.provinceQueries;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;

@@ -1,9 +1,9 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.country.countryQueries;
-import com.msservices.geopolitik.connection.queries.improvement.Improvement;
-import com.msservices.geopolitik.connection.queries.improvement.improvementQueries;
+import com.msservices.geopolitik.connection.queries.countryQueries;
+import com.msservices.geopolitik.connection.queries.improvementQueries.Improvement;
+import com.msservices.geopolitik.connection.queries.improvementQueries;
 import com.msservices.geopolitik.functions.improvementsFunctions.countryInvestigations;
 import com.msservices.geopolitik.functions.improvementsFunctions.investigations;
 import com.msservices.geopolitik.interfaces.interaction;

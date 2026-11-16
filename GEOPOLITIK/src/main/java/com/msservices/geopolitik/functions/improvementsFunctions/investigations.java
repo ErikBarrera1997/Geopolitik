@@ -1,6 +1,6 @@
 package com.msservices.geopolitik.functions.improvementsFunctions;
 
-import com.msservices.geopolitik.connection.queries.improvement.Improvement;
+import com.msservices.geopolitik.connection.queries.improvementQueries.Improvement;
 
 import java.util.ArrayList;
 import java.util.Comparator;

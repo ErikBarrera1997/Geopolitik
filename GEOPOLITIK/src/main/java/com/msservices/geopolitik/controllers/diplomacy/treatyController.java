@@ -1,9 +1,9 @@
 package com.msservices.geopolitik.controllers.diplomacy;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.country.countryQueries;
-import com.msservices.geopolitik.connection.queries.diplomacy.countryResource;
-import com.msservices.geopolitik.connection.queries.diplomacy.countryResourceQueries;
+import com.msservices.geopolitik.connection.queries.countryQueries;
+import com.msservices.geopolitik.connection.queries.countryResourceQueries.countryResource;
+import com.msservices.geopolitik.connection.queries.countryResourceQueries;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.init.loadImages;
 import com.msservices.geopolitik.interfaces.interaction;

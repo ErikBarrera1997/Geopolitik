@@ -1,4 +1,4 @@
-package com.msservices.geopolitik.connection.queries.diplomacy;
+package com.msservices.geopolitik.connection.queries;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class countryResourceQueries {
+
+    public record countryResource(String resourceName,int amount){}
+
 
     private final Connection connection;
 

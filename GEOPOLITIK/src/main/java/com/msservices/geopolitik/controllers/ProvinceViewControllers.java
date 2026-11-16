@@ -1,9 +1,9 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.province.ProvinceData;
-import com.msservices.geopolitik.connection.queries.defense.ProvinceDefense;
-import com.msservices.geopolitik.connection.queries.defense.defenseQueries;
+import com.msservices.geopolitik.connection.queries.provinceQueries.ProvinceData;
+import com.msservices.geopolitik.connection.queries.defenseQueries.ProvinceDefense;
+import com.msservices.geopolitik.connection.queries.defenseQueries;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;

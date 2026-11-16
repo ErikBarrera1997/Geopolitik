@@ -1,8 +1,8 @@
 package com.msservices.geopolitik.controllers;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.attack.attackQueries;
-import com.msservices.geopolitik.connection.queries.attack.ProvinceObjective;
+import com.msservices.geopolitik.connection.queries.attackQueries;
+import com.msservices.geopolitik.connection.queries.attackQueries.ProvinceObjective;
 import com.msservices.geopolitik.init.loadCombatActions;
 import com.msservices.geopolitik.init.entity.combatDescription;
 import com.msservices.geopolitik.init.entity.combatOption;

@@ -1,9 +1,16 @@
-package com.msservices.geopolitik.connection.queries.diplomacy;
+package com.msservices.geopolitik.connection.queries;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 
 public class diplomacyQueries {
+
+    public record CountryDiplomacyStatus(int idCountry, String countryName, int alliedId, String alliedName, int enemyId, String enemyName, int peaceId, String peaceName, int warId, String warName, int neutralId, String neutralName, int vassalId, String vassalName, int tradeId, String tradeName, int militaryId, String militaryName) {
+    }
+
+    public record DiplomacyRate(int idCountry, String countryName, int neighborId, String neighborName, double morale, double friendshipRate) {
+    }
+
 
     private final Connection connection;
 

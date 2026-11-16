@@ -1,6 +1,5 @@
 package com.msservices.geopolitik.init;
 
-import com.msservices.geopolitik.init.entity.menuIcons;
 import javafx.scene.image.Image;
 
 import java.io.File;
@@ -9,6 +8,9 @@ import java.util.List;
 import java.util.Map;
 
 public class loadImages {
+
+    public record menuIcons(String name, String path) {
+    }
 
     private static final int ICON_SIZE = 24;
     private static Map<String, Image> iconCache;

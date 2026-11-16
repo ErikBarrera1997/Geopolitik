@@ -1,8 +1,8 @@
 package com.msservices.geopolitik.controllers.diplomacy;
 
 import com.msservices.geopolitik.connection.DatabaseConnection;
-import com.msservices.geopolitik.connection.queries.diplomacy.CountryDiplomacyStatus;
-import com.msservices.geopolitik.connection.queries.diplomacy.diplomacyQueries;
+import com.msservices.geopolitik.connection.queries.diplomacyQueries.CountryDiplomacyStatus;
+import com.msservices.geopolitik.connection.queries.diplomacyQueries;
 import com.msservices.geopolitik.init.loadFlags;
 import com.msservices.geopolitik.interfaces.interaction;
 import javafx.fxml.FXML;

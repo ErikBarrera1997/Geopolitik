@@ -1,4 +1,4 @@
-package com.msservices.geopolitik.connection.queries.defense;
+package com.msservices.geopolitik.connection.queries;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class defenseQueries {
+
+    public record ArmyUnit(String name, int totalQuantity, double avgMorale, String type) {
+    }
+
+    public record ProvinceDefense(String weaponName, int quantity) {
+    }
+
 
     private final Connection connection;
 

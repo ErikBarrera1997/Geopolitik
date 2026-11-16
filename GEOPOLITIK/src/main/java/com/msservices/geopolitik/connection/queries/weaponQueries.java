@@ -1,6 +1,5 @@
-package com.msservices.geopolitik.connection.queries.weapon;
+package com.msservices.geopolitik.connection.queries;
 
-import com.msservices.geopolitik.connection.queries.defense.ArmyUnit;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -9,6 +8,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class weaponQueries {
+
+    public record Weapon(int idWeapon, String name, double cost, String type) {
+    }
+
 
     private final Connection connection;
 
@@ -38,8 +41,8 @@ public class weaponQueries {
         return weapons;
     }
 
-    public List<ArmyUnit> getArmy(int idCountry) {
-        List<ArmyUnit> army = new ArrayList<>();
+    public List<defenseQueries.ArmyUnit> getArmy(int idCountry) {
+        List<defenseQueries.ArmyUnit> army = new ArrayList<>();
         String sql = """
             SELECT w.name, SUM(pd.quantity) AS totalQuantity, AVG(p.morale) AS avgMorale, w.type
             FROM ProvinceDefenses pd
@@ -53,7 +56,7 @@ public class weaponQueries {
             stmt.setInt(1, idCountry);
             var rs = stmt.executeQuery();
             while (rs.next()) {
-                army.add(new ArmyUnit(
+                army.add(new defenseQueries.ArmyUnit(
                     rs.getString("name"),
                     rs.getInt("totalQuantity"),
                     rs.getDouble("avgMorale"),
