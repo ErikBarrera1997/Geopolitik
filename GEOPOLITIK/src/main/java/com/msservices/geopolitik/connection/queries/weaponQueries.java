@@ -12,6 +12,9 @@ public class weaponQueries {
     public record Weapon(int idWeapon, String name, double cost, String type) {
     }
 
+    public record WeaponRecipe(int idWeapon, String name, int petroleo, int industria, int oro, int uranio, int acero, int electricidad, int dinero, int tierrasRaras) {
+    }
+
 
     private final Connection connection;
 
@@ -39,6 +42,34 @@ public class weaponQueries {
         }
 
         return weapons;
+    }
+
+    public List<WeaponRecipe> getWeaponRecipes() {
+        List<WeaponRecipe> recipes = new ArrayList<>();
+        String sql = "SELECT id_weapon, name, petroleo, industria, oro, uranio, acero, electricidad, dinero, tierras_raras FROM Weapon_recipes";
+
+        try (Statement stmt = connection.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                recipes.add(new WeaponRecipe(
+                        rs.getInt("id_weapon"),
+                        rs.getString("name"),
+                        rs.getInt("petroleo"),
+                        rs.getInt("industria"),
+                        rs.getInt("oro"),
+                        rs.getInt("uranio"),
+                        rs.getInt("acero"),
+                        rs.getInt("electricidad"),
+                        rs.getInt("dinero"),
+                        rs.getInt("tierras_raras")
+                ));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return recipes;
     }
 
     public List<defenseQueries.ArmyUnit> getArmy(int idCountry) {

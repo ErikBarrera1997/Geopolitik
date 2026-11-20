@@ -110,7 +110,7 @@
                         </HBox>
                         <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconAccionesMilitares" fitWidth="28" fitHeight="28"/>
-                            <Label text="Acciones militares"/>
+                            <Label text="Producción"/>
                         </HBox>
                         <HBox spacing="5" alignment="CENTER_LEFT" maxWidth="Infinity" styleClass="fila-accion" onMouseClicked="#onInferiorItemClick">
                             <ImageView fx:id="iconNoticias" fitWidth="28" fitHeight="28"/>

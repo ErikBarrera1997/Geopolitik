@@ -231,6 +231,8 @@ public class MenuController {
 
         if (index == 0) {
             openWeaponsMarket();
+        } else if (index == 1) {
+            openProductionView();
         } else if (index == 2) {
             openNews();
         } else if (index == 4) {
@@ -352,6 +354,21 @@ public class MenuController {
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.initOwner(imagenPrincipal.getScene().getWindow());
             stage.setTitle("Diplomacia");
+            stage.setScene(new Scene(root));
+            stage.showAndWait();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void openProductionView() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/msservices/geopolitik/views/productionViews/productionView.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.initOwner(imagenPrincipal.getScene().getWindow());
+            stage.setTitle("Producción");
             stage.setScene(new Scene(root));
             stage.showAndWait();
         } catch (Exception e) {
